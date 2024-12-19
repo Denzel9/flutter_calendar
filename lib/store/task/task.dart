@@ -11,16 +11,10 @@ abstract class XStore with Store {
   List<Task> tasks = [];
 
   @observable
-  List<String> assign = [];
-
-  @observable
   String title = '';
 
   @observable
   String description = '';
-
-  @observable
-  String board = 'Default';
 
   @observable
   bool isAllTask = false;
@@ -50,25 +44,5 @@ abstract class XStore with Store {
         }
       },
     );
-  }
-
-  @action
-  void setBoard(String newBoard) {
-    board = newBoard;
-  }
-
-  @action
-  void clearBoard() {
-    board = 'Default';
-  }
-
-  @action
-  void setAssign(String newAssign) {
-    assign = [...assign, newAssign];
-  }
-
-  @action
-  void clearAssign() {
-    assign = [];
   }
 }

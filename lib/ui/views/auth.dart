@@ -54,7 +54,6 @@ class _AuthPageState extends State<AuthPage> {
       await authService.login(login.text, password.text).then((User user) {
         store.setUser(user.uid).then((_) {
           if (context.mounted) {
-            // store.user.docId = user.uid;
             localStorage.setItem('id', user.uid);
             Navigator.pushReplacementNamed(context, routesList.home);
           }

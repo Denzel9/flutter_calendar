@@ -7,6 +7,7 @@ class DNInput extends StatelessWidget {
   final TextEditingController? controller;
 
   final bool withBoarder;
+  final bool autoFocus;
 
   final Color borderColor;
 
@@ -16,6 +17,8 @@ class DNInput extends StatelessWidget {
   final int countLines;
 
   final FontWeight fontWeight;
+
+  final FocusNode? focusNode;
 
   const DNInput({
     super.key,
@@ -28,11 +31,15 @@ class DNInput extends StatelessWidget {
     this.opacity = 1,
     this.countLines = 1,
     this.controller,
+    this.focusNode,
+    this.autoFocus = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: autoFocus,
+      focusNode: focusNode,
       onChanged: onClick,
       controller: controller,
       style: const TextStyle(color: Colors.white),
@@ -43,7 +50,7 @@ class DNInput extends StatelessWidget {
         label: Text(
           title,
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: fontWeight,
             color: Colors.white.withOpacity(.5),
             height: .5,

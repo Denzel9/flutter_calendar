@@ -23,11 +23,12 @@ class DNText extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-          color: color.withOpacity(opacity),
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          height: height,
-          overflow: TextOverflow.clip),
+        color: color.withOpacity(opacity),
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        height: height,
+        overflow: TextOverflow.clip,
+      ),
     );
   }
 }

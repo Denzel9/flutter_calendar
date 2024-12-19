@@ -1,10 +1,8 @@
 import 'package:calendar_flutter/models/task.dart';
-import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/ui/views/board.dart';
-import 'package:calendar_flutter/ui/views/task.dart';
+import 'package:calendar_flutter/ui/views/board_views/board.dart';
+import 'package:calendar_flutter/ui/views/task/task.dart';
 import 'package:calendar_flutter/utils/date.dart';
-import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:calendar_flutter/utils/get_colors_tasks.dart';
 import 'package:flutter/material.dart';
 
@@ -28,20 +26,16 @@ class _InfoCardState extends State<InfoCard> {
         context: context,
         isScrollControlled: true,
         builder: (context) => widget.data is Task
-            ? TaskPage(
-                task: widget.data,
-              )
-            : BoardViewPage(
-                board: widget.data,
-              ),
+            ? TaskPage(task: widget.data)
+            : BoardViewPage(board: widget.data),
       ),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         margin: const EdgeInsets.only(bottom: 20),
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white.withOpacity(.2),
+          color: Theme.of(context).primaryColorDark,
           border: Border(
             left: BorderSide(
               color: widget.data is Task
@@ -58,7 +52,6 @@ class _InfoCardState extends State<InfoCard> {
               children: [
                 DNText(
                   title: widget.data is Task ? widget.data.board : '',
-                  // '${filteredTaskToBoard(widget.data.title).length} Tasks',
                   color: Colors.white,
                   fontSize: 18,
                 ),
@@ -72,17 +65,18 @@ class _InfoCardState extends State<InfoCard> {
                       fontSize: 15,
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 5,
                     ),
-                    DNIconButton(
-                      onClick: () {},
-                      icon: const Icon(Icons.done),
+                    const Icon(
+                      Icons.av_timer,
                       color: Colors.white,
-                      backgroundColor: Colors.black.withOpacity(.3),
                     )
                   ],
                 )
               ],
+            ),
+            const SizedBox(
+              height: 10,
             ),
             DNText(
               title: widget.data.title,

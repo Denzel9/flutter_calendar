@@ -1,5 +1,5 @@
 final now = DateTime.now();
-DateTime selectedDate = DateTime.now();
+
 final currentMonth = now.month;
 final currenDay = now.day;
 final currenYear = now.year;

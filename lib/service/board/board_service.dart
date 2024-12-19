@@ -1,9 +1,9 @@
-import 'package:calendar_flutter/models/board.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract interface class BoardService {
   Future<String> addBoard(Map<String, dynamic> board);
 
-  Future<List<Board>?> getBoards();
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getBoards();
 
   Future<void> deleteBoard(String id);
 

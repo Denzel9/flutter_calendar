@@ -63,14 +63,6 @@ mixin _$BoardStore on XStore, Store {
     return _$addBoardAsyncAction.run(() => super.addBoard(newBoards));
   }
 
-  late final _$getBoardAsyncAction =
-      AsyncAction('XStore.getBoard', context: context);
-
-  @override
-  Future<dynamic> getBoard() {
-    return _$getBoardAsyncAction.run(() => super.getBoard());
-  }
-
   @override
   String toString() {
     return '''

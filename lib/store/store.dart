@@ -1,8 +1,10 @@
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/models/user.dart';
+import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
+import 'package:calendar_flutter/utils/date.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 
@@ -10,6 +12,7 @@ part 'store.g.dart';
 
 TaskServiceImpl taskService = TaskServiceImpl();
 UserServiceImpl userService = UserServiceImpl();
+BoardServiceImpl boardService = BoardServiceImpl();
 
 class AppStore = AppStoreBase with _$AppStore;
 
@@ -23,47 +26,36 @@ abstract class AppStoreBase with Store {
   @observable
   User? user;
 
-  // @computed
-  // List<Product> get filteredProducts {
-  //   if (searchKeyword.isNotEmpty) {
-  //     return ObservableList.of(
-  //       products.where((Product product) {
-  //         String productName = product.name.toLowerCase();
-  //         bool inProductName = productName.contains(searchKeyword);
-  //         return inProductName;
-  //       }).toList(),
-  //     );
-  //   } else {
-  //     return products;
-  //   }
-  // }
+  @observable
+  DateTime selectedDate = now;
 
   @action
-  setUser(String id) async {
-    userService.setUser(id).then((response) => user = response);
+  Future<Null> setUser(String id) async {
+    Stream<DocumentSnapshot<Map<String, dynamic>>> query =
+        await userService.setUser(id);
+    query.listen((event) {
+      user = User.fromJsonWithId(event.data(), event.id);
+    });
   }
 
   @action
   void initState() {
     fetchTasks();
-    // fetchCategories().then(
-    //   (_) {
-    //     fetchProducts(categories.first.uid);
-    //     currentlySelectedCategory = categories.first;
-    //   },
-    // );
-    // fetchHotItmes();
+    fetchBoards();
   }
 
   @action
   Future<Null> fetchTasks() async {
-    QuerySnapshot query = await taskService.getTasks();
-    tasks = ObservableList.of(
-      query.docs
-          .map((DocumentSnapshot doc) =>
-              Task.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id))
-          .toList(),
-    );
+    Stream<QuerySnapshot<Map<String, dynamic>>> query =
+        await taskService.getTasks();
+    query.listen((event) {
+      final List<Task> listTasks = [];
+      for (var doc in event.docs) {
+        listTasks.add(
+            Task.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id));
+      }
+      tasks = ObservableList.of(listTasks);
+    });
   }
 
   @observable
@@ -73,39 +65,28 @@ abstract class AppStoreBase with Store {
   bool isActiveTask = false;
 
   @computed
+  List<Task> get todayTasks => tasks
+      .where((task) =>
+          getSliceDate(task.createdAt) == getSliceDate(selectedDate.toString()))
+      .toList();
+
+  @computed
   List<Task> get listAllTask => tasks;
 
   @computed
   List<Task> get listActiveTask => tasks.where((task) => task.done).toList();
 
-  // @action
-  // Future<Null> fetchProducts(String categoryUid) async {
-  //   QuerySnapshot query = await _api.fetchProducts(categoryUid);
-  //   products = ObservableList.of(
-  //     query.documents
-  //         .map((DocumentSnapshot doc) => Product.fromJson(doc.data))
-  //         .toList(),
-  //   );
-  // }
-
-  // @action
-  // Future<Null> fetchHotItmes() async {
-  //   QuerySnapshot query = await _api.fetchHotItems();
-  //   hotItems = ObservableList.of(
-  //     query.documents
-  //         .map((DocumentSnapshot doc) => Product.fromJson(doc.data))
-  //         .toList(),
-  //   );
-  // }
-
-  // @action
-  // void changeCategory(Category category) {
-  //   currentlySelectedCategory = category;
-  //   fetchProducts(category.uid);
-  // }
-
-  // @action
-  // void setSearchKeyword(String keyword) {
-  //   searchKeyword = keyword.toLowerCase();
-  // }
+  @action
+  Future<Null> fetchBoards() async {
+    Stream<QuerySnapshot<Map<String, dynamic>>> query =
+        await boardService.getBoards();
+    query.listen((event) {
+      final List<Board> listBoards = [];
+      for (var doc in event.docs) {
+        listBoards.add(
+            Board.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id));
+      }
+      boards = ObservableList.of(listBoards);
+    });
+  }
 }

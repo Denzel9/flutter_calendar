@@ -1,29 +1,22 @@
 import 'dart:io';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/user/user_service.dart';
-import 'package:calendar_flutter/store/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 final FirebaseFirestore db = FirebaseFirestore.instance;
 final FirebaseStorage storage = FirebaseStorage.instance;
 
 class UserServiceImpl implements UserService {
-  final BuildContext? context;
-  UserServiceImpl({this.context});
-
   @override
   Future<void> addUser(Map<String, dynamic> user, String id) async {
     db.collection("users").doc(id).set(user);
   }
 
   @override
-  Future<void> setFollow(String id, String anotherId) async {
-    final store = context?.read<UserStore>();
-
-    if (store?.user.following.contains(anotherId) ?? false) {
+  Future<void> setFollow(
+      String id, String anotherId, List<dynamic> listFollowing) async {
+    if (listFollowing.contains(anotherId)) {
       db.collection("users").doc(id).update({
         "following": FieldValue.arrayRemove([anotherId])
       });
@@ -41,72 +34,51 @@ class UserServiceImpl implements UserService {
   }
 
   @override
-  Future<User> setUser(String id) async {
-    final docRef = db.collection("users").doc(id);
-    return await docRef.get().then((DocumentSnapshot doc) =>
-        User.fromJsonWithId(doc.data() as Map<String, dynamic>, doc.id));
+  Future<Stream<DocumentSnapshot<Map<String, dynamic>>>> setUser(
+      String id) async {
+    return db.collection("users").doc(id).snapshots();
   }
 
   @override
-  Future<List<User>> getFollowers(String id) async {
-    List<User> users = [];
-    db
+  Future<List<dynamic>> getFollowers(String id) async {
+    return db
         .collection("users")
-        .where("following", arrayContains: id)
-        .snapshots()
-        .listen((event) {
-      for (var doc in event.docs) {
-        users.add(User.fromJsonWithId(doc.data(), doc.id));
-      }
-    });
-    return users;
+        .doc(id)
+        .get()
+        .then((event) => event.data()?['followers']);
   }
 
   @override
-  Future<List<User>> getFollowing(String id) async {
-    List<User> users = [];
-    db
+  Future<List<dynamic>> getFollowing(String id) async {
+    return db
         .collection("users")
-        .where("followers", arrayContains: id)
-        .snapshots()
-        .listen((event) {
-      for (var doc in event.docs) {
-        users.add(User.fromJsonWithId(doc.data(), doc.id));
-      }
-    });
-    return users;
+        .doc(id)
+        .get()
+        .then((event) => event.data()?['following']);
   }
 
   @override
   Future<List<User>> getAllUser(String name) async {
-    if (name.isNotEmpty) {
-      List<User> users = [];
-      db
-          .collection("users")
-          .where("name", isEqualTo: name[0].toUpperCase() + name.substring(1))
-          .snapshots()
-          .listen((event) {
-        for (var doc in event.docs) {
-          final user = User.fromJsonWithId(doc.data(), doc.id);
+    List<User> users = [];
+    db.collection("users").snapshots().listen((event) {
+      for (var doc in event.docs) {
+        final user = User.fromJsonWithId(doc.data(), doc.id);
+        if (user.name.toLowerCase().contains(name.toLowerCase())) {
           users.add(user);
         }
-      });
-      return users;
-    }
-    return [];
+      }
+    });
+    return users;
   }
 
   @override
-  Future<String?> getAvatar([String? link]) async {
-    final store = context?.read<UserStore>();
-    final ref = link ?? store?.user.docId;
-    return storage.ref().child("$ref/avatar.jpg").getDownloadURL();
+  Future<String?> getAvatar(String id) async {
+    return storage.ref().child("$id/avatar.jpg").getDownloadURL();
   }
 
   @override
   Future<void> setAvatar(File image) async {
-    final store = context?.read<UserStore>();
-    await storage.ref().child("${store?.user.docId}/avatar.jpg").putFile(image);
+    // await storage.ref().child("${store?.user.docId}/avatar.jpg").putFile(image);
   }
 
   @override

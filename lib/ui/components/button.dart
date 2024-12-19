@@ -68,7 +68,7 @@ class DNButton extends StatelessWidget {
                     style: TextStyle(
                       fontSize: fonySize,
                       fontWeight: FontWeight.w400,
-                      color: isPrimary ? color : Colors.black,
+                      color: color,
                     ),
                   ),
                 ),

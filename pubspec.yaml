@@ -26,6 +26,7 @@ dependencies:
     provider: ^6.1.2
     flutter_provider: ^2.1.0
     localstorage: ^5.0.0
+    sidebarx: ^0.17.1
 
 dev_dependencies:
     flutter_test:

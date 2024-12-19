@@ -3,9 +3,11 @@ class User {
   String lastName;
   String email;
   String docId;
+  String aboutUser;
 
   List<dynamic> following;
   List<dynamic> followers;
+  List<dynamic> colaborated;
 
   User({
     required this.name,
@@ -14,6 +16,8 @@ class User {
     required this.docId,
     required this.following,
     required this.followers,
+    required this.colaborated,
+    required this.aboutUser,
   });
 
   factory User.fromJsonWithId(Map<String, dynamic>? json, String id) {
@@ -23,6 +27,8 @@ class User {
       lastName: json?['lastName'] ?? '',
       following: json?['following'] ?? [],
       followers: json?['followers'] ?? [],
+      colaborated: json?['colaborated'] ?? [],
+      aboutUser: json?['aboutUser'] ?? '',
       docId: id,
     );
   }

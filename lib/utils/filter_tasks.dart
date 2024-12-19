@@ -10,21 +10,18 @@ List<Task> filteredTask(
   if (store.isActiveTask) {
     return store.listActiveTask
         .where((task) =>
-            getSliceDate(task.createdAt) == getSliceDate(date.toString()) &&
+            getSliceDate(task.date) == getSliceDate(date.toString()) &&
             task.title.contains(searchText ?? ''))
         .toList();
   }
   return store.tasks
       .where((task) =>
-          getSliceDate(task.createdAt) == getSliceDate(date.toString()) &&
+          getSliceDate(task.date) == getSliceDate(date.toString()) &&
           !task.done &&
           task.title.contains(searchText ?? ''))
       .toList();
 }
 
-List<Task> filteredTaskToBoard(String boardTitle) {
-  return [];
-  // Controller.taskStore.tasks
-  //     .where((board) => board.board == boardTitle)
-  //     .toList();
+List<Task> filteredTaskToBoard(String boardTitle, List<Task> tasks) {
+  return tasks.where((task) => task.board == boardTitle).toList();
 }

@@ -1,12 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:calendar_flutter/core/provider/app_provider.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:provider/provider.dart';
 
 class DNEditableField extends StatefulWidget {
   final String title;
@@ -31,56 +30,62 @@ class DNEditableField extends StatefulWidget {
 
 class _EditableFieldState extends State<DNEditableField> {
   Future<dynamic>? setOpenEditBottomSheet() {
+    final TaskServiceImpl taskService = TaskServiceImpl();
     return showModalBottomSheet(
       backgroundColor: const Color.fromARGB(255, 35, 35, 35),
       context: context,
       builder: (context) {
-        return KeyboardAvoider(
-          autoScroll: true,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                DNInput(
-                  controller: widget.controller,
-                  title: widget.editField.replaceFirst(
-                    widget.editField[0],
-                    widget.editField[0].toUpperCase(),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: DNButton(
-                    title: 'Save',
-                    onClick: () {
-                      if (widget.controller.text.isNotEmpty) {
-                        context
-                            .read<TaskServiceImpl>()
-                            .updateField(
+        return Observer(
+          builder: (_) {
+            return KeyboardAvoider(
+              autoScroll: true,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    DNInput(
+                      controller: widget.controller,
+                      title: widget.editField.replaceFirst(
+                        widget.editField[0],
+                        widget.editField[0].toUpperCase(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: DNButton(
+                        title: 'Save',
+                        onClick: () {
+                          if (widget.controller.text.isNotEmpty) {
+                            taskService
+                                .updateField(
                               widget.taskId,
                               widget.editField,
                               widget.controller.text,
                             )
-                            .then(
-                          (_) {
-                            if (context.mounted) {
-                              // Navigator.pop(context);
-                            }
-                            widget.controller.clear();
-                          },
-                        );
-                      }
-                    },
-                    isPrimary: true,
-                  ),
-                )
-              ],
-            ),
-          ),
+                                .then(
+                              (_) {
+                                if (context.mounted) {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                                }
+                                widget.controller.clear();
+                              },
+                            );
+                          }
+                        },
+                        isPrimary: true,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -107,15 +112,14 @@ class _EditableFieldState extends State<DNEditableField> {
         if (widget.title.isEmpty)
           GestureDetector(
             onTap: setOpenEditBottomSheet,
-            child: const DNText(
-              title: 'Add',
-              opacity: .5,
+            child: DNText(
+              title: 'Add ${widget.editField}',
             ),
           ),
         if (widget.isEdit)
           IconButton(
             visualDensity: VisualDensity.compact,
-            onPressed: () => setOpenEditBottomSheet(),
+            onPressed: setOpenEditBottomSheet,
             icon: const Icon(Icons.edit, color: Colors.white),
           )
       ],

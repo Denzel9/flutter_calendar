@@ -39,21 +39,6 @@ mixin _$TaskStore on XStore, Store {
     });
   }
 
-  late final _$assignAtom = Atom(name: 'XStore.assign', context: context);
-
-  @override
-  List<String> get assign {
-    _$assignAtom.reportRead();
-    return super.assign;
-  }
-
-  @override
-  set assign(List<String> value) {
-    _$assignAtom.reportWrite(value, super.assign, () {
-      super.assign = value;
-    });
-  }
-
   late final _$titleAtom = Atom(name: 'XStore.title', context: context);
 
   @override
@@ -82,21 +67,6 @@ mixin _$TaskStore on XStore, Store {
   set description(String value) {
     _$descriptionAtom.reportWrite(value, super.description, () {
       super.description = value;
-    });
-  }
-
-  late final _$boardAtom = Atom(name: 'XStore.board', context: context);
-
-  @override
-  String get board {
-    _$boardAtom.reportRead();
-    return super.board;
-  }
-
-  @override
-  set board(String value) {
-    _$boardAtom.reportWrite(value, super.board, () {
-      super.board = value;
     });
   }
 
@@ -154,57 +124,11 @@ mixin _$TaskStore on XStore, Store {
   }
 
   @override
-  void setBoard(String newBoard) {
-    final _$actionInfo =
-        _$XStoreActionController.startAction(name: 'XStore.setBoard');
-    try {
-      return super.setBoard(newBoard);
-    } finally {
-      _$XStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearBoard() {
-    final _$actionInfo =
-        _$XStoreActionController.startAction(name: 'XStore.clearBoard');
-    try {
-      return super.clearBoard();
-    } finally {
-      _$XStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setAssign(String newAssign) {
-    final _$actionInfo =
-        _$XStoreActionController.startAction(name: 'XStore.setAssign');
-    try {
-      return super.setAssign(newAssign);
-    } finally {
-      _$XStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearAssign() {
-    final _$actionInfo =
-        _$XStoreActionController.startAction(name: 'XStore.clearAssign');
-    try {
-      return super.clearAssign();
-    } finally {
-      _$XStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 tasks: ${tasks},
-assign: ${assign},
 title: ${title},
 description: ${description},
-board: ${board},
 isAllTask: ${isAllTask},
 isActiveTask: ${isActiveTask},
 listAllTask: ${listAllTask},

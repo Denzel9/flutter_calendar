@@ -12,9 +12,17 @@ class TaskServiceImpl implements TaskService {
   }
 
   @override
-  Future<QuerySnapshot> getTasks([String? id]) async {
-    final userId = id ?? await localStorage.getItem('id');
-    return db.collection('tasks').where('docId', isEqualTo: userId).get();
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getTasks(
+      [String? id]) async {
+    final String userId = id ?? await localStorage.getItem('id');
+    return db.collection("tasks").where("docId", isEqualTo: userId).snapshots();
+  }
+
+  @override
+  Future<int> getTasksCount(String userId) async {
+    final resp =
+        await db.collection("tasks").where("docId", isEqualTo: userId).get();
+    return resp.docs.length;
   }
 
   @override

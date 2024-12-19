@@ -7,6 +7,7 @@ final ThemeData theme = ThemeData(
   scaffoldBackgroundColor: ColorsApp.bg,
   appBarTheme: AppBarTheme(backgroundColor: ColorsApp.bg),
   primaryColor: ColorsApp.primary,
+  primaryColorDark: ColorsApp.dark,
   textSelectionTheme: TextSelectionThemeData(selectionColor: ColorsApp.primary),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

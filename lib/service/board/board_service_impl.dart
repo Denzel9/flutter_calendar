@@ -1,6 +1,5 @@
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/service/board/board_service.dart';
 
 class BoardServiceImpl implements BoardService {
@@ -13,20 +12,12 @@ class BoardServiceImpl implements BoardService {
   }
 
   @override
-  Future<List<Board>?> getBoards() async {
-    final id = await localStorage.getItem('id');
-    List<Board> boards = [];
-    db.collection("boards").where("userId", isEqualTo: id).get().then(
-      (querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {
-          final board =
-              Board.fromJsonWithId(docSnapshot.data(), docSnapshot.id);
-          boards.add(board);
-        }
-      },
-    );
-
-    return boards;
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getBoards() async {
+    final userId = await localStorage.getItem('id');
+    return db
+        .collection('boards')
+        .where('userId', isEqualTo: userId)
+        .snapshots();
   }
 
   @override
