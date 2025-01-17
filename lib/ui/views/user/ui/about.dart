@@ -1,38 +1,56 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:calendar_flutter/ui/widgets/card.dart';
+import 'package:calendar_flutter/service/user/user_service_impl.dart';
+import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/views/user/store/user.dart';
+import 'package:calendar_flutter/ui/widgets/editable_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class About extends StatelessWidget {
-  const About({super.key});
+class About extends StatefulWidget {
+  final bool isGuest;
+
+  const About({super.key, required this.isGuest});
 
   @override
+  State<About> createState() => _AboutState();
+}
+
+class _AboutState extends State<About> {
+  @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        SizedBox(height: 20),
-        AutoSizeText(
-          'In the following guide, I want to show you what to say and how to say it when talking about your job. You may be required to talk about your job at a party or a social event. But you may also have to talk about your job if you are changing from one company to another and having interviews. In any situation, if you are working you should be able to express yourself in English when talking about your job.',
-          style: TextStyle(color: Colors.white),
-          minFontSize: 18,
-          maxFontSize: 18,
-        ),
-        SizedBox(height: 20),
-        DNCard(
-          title: 'following guide',
-          subtitle: 'following guide',
-          description: 'following guide',
-        ),
-        DNCard(
-          title: 'following guide',
-          subtitle: 'following guide',
-          description: 'following guide',
-        ),
-        DNCard(
-          title: 'following guide',
-          subtitle: 'following guide',
-          description: 'following guide',
-        ),
-      ],
+    final UserServiceImpl userService = UserServiceImpl();
+    final AppStore store = context.watch<AppStore>();
+    final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
+
+    return Observer(
+      builder: (_) {
+        final currentUser = widget.isGuest ? userStoreLocal.user : store.user;
+
+        return (userStoreLocal.user?.about?.isNotEmpty ?? true)
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: DNEditableField(
+                  title: currentUser?.about ?? '',
+                  isEdit: userStoreLocal.isEdit,
+                  editField: 'about',
+                  docId: currentUser?.docId ?? '',
+                  updateField: (
+                    String id,
+                    String field,
+                    String data,
+                  ) {
+                    return userService.updateField(id, field, data).then(
+                      ((res) {
+                        setState(() {
+                          store.user?.about = data;
+                        });
+                      }),
+                    );
+                  },
+                ),
+              )
+            : const SizedBox();
+      },
     );
   }
 }

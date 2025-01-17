@@ -12,22 +12,24 @@ class BoardServiceImpl implements BoardService {
   }
 
   @override
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getBoards() async {
-    final userId = await localStorage.getItem('id');
-    return db
-        .collection('boards')
-        .where('userId', isEqualTo: userId)
-        .snapshots();
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getBoards(
+      String id) async {
+    return db.collection('boards').where('userId', isEqualTo: id).snapshots();
+  }
+
+  @override
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getBoard(String id) {
+    return db.collection('boards').doc(id).snapshots();
+  }
+
+  @override
+  Future<void> updateField(String id, String field, String data) async {
+    db.collection("boards").doc(id).update({field: data});
   }
 
   @override
   Future<void> deleteBoard(String id) async {
     db.collection("boards").doc(id).delete();
-  }
-
-  @override
-  Future<void> changeTitle(String id, String title) async {
-    db.collection("boards").doc(id).update({"title": title});
   }
 
   @override

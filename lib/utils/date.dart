@@ -77,3 +77,8 @@ String getSliceDate(String date) {
   String newDate = date.split(' ')[0];
   return newDate;
 }
+
+num getSliceDay(String date) {
+  String newDate = date.split(' ')[0].split('-')[2];
+  return num.parse(newDate);
+}

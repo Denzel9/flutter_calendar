@@ -39,6 +39,7 @@ class DNInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       autofocus: autoFocus,
+      textInputAction: TextInputAction.done,
       focusNode: focusNode,
       onChanged: onClick,
       controller: controller,

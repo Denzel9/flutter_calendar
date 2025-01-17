@@ -1,10 +1,12 @@
 import 'package:calendar_flutter/models/task.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/ui/views/board_views/board.dart';
+import 'package:calendar_flutter/ui/views/board/board.dart';
 import 'package:calendar_flutter/ui/views/task/task.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:calendar_flutter/utils/get_colors_tasks.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfoCard extends StatefulWidget {
   final dynamic data;
@@ -19,15 +21,24 @@ class InfoCard extends StatefulWidget {
 }
 
 class _InfoCardState extends State<InfoCard> {
+  String assignTitle(String owner) {
+    final String author =
+        widget.data.author == owner ? 'me' : widget.data.author;
+    return widget.data is TaskModel && widget.data.isCollaborated
+        ? 'Assigned by $author'
+        : '';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AppStore store = context.watch<AppStore>();
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (context) => widget.data is Task
-            ? TaskPage(task: widget.data)
-            : BoardViewPage(board: widget.data),
+        builder: (context) => widget.data is TaskModel
+            ? TaskPage(id: widget.data.docId)
+            : BoardViewPage(id: widget.data.docId),
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -38,7 +49,7 @@ class _InfoCardState extends State<InfoCard> {
           color: Theme.of(context).primaryColorDark,
           border: Border(
             left: BorderSide(
-              color: widget.data is Task
+              color: widget.data is TaskModel
                   ? getColorTasks(widget.data.board)
                   : Colors.white,
             ),
@@ -50,15 +61,29 @@ class _InfoCardState extends State<InfoCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DNText(
-                  title: widget.data is Task ? widget.data.board : '',
-                  color: Colors.white,
-                  fontSize: 18,
+                Row(
+                  children: [
+                    DNText(
+                      title: widget.data is TaskModel
+                          ? widget.data.board
+                          : '${widget.data.tasks.length} Tasks',
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    DNText(
+                      title: assignTitle(store.user?.name ?? ''),
+                      color: Colors.white54,
+                      fontSize: 14,
+                    ),
+                  ],
                 ),
                 Row(
                   children: [
                     DNText(
-                      title: widget.data is Task
+                      title: widget.data is TaskModel
                           ? getFormatTime(widget.data.date)
                           : getFormatDate(widget.data.createdAt),
                       color: Colors.white,

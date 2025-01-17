@@ -40,11 +40,44 @@ mixin _$TaskStoreLocal on XStore, Store {
     });
   }
 
+  late final _$isDoneTaskAtom =
+      Atom(name: 'XStore.isDoneTask', context: context);
+
+  @override
+  bool get isDoneTask {
+    _$isDoneTaskAtom.reportRead();
+    return super.isDoneTask;
+  }
+
+  @override
+  set isDoneTask(bool value) {
+    _$isDoneTaskAtom.reportWrite(value, super.isDoneTask, () {
+      super.isDoneTask = value;
+    });
+  }
+
+  late final _$imageAtom = Atom(name: 'XStore.image', context: context);
+
+  @override
+  List<File> get image {
+    _$imageAtom.reportRead();
+    return super.image;
+  }
+
+  @override
+  set image(List<File> value) {
+    _$imageAtom.reportWrite(value, super.image, () {
+      super.image = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 currentBoard: ${currentBoard},
-isEdit: ${isEdit}
+isEdit: ${isEdit},
+isDoneTask: ${isDoneTask},
+image: ${image}
     ''';
   }
 }

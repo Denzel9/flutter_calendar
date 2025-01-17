@@ -8,15 +8,14 @@ import 'package:provider/provider.dart';
 
 class Content extends StatelessWidget {
   final TabController controller;
-  final TextEditingController searchController;
-  const Content(
-      {super.key, required this.controller, required this.searchController});
+  const Content({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final TaskViewsStoreLocal taskViewsStoreLocal =
         context.watch<TaskViewsStoreLocal>();
     final AppStore store = context.watch<AppStore>();
+
     return TabBarView(
       controller: controller,
       children: [
@@ -24,26 +23,30 @@ class Content extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: CustomScrollView(
             slivers: [
-              Observer(builder: (_) {
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: filteredTask(
-                            date: taskViewsStoreLocal.selectedDate,
-                            searchText: searchController.text,
-                            store: store)
-                        .length,
-                    (BuildContext context, int index) {
-                      final task = filteredTask(
-                          date: taskViewsStoreLocal.selectedDate,
-                          searchText: searchController.text,
-                          store: store)[index];
-                      return InfoCard(
-                        data: task,
-                      );
-                    },
-                  ),
-                );
-              }),
+              Observer(
+                builder: (_) {
+                  final tasks = filteredTask(
+                    searchText: taskViewsStoreLocal.searchtext,
+                    isAllTask: taskViewsStoreLocal.isAllTask,
+                    isActiveTask: taskViewsStoreLocal.isActiveTask,
+                    isArchive: !taskViewsStoreLocal.isActiveTask,
+                    isCollaborationTasks: taskViewsStoreLocal.isCollaboration,
+                    store: store,
+                  );
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: tasks.length,
+                      (BuildContext context, int index) {
+                        final task = tasks[index];
+                        return InfoCard(
+                          data: task,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -52,11 +55,15 @@ class Content extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               Observer(builder: (_) {
+                final boards = filteredBoards(
+                  store.boards,
+                  taskViewsStoreLocal.searchtext,
+                );
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    childCount: store.boards.length,
+                    childCount: boards.length,
                     (context, index) {
-                      final board = store.boards[index];
+                      final board = boards[index];
                       return InfoCard(
                         data: board,
                       );

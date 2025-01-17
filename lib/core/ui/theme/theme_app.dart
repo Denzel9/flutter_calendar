@@ -1,6 +1,5 @@
 import 'package:calendar_flutter/core/ui/styles/colors_app.dart';
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 final ThemeData theme = ThemeData(
   fontFamily: "inter",
@@ -22,13 +21,4 @@ final ThemeData theme = ThemeData(
     primary: ColorsApp.primary,
     secondary: ColorsApp.secondary,
   ),
-  extensions: const [
-    SkeletonizerConfigData(
-      effect: ShimmerEffect(
-        baseColor: Colors.white10,
-        highlightColor: Colors.white24,
-        duration: Duration(seconds: 1),
-      ),
-    ),
-  ],
 );

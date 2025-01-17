@@ -1,4 +1,4 @@
-import 'package:calendar_flutter/ui/views/create/create.dart';
+import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
@@ -8,7 +8,7 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       clipBehavior: Clip.antiAlias,
-      onPressed: () => showModalBottomSheetDN(context),
+      onPressed: () => Navigator.pushNamed(context, routesList.create),
       child: InkWell(
         splashColor: Colors.white10,
         child: Ink(
@@ -31,23 +31,4 @@ class ActionButton extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<dynamic>? showModalBottomSheetDN(BuildContext context) {
-  return showModalBottomSheet(
-    isScrollControlled: true,
-    backgroundColor: Theme.of(context).primaryColorDark,
-    context: context,
-    builder: (context) {
-      return FractionallySizedBox(
-        heightFactor: 1,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(top: 60),
-          child: const CreatePage(),
-        ),
-      );
-    },
-  );
 }

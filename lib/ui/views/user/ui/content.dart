@@ -3,6 +3,7 @@ import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
@@ -13,8 +14,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class Content extends StatefulWidget {
-  final User user;
-  const Content({super.key, required this.user});
+  final bool isGuest;
+  const Content({super.key, required this.isGuest});
 
   @override
   State<Content> createState() => _ContentState();
@@ -33,10 +34,12 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    final store = context.watch<AppStore>();
+    final AppStore store = context.watch<AppStore>();
     final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
+
     return Observer(
       builder: (_) {
+        final currentUser = widget.isGuest ? userStoreLocal.user : store.user;
         return Column(
           children: [
             Row(
@@ -47,31 +50,71 @@ class _ContentState extends State<Content> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DNEditableField(
-                      title: toUpperCase(widget.user.name),
+                      title: toUpperCase(currentUser?.name ?? ''),
                       isEdit: userStoreLocal.isEdit,
                       editField: 'name',
-                      controller: controller,
-                      taskId: widget.user.docId,
+                      docId: currentUser?.docId ?? '',
                       maxFontSize: 40,
+                      minFontSize: 30,
+                      withTitle: false,
+                      updateField: (
+                        String id,
+                        String field,
+                        String data,
+                      ) {
+                        return userService
+                            .updateField(id, field, data)
+                            .then(((res) {
+                          setState(() {
+                            store.user?.name = data;
+                          });
+                        }));
+                      },
                     ),
                     DNEditableField(
-                      title: toUpperCase(widget.user.lastName),
+                      title: toUpperCase(currentUser?.lastName ?? ''),
                       isEdit: userStoreLocal.isEdit,
                       editField: 'lastName',
-                      controller: controller,
-                      taskId: widget.user.docId,
+                      docId: currentUser?.docId ?? '',
                       maxFontSize: 40,
+                      minFontSize: 30,
+                      withTitle: false,
+                      updateField: (
+                        String id,
+                        String field,
+                        String data,
+                      ) {
+                        return userService
+                            .updateField(id, field, data)
+                            .then(((res) {
+                          setState(() {
+                            store.user?.lastName = data;
+                          });
+                        }));
+                      },
                     ),
                   ],
                 ),
-                if (userStoreLocal.guestId.isNotEmpty)
+                if (widget.isGuest)
                   GestureDetector(
-                    onTap: () async {
-                      await userService.setFollow(store.user?.docId ?? '',
-                          userStoreLocal.guestId, store.user?.following ?? []);
+                    onTap: () {
+                      userService.setFollow(
+                          store.user?.docId ?? '',
+                          userStoreLocal.user?.docId ?? '',
+                          store.user?.following ?? []);
+                      // .then(
+                      //   (isAdd) => setState(() {
+                      //     isAdd
+                      //         ? userStoreLocal.user?.followers
+                      //             .add(store.user?.docId)
+                      //         : userStoreLocal.user?.followers
+                      //             .remove(store.user?.docId);
+                      //     userService.isLoading = false;
+                      //   }),
+                      // );
                     },
                     child: Text(
-                      store.user?.following.contains(userStoreLocal.guestId) ??
+                      store.user?.following.contains(currentUser?.docId) ??
                               false
                           ? "Unfollow"
                           : 'Follow',
@@ -79,25 +122,33 @@ class _ContentState extends State<Content> {
                           color: Colors.amberAccent, fontSize: 20, height: 3),
                     ),
                   ),
-                if (userStoreLocal.guestId.isEmpty)
+                if (!widget.isGuest)
                   GestureDetector(
                     onTap: () => setState(
                         () => userStoreLocal.isEdit = !userStoreLocal.isEdit),
-                    child: Text(
-                      userStoreLocal.isEdit ? 'Done' : 'Edit',
-                      style: const TextStyle(
-                          color: Colors.amberAccent, fontSize: 20),
+                    child: DNIconButton(
+                      icon:
+                          Icon(userStoreLocal.isEdit ? Icons.done : Icons.edit),
+                      onClick: () => setState(
+                        () => userStoreLocal.isEdit = !userStoreLocal.isEdit,
+                      ),
                     ),
                   ),
               ],
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
                   child: ListTile(
-                    onTap: () =>
-                        _showFollowBottomShet(context, true, widget.user.docId),
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      _showFollowBottomSheet(
+                        context,
+                        true,
+                        store.user?.followers ?? [],
+                      ).then((_) => setState(() {}));
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: const DNText(
                       title: 'Followers',
@@ -105,28 +156,23 @@ class _ContentState extends State<Content> {
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 5),
-                      child: userStoreLocal.guestId.isNotEmpty
-                          ? FutureBuilder(
-                              future: userService
-                                  .getFollowers(userStoreLocal.guestId),
-                              builder: (context, snap) {
-                                return DNText(
-                                  title: snap.data?.length.toString() ?? '0',
-                                  fontWeight: FontWeight.bold,
-                                );
-                              })
-                          : DNText(
-                              title: store.user?.followers.length.toString() ??
-                                  '0',
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: DNText(
+                        title: currentUser?.followers.length.toString() ?? '0',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: ListTile(
-                    onTap: () => _showFollowBottomShet(
-                        context, false, widget.user.docId),
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      _showFollowBottomSheet(
+                        context,
+                        false,
+                        store.user?.following ?? [],
+                      ).then((_) => setState(() {}));
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: const DNText(
                       title: 'Following',
@@ -134,27 +180,16 @@ class _ContentState extends State<Content> {
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 5),
-                      child: userStoreLocal.guestId.isNotEmpty
-                          ? FutureBuilder(
-                              future: userService
-                                  .getFollowing(userStoreLocal.guestId),
-                              builder: (context, snap) {
-                                return DNText(
-                                  title: snap.data?.length.toString() ?? "0",
-                                  fontWeight: FontWeight.bold,
-                                );
-                              })
-                          : DNText(
-                              title: store.user?.following.length.toString() ??
-                                  "0",
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: DNText(
+                        title: currentUser?.following.length.toString() ?? '0',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: FutureBuilder(
-                    future: taskService.getTasksCount(widget.user.docId),
+                    future: taskService.getTasksCount(currentUser?.docId ?? ''),
                     builder: (context, snap) {
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
@@ -175,6 +210,9 @@ class _ContentState extends State<Content> {
                 ),
               ],
             ),
+            const Divider(
+              color: Colors.white60,
+            )
           ],
         );
       },
@@ -182,79 +220,97 @@ class _ContentState extends State<Content> {
   }
 }
 
-Future<dynamic> _showFollowBottomShet(
-    BuildContext context, bool isFollowers, String userId) {
+Future<dynamic> _showFollowBottomSheet(
+    BuildContext context, bool isFollowers, List<dynamic> usersIds) {
+  final UserServiceImpl userService = UserServiceImpl();
   return showModalBottomSheet(
     backgroundColor: const Color.fromARGB(255, 35, 35, 35),
     context: context,
     builder: (context) {
-      return Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            DNText(
-              title: isFollowers ? 'Followers' : 'Following',
-            ),
-            FutureBuilder(
-              future: isFollowers
-                  ? userService.getFollowers(userId)
-                  : userService.getFollowing(userId),
-              builder: (context, snap) {
-                if (snap.data?.isEmpty ?? true) {
-                  return const Center(
-                    child: DNText(
-                      title: 'Empty',
-                      color: Colors.white,
-                      fontSize: 30,
-                      opacity: .5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: snap.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final user = snap.data![index];
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return UserPage(
-                                user: user,
-                              );
-                            },
-                          ),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: ClipOval(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://microsac.es/wp-content/uploads/2019/06/8V1z7D_t20_YX6vKm.jpg',
-                              width: 45,
-                              height: 45,
-                              fit: BoxFit.cover,
+      return StatefulBuilder(
+        builder: (context, setState) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              DNText(
+                title: isFollowers ? 'Followers' : 'Following',
+              ),
+              FutureBuilder(
+                future: userService.getUser(usersIds),
+                builder: (context, snap) {
+                  if (snap.hasData) {
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: snap.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final User user = snap.data![index];
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return UserPage(
+                                    user: user,
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          title: DNText(title: user.name),
-                          subtitle: DNText(title: user.lastName, opacity: .5),
-                          trailing: isFollowers
-                              ? const SizedBox()
-                              : const SizedBox(
-                                  width: 70,
-                                  child:
-                                      DNText(title: 'Unfollow', fontSize: 14),
-                                ),
+                            leading: FutureBuilder(
+                              future: userService.getAvatar(user.docId),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: snapshot.data ?? '',
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                } else if (!snapshot.hasData &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                  return const CircleAvatar();
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              },
+                            ),
+                            title: DNText(title: user.name),
+                            subtitle: DNText(title: user.lastName, opacity: .5),
+                            trailing: const Icon(
+                              Icons.north_east,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } else if (!snap.hasData &&
+                      snap.connectionState == ConnectionState.done) {
+                    return const Expanded(
+                      child: Center(
+                        child: DNText(
+                          title: 'Empty',
+                          color: Colors.white,
+                          fontSize: 30,
+                          opacity: .5,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+                      ),
+                    );
+                  } else {
+                    return const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       );
     },

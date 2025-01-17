@@ -73,13 +73,80 @@ mixin _$TaskViewsStoreLocal on XStore, Store {
     });
   }
 
+  late final _$isAllTaskAtom = Atom(name: 'XStore.isAllTask', context: context);
+
+  @override
+  bool get isAllTask {
+    _$isAllTaskAtom.reportRead();
+    return super.isAllTask;
+  }
+
+  @override
+  set isAllTask(bool value) {
+    _$isAllTaskAtom.reportWrite(value, super.isAllTask, () {
+      super.isAllTask = value;
+    });
+  }
+
+  late final _$isActiveTaskAtom =
+      Atom(name: 'XStore.isActiveTask', context: context);
+
+  @override
+  bool get isActiveTask {
+    _$isActiveTaskAtom.reportRead();
+    return super.isActiveTask;
+  }
+
+  @override
+  set isActiveTask(bool value) {
+    _$isActiveTaskAtom.reportWrite(value, super.isActiveTask, () {
+      super.isActiveTask = value;
+    });
+  }
+
+  late final _$isCollaborationAtom =
+      Atom(name: 'XStore.isCollaboration', context: context);
+
+  @override
+  bool get isCollaboration {
+    _$isCollaborationAtom.reportRead();
+    return super.isCollaboration;
+  }
+
+  @override
+  set isCollaboration(bool value) {
+    _$isCollaborationAtom.reportWrite(value, super.isCollaboration, () {
+      super.isCollaboration = value;
+    });
+  }
+
+  late final _$searchtextAtom =
+      Atom(name: 'XStore.searchtext', context: context);
+
+  @override
+  String get searchtext {
+    _$searchtextAtom.reportRead();
+    return super.searchtext;
+  }
+
+  @override
+  set searchtext(String value) {
+    _$searchtextAtom.reportWrite(value, super.searchtext, () {
+      super.searchtext = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 selectedDate: ${selectedDate},
 currentMonthIndex: ${currentMonthIndex},
 isShowSearch: ${isShowSearch},
-isOpenCalendar: ${isOpenCalendar}
+isOpenCalendar: ${isOpenCalendar},
+isAllTask: ${isAllTask},
+isActiveTask: ${isActiveTask},
+isCollaboration: ${isCollaboration},
+searchtext: ${searchtext}
     ''';
   }
 }

@@ -24,18 +24,18 @@ mixin _$UserStoreLocal on XStore, Store {
     });
   }
 
-  late final _$guestIdAtom = Atom(name: 'XStore.guestId', context: context);
+  late final _$userAtom = Atom(name: 'XStore.user', context: context);
 
   @override
-  String get guestId {
-    _$guestIdAtom.reportRead();
-    return super.guestId;
+  User? get user {
+    _$userAtom.reportRead();
+    return super.user;
   }
 
   @override
-  set guestId(String value) {
-    _$guestIdAtom.reportWrite(value, super.guestId, () {
-      super.guestId = value;
+  set user(User? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
     });
   }
 
@@ -58,7 +58,7 @@ mixin _$UserStoreLocal on XStore, Store {
   String toString() {
     return '''
 isEdit: ${isEdit},
-guestId: ${guestId},
+user: ${user},
 image: ${image}
     ''';
   }

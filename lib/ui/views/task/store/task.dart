@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mobx/mobx.dart';
 
 part 'task.g.dart';
@@ -13,4 +15,7 @@ abstract class XStore with Store {
 
   @observable
   bool isDoneTask = false;
+
+  @observable
+  List<File> image = [];
 }

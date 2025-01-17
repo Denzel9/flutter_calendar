@@ -1,10 +1,12 @@
-import 'package:calendar_flutter/models/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
-import 'package:calendar_flutter/core/config/routes/routes.dart';
+import 'package:calendar_flutter/utils/search.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserSearchPage extends StatefulWidget {
   const UserSearchPage({super.key});
@@ -16,39 +18,17 @@ class UserSearchPage extends StatefulWidget {
 class _UserSearchStatePage extends State<UserSearchPage> {
   final UserServiceImpl userService = UserServiceImpl();
   final TextEditingController controller = TextEditingController();
-  Future<List<User>>? users;
-  final routesList = Routes();
-  final FocusNode focusNode = FocusNode();
-
-  void getUsers() {
-    setState(() {
-      users = userService.getAllUser(controller.text.trim());
-    });
-  }
-
-  @override
-  void initState() {
-    getUsers();
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    controller.addListener(() {
-      getUsers();
-    });
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {
     controller.dispose();
-    focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final String userId = context.read<AppStore>().user?.docId ?? '';
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
       appBar: AppBar(
@@ -64,9 +44,10 @@ class _UserSearchStatePage extends State<UserSearchPage> {
               children: [
                 Expanded(
                   child: DNInput(
-                    title: 'Search',
+                    title: 'Search users',
                     controller: controller,
                     autoFocus: true,
+                    onClick: (_) => setState(() {}),
                   ),
                 ),
               ],
@@ -74,45 +55,62 @@ class _UserSearchStatePage extends State<UserSearchPage> {
           ),
           const SizedBox(height: 20),
           Expanded(
-            child: FutureBuilder(
-              future: users,
+            child: StreamBuilder(
+              stream: userService.getAllUser(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (controller.text.length > 2) {
-                    return ListView.builder(
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        final user = snapshot.data?[index];
+                  return ListView.builder(
+                    itemCount:
+                        searchUser(snapshot.data?.docs, controller)?.length,
+                    itemBuilder: (context, index) {
+                      final user =
+                          searchUser(snapshot.data?.docs, controller)?[index];
+                      if (user != null && user.docId != userId) {
                         return GestureDetector(
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return UserPage(
-                                  user: user,
-                                );
+                                return UserPage(user: user);
                               },
                             ),
                           ),
                           child: ListTile(
-                            title: DNText(
-                              title: user?.email ?? '',
-                            ),
+                            leading: FutureBuilder(
+                                future: userService.getAvatar(user.docId),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data ?? '',
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  } else if (!snapshot.hasData &&
+                                      snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                    return const CircleAvatar();
+                                  } else {
+                                    return const CircularProgressIndicator();
+                                  }
+                                }),
+                            title:
+                                DNText(title: '${user.name} ${user.lastName}'),
                             subtitle: DNText(
-                              title: user?.docId ?? '',
-                              fontSize: 14,
+                              title: user.email,
+                              fontSize: 15,
                               opacity: .5,
                             ),
-                            leading: const CircleAvatar(),
                           ),
                         );
-                      },
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
+                      }
+                      return null;
+                    },
+                  );
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  return const SizedBox();
                 }
               },
             ),

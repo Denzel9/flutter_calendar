@@ -1,11 +1,11 @@
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:calendar_flutter/ui/views/home/ui/action_button.dart';
-import 'package:calendar_flutter/ui/views/home/ui/content.dart';
-import 'package:calendar_flutter/ui/views/home/ui/content_sliver.dart';
+import 'package:calendar_flutter/ui/views/home/ui/board_tab.dart';
+import 'package:calendar_flutter/ui/views/home/ui/tabs_sliver.dart';
 import 'package:calendar_flutter/ui/views/home/ui/info_sliver.dart';
-import 'package:calendar_flutter/utils/date.dart';
+import 'package:calendar_flutter/ui/views/home/ui/task_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,30 +26,33 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
+  void didChangeDependencies() {
+    final store = context.read<AppStore>();
+    store.initState();
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    context.watch<AppStore>().selectedDate = now;
     tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final store = context.watch<AppStore>();
-    return Scaffold(
-      body: Observer(builder: (_) {
-        return NestedScrollView(
-          scrollBehavior: store.todayTasks.isEmpty
-              ? const MaterialScrollBehavior().copyWith(
-                  physics: const NeverScrollableScrollPhysics(),
-                  dragDevices: {},
-                )
-              : null,
+    return Provider(
+      create: (context) => HomeStoreLocal(),
+      child: Scaffold(
+        body: NestedScrollView(
           headerSliverBuilder: (context, _) =>
-              [const InfoSliver(), ContentSliver(controller: tabController)],
-          body: Content(controller: tabController),
-        );
-      }),
-      floatingActionButton: const ActionButton(),
+              [const InfoSliver(), TabsSliver(controller: tabController)],
+          body: TabBarView(
+            controller: tabController,
+            children: const [TaskTab(), BoardTab()],
+          ),
+        ),
+        floatingActionButton: const ActionButton(),
+      ),
     );
   }
 }

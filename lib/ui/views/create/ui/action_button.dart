@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 
 class ActionButton extends StatefulWidget {
   final TabController controller;
-  const ActionButton({super.key, required this.controller});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const ActionButton(
+      {super.key, required this.controller, required this.scaffoldKey});
 
   @override
   State<ActionButton> createState() => _ActionButtonState();
@@ -21,12 +23,106 @@ class _ActionButtonState extends State<ActionButton> {
   final BoardServiceImpl boardService = BoardServiceImpl();
 
   @override
+  void dispose() {
+    if (context.mounted) {
+      context.read<AppStore>().selectedDate = now;
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
     final CreateStoreLocal createStoreLocal = context.watch<CreateStoreLocal>();
+
+    void showSnackbar(String title) {
+      widget.scaffoldKey.currentState?.setState(() {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(title)));
+      });
+    }
+
+    void addTask() {
+      if (createStoreLocal.taskTitle.isEmpty) {
+        return showSnackbar('Title is requared');
+      } else {
+        taskService.addTask(
+          {
+            'author': store.user?.name,
+            'done': false,
+            'board': createStoreLocal.board,
+            'title': createStoreLocal.taskTitle,
+            'description': createStoreLocal.taskDescription,
+            'assign': createStoreLocal.assign,
+            'userId': store.user?.docId,
+            'date': store.selectedDate.toString(),
+            'createdAt': now.toString(),
+            'isCollaborated': createStoreLocal.assign.isNotEmpty ? true : false
+          },
+        ).then(
+          (taskId) async {
+            List<Board> findedBoard = store.boards
+                .where((board) => board.title == createStoreLocal.board)
+                .toList();
+            if (findedBoard.isEmpty) {
+              boardService.addBoard({
+                'author': store.user?.name,
+                'title': createStoreLocal.board,
+                'description': '',
+                'assign': createStoreLocal.assign,
+                'userId': store.user?.docId,
+                'createdAt': now.toString(),
+                'tasks': [taskId]
+              });
+            } else {
+              boardService.addTask(findedBoard.first.docId, taskId);
+            }
+            await taskService.addAttachments(createStoreLocal.image, taskId);
+          },
+        ).then(
+          (_) => setState(() {
+            Navigator.pop(context);
+            taskService.isLoading = false;
+          }),
+        );
+      }
+    }
+
+    void addBoard() {
+      if (createStoreLocal.boardTitle.isEmpty) {
+        return showSnackbar("Title is requared");
+      } else if (store.boards
+          .where((board) => board.title == createStoreLocal.boardTitle)
+          .isNotEmpty) {
+        return showSnackbar("The name board already exists");
+      }
+
+      boardService.addBoard(
+        {
+          'author': store.user?.name,
+          'title': createStoreLocal.boardTitle,
+          'description': createStoreLocal.boardDescription,
+          'assign': [],
+          'userId': store.user?.docId,
+          'createdAt': now.toString(),
+          'tasks': []
+        },
+      ).then(
+        (_) {
+          if (context.mounted) {
+            setState(() {
+              Navigator.pop(context);
+            });
+          }
+        },
+      );
+    }
+
     return FloatingActionButton(
       clipBehavior: Clip.antiAlias,
       child: Ink(
+        padding:
+            taskService.isLoading ? const EdgeInsets.all(10) : EdgeInsets.zero,
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -39,64 +135,19 @@ class _ActionButtonState extends State<ActionButton> {
             ),
           ),
         ),
-        child: const Center(
-          child: DNText(title: 'Add'),
-        ),
+        child: taskService.isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(),
+              )
+            : const Center(
+                child: DNText(title: 'Add'),
+              ),
       ),
       onPressed: () {
         setState(
-          () {
-            if (widget.controller.index == 0) {
-              taskService.addTask(
-                {
-                  'author': store.user?.name,
-                  'done': false,
-                  'board': createStoreLocal.board,
-                  'title': createStoreLocal.taskTitle,
-                  'description': createStoreLocal.taskDescription,
-                  'assign': createStoreLocal.assign,
-                  'docId': store.user?.docId,
-                  'date': store.selectedDate.toString(),
-                  'createdAt': now.toString()
-                },
-              ).then(
-                (taskId) {
-                  List<Board> findedBoard = store.boards
-                      .where((board) => board.title == createStoreLocal.board)
-                      .toList();
-                  if (findedBoard.isEmpty) {
-                    boardService.addBoard({
-                      'author': store.user?.name,
-                      'title': createStoreLocal.board,
-                      'description': '',
-                      'assign': createStoreLocal.assign,
-                      'userId': store.user?.docId,
-                      'createdAt': now.toString(),
-                      'tasks': [taskId]
-                    });
-                  } else {
-                    boardService.addTask(findedBoard.first.docId, taskId);
-                  }
-                },
-              );
-            } else {
-              () {
-                boardService.addBoard(
-                  {
-                    'author': store.user?.name,
-                    'title': createStoreLocal.boardTitle,
-                    'description': createStoreLocal.boardDescription,
-                    'assign': [],
-                    'userId': store.user?.docId,
-                    'createdAt': now.toString(),
-                    'tasks': []
-                  },
-                );
-              };
-            }
-            Navigator.pop(context);
-            store.selectedDate = now;
-          },
+          () => widget.controller.index == 0 ? addTask() : addBoard(),
         );
       },
     );

@@ -11,19 +11,10 @@ class AppProvider extends StatefulWidget {
 }
 
 class _AppProviderState extends State<AppProvider> {
-  late AppStore store;
-
-  @override
-  void initState() {
-    store = AppStore();
-    store.initState();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (context) => store,
+      create: (context) => AppStore(),
       child: widget.child,
     );
   }

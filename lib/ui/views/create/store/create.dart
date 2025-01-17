@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:mobx/mobx.dart';
 
 part 'create.g.dart';
@@ -7,9 +6,6 @@ part 'create.g.dart';
 class CreateStoreLocal = XStore with _$CreateStoreLocal;
 
 abstract class XStore with Store {
-  @observable
-  List<String> assignList = [];
-
   @observable
   List<String> boards = [];
 
@@ -32,11 +28,8 @@ abstract class XStore with Store {
   String boardDescription = '';
 
   @observable
-  String assignHint = '';
-
-  @observable
   bool isEdit = false;
 
   @observable
-  File? image;
+  List<File> image = [];
 }

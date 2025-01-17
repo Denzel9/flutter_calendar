@@ -13,5 +13,5 @@ Color getColorTasks(String board) {
   if (board == "Myself") {
     return Colors.green;
   }
-  return Colors.transparent;
+  return Colors.teal;
 }

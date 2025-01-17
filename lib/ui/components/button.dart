@@ -1,17 +1,14 @@
+import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:flutter/material.dart';
 
 class DNButton extends StatelessWidget {
   final String title;
   final void Function() onClick;
   final bool isPrimary;
-
   final double width;
   final double height;
-  final double fonySize;
-
-  final Color? backgroundColor;
+  final double fontSize;
   final Color color;
-
   final bool loading;
 
   const DNButton({
@@ -21,56 +18,38 @@ class DNButton extends StatelessWidget {
     required this.isPrimary,
     this.loading = false,
     this.width = 100,
-    this.height = 40,
-    this.fonySize = 18,
-    this.backgroundColor,
-    this.color = Colors.white,
+    this.height = 45,
+    this.fontSize = 16,
+    this.color = Colors.black,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onClick,
-      splashColor: Colors.white10,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: Ink(
-        padding: loading
-            ? const EdgeInsets.symmetric(horizontal: 30, vertical: 5)
-            : null,
+      child: AnimatedContainer(
         width: width,
         height: height,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
         decoration: BoxDecoration(
+          color: isPrimary
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
-          color: Theme.of(context).primaryColor,
-          image: isPrimary
-              ? DecorationImage(
-                  image: const AssetImage('assets/pattern.jpg'),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.amberAccent.shade200,
-                    BlendMode.multiply,
-                  ),
-                )
-              : null,
+          border:
+              Border.all(color: isPrimary ? Colors.transparent : Colors.white),
         ),
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+        child: Align(
+          alignment: Alignment.center,
           child: loading
               ? const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
+                  color: Colors.black,
                 )
-              : Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: fonySize,
-                      fontWeight: FontWeight.w400,
-                      color: color,
-                    ),
-                  ),
+              : DNText(
+                  title: title,
+                  fontSize: fontSize,
+                  color: isPrimary ? color : Colors.white,
                 ),
         ),
       ),

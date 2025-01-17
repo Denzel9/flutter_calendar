@@ -9,22 +9,6 @@ part of 'create.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CreateStoreLocal on XStore, Store {
-  late final _$assignListAtom =
-      Atom(name: 'XStore.assignList', context: context);
-
-  @override
-  List<String> get assignList {
-    _$assignListAtom.reportRead();
-    return super.assignList;
-  }
-
-  @override
-  set assignList(List<String> value) {
-    _$assignListAtom.reportWrite(value, super.assignList, () {
-      super.assignList = value;
-    });
-  }
-
   late final _$boardsAtom = Atom(name: 'XStore.boards', context: context);
 
   @override
@@ -133,22 +117,6 @@ mixin _$CreateStoreLocal on XStore, Store {
     });
   }
 
-  late final _$assignHintAtom =
-      Atom(name: 'XStore.assignHint', context: context);
-
-  @override
-  String get assignHint {
-    _$assignHintAtom.reportRead();
-    return super.assignHint;
-  }
-
-  @override
-  set assignHint(String value) {
-    _$assignHintAtom.reportWrite(value, super.assignHint, () {
-      super.assignHint = value;
-    });
-  }
-
   late final _$isEditAtom = Atom(name: 'XStore.isEdit', context: context);
 
   @override
@@ -167,13 +135,13 @@ mixin _$CreateStoreLocal on XStore, Store {
   late final _$imageAtom = Atom(name: 'XStore.image', context: context);
 
   @override
-  File? get image {
+  List<File> get image {
     _$imageAtom.reportRead();
     return super.image;
   }
 
   @override
-  set image(File? value) {
+  set image(List<File> value) {
     _$imageAtom.reportWrite(value, super.image, () {
       super.image = value;
     });
@@ -182,7 +150,6 @@ mixin _$CreateStoreLocal on XStore, Store {
   @override
   String toString() {
     return '''
-assignList: ${assignList},
 boards: ${boards},
 assign: ${assign},
 board: ${board},
@@ -190,7 +157,6 @@ taskTitle: ${taskTitle},
 taskDescription: ${taskDescription},
 boardTitle: ${boardTitle},
 boardDescription: ${boardDescription},
-assignHint: ${assignHint},
 isEdit: ${isEdit},
 image: ${image}
     ''';

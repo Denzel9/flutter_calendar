@@ -21,12 +21,11 @@ dependencies:
     auto_size_text: ^3.0.0
     firebase_storage: ^12.3.1
     image_picker: ^1.1.2
-    skeletonizer: ^1.4.2
     cached_network_image: ^3.4.1
     provider: ^6.1.2
     flutter_provider: ^2.1.0
     localstorage: ^5.0.0
-    sidebarx: ^0.17.1
+    animations: ^2.0.11
 
 dev_dependencies:
     flutter_test:

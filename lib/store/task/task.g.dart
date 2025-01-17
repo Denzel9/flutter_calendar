@@ -9,31 +9,31 @@ part of 'task.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$TaskStore on XStore, Store {
-  Computed<List<Task>>? _$listAllTaskComputed;
+  Computed<List<TaskModel>>? _$listAllTaskComputed;
 
   @override
-  List<Task> get listAllTask =>
-      (_$listAllTaskComputed ??= Computed<List<Task>>(() => super.listAllTask,
+  List<TaskModel> get listAllTask => (_$listAllTaskComputed ??=
+          Computed<List<TaskModel>>(() => super.listAllTask,
               name: 'XStore.listAllTask'))
-          .value;
-  Computed<List<Task>>? _$listActiveTaskComputed;
+      .value;
+  Computed<List<TaskModel>>? _$listActiveTaskComputed;
 
   @override
-  List<Task> get listActiveTask => (_$listActiveTaskComputed ??=
-          Computed<List<Task>>(() => super.listActiveTask,
+  List<TaskModel> get listActiveTask => (_$listActiveTaskComputed ??=
+          Computed<List<TaskModel>>(() => super.listActiveTask,
               name: 'XStore.listActiveTask'))
       .value;
 
   late final _$tasksAtom = Atom(name: 'XStore.tasks', context: context);
 
   @override
-  List<Task> get tasks {
+  List<TaskModel> get tasks {
     _$tasksAtom.reportRead();
     return super.tasks;
   }
 
   @override
-  set tasks(List<Task> value) {
+  set tasks(List<TaskModel> value) {
     _$tasksAtom.reportWrite(value, super.tasks, () {
       super.tasks = value;
     });
@@ -113,7 +113,7 @@ mixin _$TaskStore on XStore, Store {
       ActionController(name: 'XStore', context: context);
 
   @override
-  void addTask(List<Task> listTask) {
+  void addTask(List<TaskModel> listTask) {
     final _$actionInfo =
         _$XStoreActionController.startAction(name: 'XStore.addTask');
     try {

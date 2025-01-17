@@ -17,4 +17,16 @@ abstract class XStore with Store {
 
   @observable
   bool isOpenCalendar = false;
+
+  @observable
+  bool isAllTask = false;
+
+  @observable
+  bool isActiveTask = true;
+
+  @observable
+  bool isCollaboration = false;
+
+  @observable
+  String searchtext = '';
 }
