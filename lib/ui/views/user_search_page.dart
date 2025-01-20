@@ -27,7 +27,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String userId = context.read<AppStore>().user?.docId ?? '';
+    final String userId = context.read<AppStore>().user.docId;
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -39,7 +39,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
             child: Row(
               children: [
                 Expanded(
@@ -53,7 +53,6 @@ class _UserSearchStatePage extends State<UserSearchPage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
           Expanded(
             child: StreamBuilder(
               stream: userService.getAllUser(),
@@ -71,7 +70,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return UserPage(user: user);
+                                return UserPage(userId: user.docId);
                               },
                             ),
                           ),

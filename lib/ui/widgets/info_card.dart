@@ -74,7 +74,7 @@ class _InfoCardState extends State<InfoCard> {
                       width: 10,
                     ),
                     DNText(
-                      title: assignTitle(store.user?.name ?? ''),
+                      title: assignTitle(store.user.name),
                       color: Colors.white54,
                       fontSize: 14,
                     ),

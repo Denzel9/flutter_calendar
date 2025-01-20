@@ -118,13 +118,13 @@ mixin _$AppStore on AppStoreBase, Store {
   late final _$userAtom = Atom(name: 'AppStoreBase.user', context: context);
 
   @override
-  User? get user {
+  User get user {
     _$userAtom.reportRead();
     return super.user;
   }
 
   @override
-  set user(User? value) {
+  set user(User value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });

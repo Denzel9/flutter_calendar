@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ImageSliver extends StatefulWidget {
-  final bool isGuest;
-  const ImageSliver({super.key, required this.isGuest});
+  const ImageSliver({super.key});
 
   @override
   State<ImageSliver> createState() => _ImageSliverState();
@@ -41,7 +40,8 @@ class _ImageSliverState extends State<ImageSliver> {
 
     return Observer(
       builder: (_) {
-        final currentUser = widget.isGuest ? userStoreLocal.user : store.user;
+        final currentUser =
+            userStoreLocal.isGuest ? userStoreLocal.user : store.user;
 
         return SliverAppBar(
           surfaceTintColor: Colors.white,
@@ -54,57 +54,51 @@ class _ImageSliverState extends State<ImageSliver> {
             style: ButtonStyle(iconSize: WidgetStatePropertyAll(30)),
           ),
           actions: [
-            if (!userStoreLocal.isEdit && !widget.isGuest ||
-                store.user!.following.contains(userStoreLocal.user?.docId))
-              if (!widget.isGuest)
-                DNIconButton(
-                  onClick: () {
-                    showModalBottomSheet(
-                      backgroundColor: const Color.fromARGB(255, 35, 35, 35),
-                      context: context,
-                      builder: (_) {
-                        return StatefulBuilder(
-                            builder: (context, setLocalState) => Container(
-                                  padding: const EdgeInsets.all(20),
-                                  height: 300,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.center,
-                                        child: DNText(
-                                          title: 'Settings',
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        onTap: () async {
-                                          await localStorage.deleteItem('id');
-                                          if (context.mounted) {
-                                            Navigator.pushReplacementNamed(
-                                                context, routesList.auth);
-                                          }
-                                        },
-                                        title: const DNText(
-                                            title: 'Change account'),
-                                        trailing: Icon(
-                                          Icons.exit_to_app,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ));
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.settings,
-                    color: Colors.black,
-                  ),
+            if (!userStoreLocal.isGuest && !userStoreLocal.isEdit)
+              DNIconButton(
+                onClick: () {
+                  showModalBottomSheet(
+                    backgroundColor: const Color.fromARGB(255, 35, 35, 35),
+                    context: context,
+                    builder: (_) {
+                      return Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Align(
+                              alignment: Alignment.center,
+                              child: DNText(
+                                title: 'Settings',
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              onTap: () async {
+                                await localStorage.deleteItem('id');
+                                if (context.mounted) {
+                                  Navigator.pushReplacementNamed(
+                                      context, routesList.auth);
+                                }
+                              },
+                              title: const DNText(title: 'Change account'),
+                              trailing: Icon(
+                                Icons.exit_to_app,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.settings,
+                  color: Colors.black,
                 ),
+              ),
             if (userStoreLocal.isEdit)
               DNIconButton(
                 onClick: () => pickImage(userStoreLocal),
@@ -116,9 +110,7 @@ class _ImageSliverState extends State<ImageSliver> {
             if (userStoreLocal.isEdit && userStoreLocal.image != null)
               DNIconButton(
                 backgroundColor: Colors.red,
-                onClick: () => setState(() {
-                  userStoreLocal.image = null;
-                }),
+                onClick: () => setState(() => userStoreLocal.image = null),
                 icon: const Icon(
                   Icons.clear,
                   color: Colors.white,
@@ -128,7 +120,7 @@ class _ImageSliverState extends State<ImageSliver> {
               DNIconButton(
                 backgroundColor: Colors.green,
                 onClick: () => userService
-                    .setAvatar(userStoreLocal.image!, store.user?.docId ?? '')
+                    .setAvatar(userStoreLocal.image!, store.user.docId)
                     .then((_) => setState(() {
                           userStoreLocal.image = null;
                         })),
@@ -141,30 +133,29 @@ class _ImageSliverState extends State<ImageSliver> {
           ],
           leadingWidth: 50,
           flexibleSpace: FlexibleSpaceBar(
-            background: FutureBuilder(
-              future: userService.getAvatar(currentUser?.docId ?? ''),
-              builder: (context, snap) {
-                if (userStoreLocal.image?.path.isNotEmpty ?? false) {
-                  return Image.file(
-                    File(userStoreLocal.image!.path),
-                    fit: BoxFit.cover,
-                  );
-                }
-                if (snap.hasData) {
-                  return CachedNetworkImage(
-                    imageUrl: snap.data ?? '',
-                    fit: BoxFit.cover,
-                  );
-                } else {
-                  return CachedNetworkImage(
-                    imageUrl:
-                        'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg',
-                    fit: BoxFit.cover,
-                  );
-                }
-              },
-            ),
-          ),
+              background: FutureBuilder(
+            future: userService.getAvatar(currentUser?.docId ?? ''),
+            builder: (context, snap) {
+              if (userStoreLocal.image?.path.isNotEmpty ?? false) {
+                return Image.file(
+                  File(userStoreLocal.image!.path),
+                  fit: BoxFit.cover,
+                );
+              }
+              if (snap.hasData) {
+                return DNImage(
+                  url: snap.data ?? '',
+                );
+              }
+              if (!snap.hasData &&
+                  snap.connectionState == ConnectionState.done) {
+                return const DNImage(
+                    url:
+                        'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg');
+              }
+              return const SizedBox();
+            },
+          )),
         );
       },
     );

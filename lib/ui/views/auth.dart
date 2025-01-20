@@ -29,6 +29,7 @@ class _AuthPageState extends State<AuthPage> {
   void dispose() {
     login.dispose();
     password.dispose();
+    secondPassword.dispose();
     super.dispose();
   }
 

@@ -1,7 +1,9 @@
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:calendar_flutter/ui/views/create/ui/action_button.dart';
-import 'package:calendar_flutter/ui/views/create/ui/form.dart';
+import 'package:calendar_flutter/ui/views/create/ui/assign.dart';
+import 'package:calendar_flutter/ui/views/create/ui/main.dart';
+import 'package:calendar_flutter/ui/views/create/ui/media.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,9 +79,19 @@ class _CreatePageState extends State<CreatePage>
                     padding: const EdgeInsets.only(top: 20),
                     child: TabBarView(
                       controller: _tabController,
-                      children: const [
-                        DNForm(isTask: true),
-                        DNForm(isTask: false),
+                      children: [
+                        ListView(
+                          children: const [
+                            Main(isTask: true),
+                            Assign(),
+                            Media()
+                          ],
+                        ),
+                        ListView(
+                          children: const [
+                            Main(isTask: false),
+                          ],
+                        ),
                       ],
                     ),
                   ),

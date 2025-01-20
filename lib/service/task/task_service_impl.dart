@@ -33,6 +33,7 @@ class TaskServiceImpl implements TaskService {
     return db
         .collection("tasks")
         .where("assign", arrayContains: id)
+        .where("userId", isNotEqualTo: id)
         .snapshots();
   }
 

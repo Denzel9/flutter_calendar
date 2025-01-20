@@ -54,12 +54,36 @@ mixin _$UserStoreLocal on XStore, Store {
     });
   }
 
+  late final _$isGuestAtom = Atom(name: 'XStore.isGuest', context: context);
+
+  @override
+  bool get isGuest {
+    _$isGuestAtom.reportRead();
+    return super.isGuest;
+  }
+
+  @override
+  set isGuest(bool value) {
+    _$isGuestAtom.reportWrite(value, super.isGuest, () {
+      super.isGuest = value;
+    });
+  }
+
+  late final _$getUserAsyncAction =
+      AsyncAction('XStore.getUser', context: context);
+
+  @override
+  Future<Null> getUser(String id) {
+    return _$getUserAsyncAction.run(() => super.getUser(id));
+  }
+
   @override
   String toString() {
     return '''
 isEdit: ${isEdit},
 user: ${user},
-image: ${image}
+image: ${image},
+isGuest: ${isGuest}
     ''';
   }
 }

@@ -3,6 +3,7 @@ import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +26,14 @@ class _AssignState extends State<Assign> {
     final AppStore store = context.watch<AppStore>();
 
     void doAssign(String id) {
-      if (createStore.assign.where((el) => el == id).isEmpty) {
-        setState(() {
+      setState(() {
+        if (createStore.assign.where((el) => el == id).isEmpty) {
           createStore.assign = [...createStore.assign, id];
-        });
-      } else {
-        setState(() {
+        } else {
           createStore.assign =
               createStore.assign.where((el) => el != id).toList();
-        });
-      }
+        }
+      });
     }
 
     return Observer(
@@ -49,7 +48,7 @@ class _AssignState extends State<Assign> {
               fontWeight: FontWeight.bold,
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 children: [
                   Expanded(
@@ -68,17 +67,17 @@ class _AssignState extends State<Assign> {
                                 builder: (context, snap) {
                                   if (snap.hasData) {
                                     return ClipOval(
-                                      child: Image.network(
-                                        snap.data.toString(),
-                                        fit: BoxFit.cover,
+                                      child: DNImage(
+                                        url: snap.data.toString(),
                                         width: 40,
                                         height: 40,
                                       ),
                                     );
                                   }
-                                  return const ClipOval(
-                                    child: ColoredBox(color: Colors.red),
-                                  );
+                                  return CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      child: const Icon(Icons.person));
                                 },
                               ),
                             ),
@@ -89,91 +88,84 @@ class _AssignState extends State<Assign> {
                                 backgroundColor:
                                     Theme.of(context).scaffoldBackgroundColor,
                                 context: context,
-                                builder: (context) {
+                                builder: (_) {
                                   return Container(
                                     margin: const EdgeInsets.only(top: 20),
                                     width: double.infinity,
-                                    child: FutureBuilder(
-                                      future: userService.getFollowings(
-                                          store.user?.docId ?? ''),
+                                    child: StreamBuilder(
+                                      stream: userService
+                                          .getFollowers(store.user.docId),
                                       builder: (context, snap) {
-                                        if (snap.hasData) {
+                                        if (snap.data?.docs.isNotEmpty ??
+                                            false) {
                                           return ListView.builder(
-                                            itemCount: snap.data?.length,
+                                            itemCount: snap.data?.docs.length,
                                             itemBuilder: (context, index) {
-                                              final User? user =
-                                                  snap.data?[index];
-                                              if (user != null) {
-                                                return ListTile(
-                                                  title: DNText(
-                                                    title: user.name,
-                                                  ),
-                                                  subtitle: DNText(
-                                                    title: user.lastName,
-                                                  ),
-                                                  leading: FutureBuilder(
-                                                      future:
-                                                          userService.getAvatar(
-                                                              user.docId),
-                                                      builder: (context, snap) {
-                                                        if (snap.hasData) {
-                                                          return ClipOval(
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  snap.data ??
-                                                                      '',
-                                                              width: 40,
-                                                              height: 40,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          );
-                                                        } else if (!snap
-                                                                .hasData &&
-                                                            snap.connectionState ==
-                                                                ConnectionState
-                                                                    .done) {
-                                                          return const CircleAvatar();
-                                                        } else {
-                                                          return const CircularProgressIndicator();
-                                                        }
-                                                      }),
-                                                  trailing:
-                                                      Observer(builder: (_) {
-                                                    return DNIconButton(
-                                                      onClick: () =>
-                                                          doAssign(user.docId),
-                                                      icon: createStore.assign
-                                                              .contains(
-                                                                  user.docId)
-                                                          ? const Icon(
-                                                              Icons.done)
-                                                          : const Icon(
-                                                              Icons.add),
-                                                    );
-                                                  }),
-                                                );
-                                              } else {
-                                                return const SizedBox();
-                                              }
+                                              final User user =
+                                                  User.fromJsonWithId(
+                                                      snap.data?.docs[index]
+                                                          .data(),
+                                                      snap.data?.docs[index]
+                                                              .id ??
+                                                          '');
+
+                                              return ListTile(
+                                                title: DNText(
+                                                  title: user.name,
+                                                ),
+                                                subtitle: DNText(
+                                                  title: user.lastName,
+                                                ),
+                                                leading: FutureBuilder(
+                                                    future: userService
+                                                        .getAvatar(user.docId),
+                                                    builder: (context, snap) {
+                                                      if (snap.hasData) {
+                                                        return ClipOval(
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            imageUrl:
+                                                                snap.data ?? '',
+                                                            width: 40,
+                                                            height: 40,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        );
+                                                      } else if (!snap
+                                                              .hasData &&
+                                                          snap.connectionState ==
+                                                              ConnectionState
+                                                                  .done) {
+                                                        return const CircleAvatar();
+                                                      } else {
+                                                        return const CircularProgressIndicator();
+                                                      }
+                                                    }),
+                                                trailing:
+                                                    Observer(builder: (_) {
+                                                  return DNIconButton(
+                                                    onClick: () =>
+                                                        doAssign(user.docId),
+                                                    icon: createStore.assign
+                                                            .contains(
+                                                                user.docId)
+                                                        ? const Icon(Icons.done)
+                                                        : const Icon(Icons.add),
+                                                  );
+                                                }),
+                                              );
                                             },
                                           );
-                                        } else if (!snap.hasData &&
-                                            snap.connectionState ==
-                                                ConnectionState.done) {
-                                          return const Expanded(
-                                            child: Center(
-                                              child: DNText(
-                                                title: 'Empty',
-                                                color: Colors.white,
-                                                fontSize: 30,
-                                                opacity: .5,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        } else {
+                                          return const Center(
+                                            child: DNText(
+                                              title: 'Empty',
+                                              color: Colors.white,
+                                              fontSize: 30,
+                                              opacity: .5,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           );
-                                        } else {
-                                          return const CircularProgressIndicator();
                                         }
                                       },
                                     ),

@@ -22,6 +22,7 @@ class _TabsSliverState extends State<TabsSliver> {
   @override
   Widget build(BuildContext context) {
     final store = context.watch<AppStore>();
+
     return SliverAppBar(
       backgroundColor: Theme.of(context).primaryColorDark,
       surfaceTintColor: Colors.white,
@@ -46,9 +47,7 @@ class _TabsSliverState extends State<TabsSliver> {
               indicatorColor: Colors.amberAccent,
               unselectedLabelColor: Colors.white54,
               labelColor: Colors.amberAccent,
-              overlayColor: WidgetStateProperty.all(
-                Colors.amberAccent.withOpacity(0.1),
-              ),
+              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
               tabs: [
                 Tab(
                   height: 60,

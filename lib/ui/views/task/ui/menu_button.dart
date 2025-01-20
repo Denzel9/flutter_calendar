@@ -6,8 +6,6 @@ import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum SampleItem { delete, edit }
-
 class MenuButton extends StatefulWidget {
   final String docId;
   final List<Board> boards;
@@ -36,9 +34,8 @@ class _MenuButtonState extends State<MenuButton> {
       style: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
           foregroundColor: WidgetStatePropertyAll(Colors.black)),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<SampleItem>>[
-        PopupMenuItem<SampleItem>(
-          value: SampleItem.edit,
+      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        PopupMenuItem(
           onTap: () => setState(
             () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
           ),
@@ -47,8 +44,7 @@ class _MenuButtonState extends State<MenuButton> {
             color: Colors.black,
           ),
         ),
-        PopupMenuItem<SampleItem>(
-          value: SampleItem.delete,
+        PopupMenuItem(
           onTap: () {
             setState(() {
               taskService.deleteTask(widget.docId).then((_) {

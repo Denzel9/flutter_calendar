@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:calendar_flutter/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract interface class UserService {
@@ -12,11 +11,11 @@ abstract interface class UserService {
 
   Future<Stream<DocumentSnapshot<Map<String, dynamic>>>> setUser(String id);
 
-  Future<List<User>> getFollowers(String id);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id);
 
-  Future<List<User>> getFollowings(String id);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowings(String id);
 
-  Future<List<dynamic>> getUser(List<String> usersId);
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getUser(String usersId);
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser();
 

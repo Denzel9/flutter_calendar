@@ -119,42 +119,63 @@ class _NavigateState extends State<Navigate> {
                       ),
                       if (!taskViewsStoreLocal.isShowSearch &&
                           widget.controller.index == 0)
-                        PopupMenuButton(
-                          icon: const Icon(
-                            Icons.filter_alt,
-                            color: Colors.black,
-                          ),
-                          style: const ButtonStyle(
-                            backgroundColor:
-                                WidgetStatePropertyAll(Colors.amberAccent),
-                            foregroundColor:
-                                WidgetStatePropertyAll(Colors.white),
-                          ),
-                          itemBuilder: (BuildContext context) => [
-                            PopupMenuItem(
-                              value: SampleItem.active,
-                              onTap: () => setState(
-                                () => taskViewsStoreLocal.isActiveTask = true,
+                        Stack(
+                          children: [
+                            PopupMenuButton(
+                              icon: const Icon(
+                                Icons.filter_alt,
+                                color: Colors.black,
                               ),
-                              child: DNText(
-                                title: 'Active',
-                                color: taskViewsStoreLocal.isActiveTask
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.black,
+                              style: const ButtonStyle(
+                                backgroundColor:
+                                    WidgetStatePropertyAll(Colors.amberAccent),
+                                foregroundColor:
+                                    WidgetStatePropertyAll(Colors.white),
                               ),
+                              itemBuilder: (BuildContext context) => [
+                                PopupMenuItem(
+                                  value: SampleItem.active,
+                                  onTap: () => setState(
+                                    () =>
+                                        taskViewsStoreLocal.isActiveTask = true,
+                                  ),
+                                  child: DNText(
+                                    title:
+                                        'Active ${store.listActiveTask.length}',
+                                    color: taskViewsStoreLocal.isActiveTask
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.black,
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: SampleItem.done,
+                                  onTap: () => setState(
+                                    () => taskViewsStoreLocal.isActiveTask =
+                                        false,
+                                  ),
+                                  child: DNText(
+                                    title:
+                                        'Archive ${store.listActiveTask.length}',
+                                    color: !taskViewsStoreLocal.isActiveTask
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                            PopupMenuItem(
-                              value: SampleItem.done,
-                              onTap: () => setState(
-                                () => taskViewsStoreLocal.isActiveTask = false,
-                              ),
-                              child: DNText(
-                                title: 'Archive',
-                                color: !taskViewsStoreLocal.isActiveTask
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.black,
-                              ),
-                            ),
+                            if (store.listArchiveTasks.isNotEmpty)
+                              Positioned(
+                                right: 5,
+                                top: 3,
+                                child: Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              )
                           ],
                         ),
                       if (!taskViewsStoreLocal.isShowSearch &&

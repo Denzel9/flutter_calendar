@@ -48,13 +48,13 @@ class _ActionButtonState extends State<ActionButton> {
       } else {
         taskService.addTask(
           {
-            'author': store.user?.name,
+            'author': store.user.name,
             'done': false,
             'board': createStoreLocal.board,
             'title': createStoreLocal.taskTitle,
             'description': createStoreLocal.taskDescription,
             'assign': createStoreLocal.assign,
-            'userId': store.user?.docId,
+            'userId': store.user.docId,
             'date': store.selectedDate.toString(),
             'createdAt': now.toString(),
             'isCollaborated': createStoreLocal.assign.isNotEmpty ? true : false
@@ -66,11 +66,11 @@ class _ActionButtonState extends State<ActionButton> {
                 .toList();
             if (findedBoard.isEmpty) {
               boardService.addBoard({
-                'author': store.user?.name,
+                'author': store.user.name,
                 'title': createStoreLocal.board,
                 'description': '',
                 'assign': createStoreLocal.assign,
-                'userId': store.user?.docId,
+                'userId': store.user.docId,
                 'createdAt': now.toString(),
                 'tasks': [taskId]
               });
@@ -99,11 +99,11 @@ class _ActionButtonState extends State<ActionButton> {
 
       boardService.addBoard(
         {
-          'author': store.user?.name,
+          'author': store.user.name,
           'title': createStoreLocal.boardTitle,
           'description': createStoreLocal.boardDescription,
           'assign': [],
-          'userId': store.user?.docId,
+          'userId': store.user.docId,
           'createdAt': now.toString(),
           'tasks': []
         },

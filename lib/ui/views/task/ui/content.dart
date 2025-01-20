@@ -66,7 +66,6 @@ class _ContentState extends State<Content> {
                     Icons.arrow_downward,
                     color: Colors.black,
                   ),
-                  backgroundColor: Colors.amberAccent,
                   onClick: () => Navigator.pop(context),
                 ),
                 MenuButton(
@@ -79,7 +78,10 @@ class _ContentState extends State<Content> {
               child: ListView(
                 controller: widget.controller,
                 children: [
-                  BoardButton(board: widget.task.board, boards: store.boards),
+                  BoardButton(
+                    board: widget.task.board,
+                    boards: store.boards,
+                  ),
                   DNEditableField(
                     title: widget.task.title,
                     isEdit: taskStoreLocal.isEdit,
@@ -155,18 +157,13 @@ class _ContentState extends State<Content> {
                     title: 'Created',
                     opacity: .5,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  if (widget.task.author.isNotEmpty)
-                    DNText(
-                      title: widget.task.createdAt.isNotEmpty
-                          ? '${getFormatDate(widget.task.createdAt)}, by ${widget.task.author}'
-                          : widget.task.author,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: DNText(
+                      title:
+                          '${getFormatDate(widget.task.createdAt)}, by ${widget.task.author}',
                       fontWeight: FontWeight.w500,
                     ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Attachments(
                     docId: widget.task.docId,

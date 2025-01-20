@@ -11,7 +11,12 @@ import 'package:provider/provider.dart';
 
 class HeaderCalendar extends StatefulWidget {
   final List<TaskModel> tasks;
-  const HeaderCalendar({super.key, required this.tasks});
+  final TabController controller;
+  const HeaderCalendar({
+    super.key,
+    required this.tasks,
+    required this.controller,
+  });
 
   @override
   State<HeaderCalendar> createState() => _HeaderCalendarState();
@@ -40,6 +45,7 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
                   taskViewsStoreLocal.selectedDate = day;
                   taskViewsStoreLocal.isOpenCalendar =
                       !taskViewsStoreLocal.isOpenCalendar;
+                  widget.controller.index = 0;
                 },
               ),
             ),
@@ -67,10 +73,11 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
                   color: Colors.black,
                 ),
                 backgroundColor: Colors.amberAccent,
-                onClick: () => setState(
-                  () => taskViewsStoreLocal.isOpenCalendar =
-                      !taskViewsStoreLocal.isOpenCalendar,
-                ),
+                onClick: () => setState(() {
+                  taskViewsStoreLocal.isOpenCalendar =
+                      !taskViewsStoreLocal.isOpenCalendar;
+                  widget.controller.index = 0;
+                }),
               ),
             ],
           ),

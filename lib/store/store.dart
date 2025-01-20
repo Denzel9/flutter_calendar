@@ -29,7 +29,13 @@ abstract class AppStoreBase with Store {
   ObservableList<Board> boards = ObservableList<Board>.of([]);
 
   @observable
-  User? user;
+  User user = User(
+      name: '',
+      lastName: '',
+      email: '',
+      docId: '',
+      following: [],
+      followers: []);
 
   @observable
   DateTime selectedDate = now;

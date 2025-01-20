@@ -239,10 +239,11 @@ class _TaskTabState extends State<TaskTab> {
                               MaterialPageRoute(
                                 builder: (context) => TaskViewPage(
                                   date: DateTime.parse(
-                                      getSliceDate(store.nextTasks.first.date)
-                                          .split('.')
-                                          .reversed
-                                          .join()),
+                                    getSliceDate(store.nextTasks.first.date)
+                                        .split('.')
+                                        .reversed
+                                        .join(),
+                                  ),
                                 ),
                               ),
                             );

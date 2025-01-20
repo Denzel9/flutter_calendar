@@ -7,9 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class About extends StatefulWidget {
-  final bool isGuest;
-
-  const About({super.key, required this.isGuest});
+  const About({super.key});
 
   @override
   State<About> createState() => _AboutState();
@@ -24,7 +22,8 @@ class _AboutState extends State<About> {
 
     return Observer(
       builder: (_) {
-        final currentUser = widget.isGuest ? userStoreLocal.user : store.user;
+        final currentUser =
+            userStoreLocal.isGuest ? userStoreLocal.user : store.user;
 
         return (userStoreLocal.user?.about?.isNotEmpty ?? true)
             ? Padding(
@@ -42,7 +41,7 @@ class _AboutState extends State<About> {
                     return userService.updateField(id, field, data).then(
                       ((res) {
                         setState(() {
-                          store.user?.about = data;
+                          store.user.about = data;
                         });
                       }),
                     );

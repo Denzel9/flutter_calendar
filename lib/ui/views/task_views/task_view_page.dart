@@ -38,7 +38,10 @@ class _TaskViewStatePage extends State<TaskViewPage>
         body: SafeArea(
           child: Column(
             children: [
-              HeaderCalendar(tasks: store.tasks),
+              HeaderCalendar(
+                tasks: store.tasks,
+                controller: _tabController,
+              ),
               Expanded(
                 child: NestedScrollView(
                   floatHeaderSlivers: true,
@@ -57,12 +60,27 @@ class _TaskViewStatePage extends State<TaskViewPage>
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.amberAccent,
+          clipBehavior: Clip.antiAlias,
           onPressed: () => Navigator.pushNamed(context, routesList.create),
-          child: const Icon(
-            Icons.add,
-            size: 30,
-            color: Colors.black,
+          child: InkWell(
+            splashColor: Colors.white10,
+            child: Ink(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: const AssetImage('assets/pattern.jpg'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.amberAccent.shade200, BlendMode.multiply),
+                ),
+              ),
+              child: const Icon(
+                Icons.add,
+                size: 40,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
