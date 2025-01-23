@@ -18,11 +18,25 @@ class MenuButton extends StatefulWidget {
 class _MenuButtonState extends State<MenuButton> {
   final TaskServiceImpl taskService = TaskServiceImpl();
   final BoardServiceImpl boardService = BoardServiceImpl();
+  late List<String> links;
+  bool isDeleting = false;
+
+  @override
+  void initState() {
+    taskService.getAttachments(widget.docId).then((value) {
+      setState(() {
+        links =
+            value.map((el) => el.split('%2F').last.split('.').first).toList();
+      });
+    });
+
+    super.initState();
+  }
 
   void checkEmptyBoard(String taskId, List<Board> boards) {
     final emptyBoard = boards.where((el) => el.tasks.contains(taskId)).toList();
     if (emptyBoard.first.tasks.length == 1) {
-      boardService.deleteBoard(emptyBoard.first.docId);
+      boardService.deleteBoard(emptyBoard.first.docId ?? '');
     }
   }
 
@@ -30,36 +44,52 @@ class _MenuButtonState extends State<MenuButton> {
   Widget build(BuildContext context) {
     final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
 
-    return PopupMenuButton(
-      style: const ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
-          foregroundColor: WidgetStatePropertyAll(Colors.black)),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        PopupMenuItem(
-          onTap: () => setState(
-            () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
-          ),
-          child: const DNText(
-            title: 'Edit',
-            color: Colors.black,
-          ),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            setState(() {
-              taskService.deleteTask(widget.docId).then((_) {
-                boardService.deleteTask(
-                    taskStoreLocal.currentBoard, widget.docId);
-              }).then((_) => checkEmptyBoard(widget.docId, widget.boards));
-            });
-            Navigator.pop(context);
-          },
-          child: const DNText(
-            title: 'Delete',
-            color: Colors.black,
-          ),
-        ),
-      ],
-    );
+    return isDeleting
+        ? const SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(),
+          )
+        : PopupMenuButton(
+            style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
+                foregroundColor: WidgetStatePropertyAll(Colors.black)),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () => setState(
+                  () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
+                ),
+                child: const DNText(
+                  title: 'Edit',
+                  color: Colors.black,
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () {
+                  setState(() {
+                    isDeleting = true;
+                    taskService.deleteTask(widget.docId).then((_) {
+                      boardService.deleteTask(
+                          taskStoreLocal.currentBoard, widget.docId);
+                    }).then((_) {
+                      for (var el in links) {
+                        taskService.deleteAttachments(widget.docId, el);
+                      }
+                      checkEmptyBoard(widget.docId, widget.boards);
+                    }).then((_) {
+                      taskService.isLoading = false;
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    });
+                  });
+                },
+                child: const DNText(
+                  title: 'Delete',
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          );
   }
 }

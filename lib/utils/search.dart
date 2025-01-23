@@ -2,7 +2,7 @@ import 'package:calendar_flutter/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-List<User?>? searchUser(
+List<UserModel?>? searchUser(
     List<QueryDocumentSnapshot<Map<String, dynamic>>>? snapshot,
     TextEditingController controller) {
   final lowerCaseText = controller.text.toLowerCase();
@@ -17,7 +17,7 @@ List<User?>? searchUser(
                   .toLowerCase()
                   .contains(lowerCaseText) ||
               data['email'].toString().toLowerCase().contains(lowerCaseText)) {
-            return User.fromJsonWithId(user.data(), user.id);
+            return UserModel.fromJsonWithId(user.data(), user.id);
           } else {
             return null;
           }

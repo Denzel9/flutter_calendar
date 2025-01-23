@@ -1,9 +1,9 @@
-import 'package:calendar_flutter/ui/views/auth.dart';
+import 'package:calendar_flutter/ui/views/auth/auth.dart';
 import 'package:calendar_flutter/ui/views/create/create.dart';
 import 'package:calendar_flutter/ui/views/home/home.dart';
 import 'package:calendar_flutter/ui/views/task_views/task_view_page.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
-import 'package:calendar_flutter/ui/views/user_search_page.dart';
+import 'package:calendar_flutter/ui/views/search/user_search_page.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

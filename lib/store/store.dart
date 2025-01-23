@@ -29,7 +29,7 @@ abstract class AppStoreBase with Store {
   ObservableList<Board> boards = ObservableList<Board>.of([]);
 
   @observable
-  User user = User(
+  UserModel user = UserModel(
       name: '',
       lastName: '',
       email: '',
@@ -80,7 +80,7 @@ abstract class AppStoreBase with Store {
     Stream<DocumentSnapshot<Map<String, dynamic>>> query =
         await _userService.setUser(id);
     query.listen((event) {
-      user = User.fromJsonWithId(event.data(), event.id);
+      user = UserModel.fromJsonWithId(event.data(), event.id);
     });
   }
 

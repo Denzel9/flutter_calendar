@@ -27,7 +27,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String userId = context.read<AppStore>().user.docId;
+    final String userId = context.read<AppStore>().user.docId ?? '';
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -76,7 +76,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
                           ),
                           child: ListTile(
                             leading: FutureBuilder(
-                                future: userService.getAvatar(user.docId),
+                                future: userService.getAvatar(user.docId ?? ''),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return ClipOval(
@@ -90,7 +90,11 @@ class _UserSearchStatePage extends State<UserSearchPage> {
                                   } else if (!snapshot.hasData &&
                                       snapshot.connectionState ==
                                           ConnectionState.done) {
-                                    return const CircleAvatar();
+                                    return CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                        radius: 20,
+                                        child: const Icon(Icons.person));
                                   } else {
                                     return const CircularProgressIndicator();
                                   }
@@ -105,7 +109,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
                           ),
                         );
                       }
-                      return null;
+                      return Container();
                     },
                   );
                 } else {

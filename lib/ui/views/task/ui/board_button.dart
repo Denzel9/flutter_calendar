@@ -28,7 +28,7 @@ class _BoardButtonState extends State<BoardButton> {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              builder: (context) => BoardViewPage(id: docId),
+              builder: (context) => BoardViewPage(id: docId ?? ''),
             );
           },
           child: Chip(

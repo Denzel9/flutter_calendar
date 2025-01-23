@@ -32,6 +32,7 @@ class _InfoCardState extends State<InfoCard> {
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
+
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         context: context,

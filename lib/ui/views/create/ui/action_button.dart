@@ -1,4 +1,5 @@
 import 'package:calendar_flutter/models/board.dart';
+import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
@@ -30,92 +31,95 @@ class _ActionButtonState extends State<ActionButton> {
     super.dispose();
   }
 
+  void showSnackbar(String title) {
+    widget.scaffoldKey.currentState?.setState(() {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(title)));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
     final CreateStoreLocal createStoreLocal = context.watch<CreateStoreLocal>();
 
-    void showSnackbar(String title) {
-      widget.scaffoldKey.currentState?.setState(() {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(title)));
-      });
-    }
-
     void addTask() {
       if (createStoreLocal.taskTitle.isEmpty) {
-        return showSnackbar('Title is requared');
+        return showSnackbar('Title is required');
       } else {
-        taskService.addTask(
-          {
-            'author': store.user.name,
-            'done': false,
-            'board': createStoreLocal.board,
-            'title': createStoreLocal.taskTitle,
-            'description': createStoreLocal.taskDescription,
-            'assign': createStoreLocal.assign,
-            'userId': store.user.docId,
-            'date': store.selectedDate.toString(),
-            'createdAt': now.toString(),
-            'isCollaborated': createStoreLocal.assign.isNotEmpty ? true : false
-          },
-        ).then(
-          (taskId) async {
-            List<Board> findedBoard = store.boards
-                .where((board) => board.title == createStoreLocal.board)
-                .toList();
-            if (findedBoard.isEmpty) {
-              boardService.addBoard({
-                'author': store.user.name,
-                'title': createStoreLocal.board,
-                'description': '',
-                'assign': createStoreLocal.assign,
-                'userId': store.user.docId,
-                'createdAt': now.toString(),
-                'tasks': [taskId]
-              });
-            } else {
-              boardService.addTask(findedBoard.first.docId, taskId);
-            }
-            await taskService.addAttachments(createStoreLocal.image, taskId);
-          },
-        ).then(
-          (_) => setState(() {
-            Navigator.pop(context);
-            taskService.isLoading = false;
-          }),
-        );
+        setState(() {
+          taskService
+              .addTask(TaskModel(
+            author: store.user.name,
+            done: false,
+            board: createStoreLocal.board,
+            title: createStoreLocal.taskTitle,
+            description: createStoreLocal.taskDescription,
+            assign: createStoreLocal.assign,
+            date: store.selectedDate.toString(),
+            createdAt: now.toString(),
+            isCollaborated: createStoreLocal.assign.isNotEmpty ? true : false,
+            userId: store.user.docId ?? '',
+          ).toJson())
+              .then(
+            (taskId) async {
+              List<Board> foundBoard = store.boards
+                  .where((board) => board.title == createStoreLocal.board)
+                  .toList();
+              if (foundBoard.isEmpty) {
+                boardService.addBoard(
+                  Board(
+                      author: store.user.name,
+                      title: createStoreLocal.board,
+                      description: createStoreLocal.taskDescription,
+                      userId: store.user.docId ?? '',
+                      createdAt: now.toString(),
+                      tasks: [taskId]).toJson(),
+                );
+              } else {
+                boardService.addTask(foundBoard.first.docId ?? '', taskId);
+              }
+              await taskService.addAttachments(createStoreLocal.image, taskId);
+            },
+          ).then(
+            (_) => setState(() {
+              Navigator.pop(context);
+              taskService.isLoading = false;
+            }),
+          );
+        });
       }
     }
 
     void addBoard() {
       if (createStoreLocal.boardTitle.isEmpty) {
-        return showSnackbar("Title is requared");
+        return showSnackbar("Title is required");
       } else if (store.boards
           .where((board) => board.title == createStoreLocal.boardTitle)
           .isNotEmpty) {
         return showSnackbar("The name board already exists");
       }
-
-      boardService.addBoard(
-        {
-          'author': store.user.name,
-          'title': createStoreLocal.boardTitle,
-          'description': createStoreLocal.boardDescription,
-          'assign': [],
-          'userId': store.user.docId,
-          'createdAt': now.toString(),
-          'tasks': []
-        },
-      ).then(
-        (_) {
-          if (context.mounted) {
-            setState(() {
-              Navigator.pop(context);
-            });
-          }
-        },
-      );
+      setState(() {
+        boardService
+            .addBoard(
+          Board(
+              author: store.user.name,
+              title: createStoreLocal.board,
+              description: createStoreLocal.taskDescription,
+              userId: store.user.docId ?? '',
+              createdAt: now.toString(),
+              tasks: []).toJson(),
+        )
+            .then(
+          (_) {
+            if (context.mounted) {
+              setState(() {
+                Navigator.pop(context);
+              });
+            }
+          },
+        );
+      });
     }
 
     return FloatingActionButton(
@@ -146,9 +150,11 @@ class _ActionButtonState extends State<ActionButton> {
               ),
       ),
       onPressed: () {
-        setState(
-          () => widget.controller.index == 0 ? addTask() : addBoard(),
-        );
+        if (widget.controller.index == 0) {
+          addTask();
+        } else {
+          addBoard();
+        }
       },
     );
   }

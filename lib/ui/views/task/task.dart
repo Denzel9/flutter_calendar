@@ -48,7 +48,7 @@ class _TaskPageState extends State<TaskPage> {
                         right: 0,
                         child: Buttons(
                           isDone: task.done,
-                          id: task.docId,
+                          id: task.docId ?? '',
                         ),
                       )
                     ],

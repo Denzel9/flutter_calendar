@@ -7,7 +7,7 @@ class TaskModel {
   final String createdAt;
   final bool done;
   final List<dynamic> assign;
-  final String docId;
+  final String? docId;
   final String userId;
   final bool isCollaborated;
 
@@ -18,11 +18,11 @@ class TaskModel {
     required this.title,
     required this.description,
     required this.assign,
-    required this.docId,
     required this.date,
     required this.createdAt,
     required this.isCollaborated,
     required this.userId,
+    this.docId,
   });
 
   factory TaskModel.fromJsonWithId(Map<String, dynamic>? json, String id) {
@@ -39,5 +39,20 @@ class TaskModel {
       userId: json?['userId'] ?? '',
       docId: id,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'author': author,
+      'title': title,
+      'description': description,
+      'board': board,
+      'date': date,
+      'createdAt': createdAt,
+      'done': done,
+      'assign': assign,
+      'userId': userId,
+      'isCollaborated': isCollaborated,
+    };
   }
 }

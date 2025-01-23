@@ -37,13 +37,13 @@ class _AssignState extends State<Assign> {
               child: Stack(
                 children: [
                   StreamBuilder(
-                    stream: userService.getFollowers(store.user.docId),
+                    stream: userService.getFollowers(store.user.docId ?? ''),
                     builder: (context, snap) {
                       if (snap.data?.docs.isNotEmpty ?? false) {
                         return ListView.builder(
                           itemCount: snap.data?.docs.length,
                           itemBuilder: (context, index) {
-                            final User user = User.fromJsonWithId(
+                            final UserModel user = UserModel.fromJsonWithId(
                                 snap.data?.docs[index].data(),
                                 snap.data?.docs[index].id ?? '');
 
@@ -51,7 +51,7 @@ class _AssignState extends State<Assign> {
                               title: DNText(title: user.name),
                               subtitle: DNText(title: user.lastName),
                               leading: FutureBuilder(
-                                future: userService.getAvatar(user.docId),
+                                future: userService.getAvatar(user.docId ?? ''),
                                 builder: (context, snap) {
                                   if (snap.hasData) {
                                     return ClipOval(

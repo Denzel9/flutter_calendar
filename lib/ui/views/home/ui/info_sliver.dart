@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+final UserServiceImpl userService = UserServiceImpl();
+
 class InfoSliver extends StatelessWidget {
   const InfoSliver({super.key});
 
@@ -24,8 +26,6 @@ class InfoSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final routesList = Routes();
-    final UserServiceImpl userService = UserServiceImpl();
     final AppStore store = context.watch<AppStore>();
 
     return SliverAppBar(
@@ -62,30 +62,36 @@ class InfoSliver extends StatelessWidget {
                       ),
                       child: Observer(
                         builder: (_) {
-                          if (store.user.docId.isNotEmpty) {
+                          if (store.user.docId != null) {
                             return FutureBuilder(
-                              future: userService.getAvatar(store.user.docId),
+                              future:
+                                  userService.getAvatar(store.user.docId ?? ''),
                               builder: (context, snap) {
-                                if (snap.hasData) {
-                                  return ClipOval(
-                                    child: CachedNetworkImage(
-                                      imageUrl: snap.data ?? '',
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                  );
+                                if (snap.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snap.hasData) {
+                                    return ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: snap.data ?? '',
+                                        fit: BoxFit.cover,
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  } else {
+                                    return CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      child: DNText(
+                                        title: store.user.email
+                                            .substring(0, 1)
+                                            .toUpperCase(),
+                                        color: Colors.black,
+                                      ),
+                                    );
+                                  }
                                 } else {
-                                  return CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    child: DNText(
-                                      title: store.user.email
-                                          .substring(0, 1)
-                                          .toUpperCase(),
-                                      color: Colors.black,
-                                    ),
-                                  );
+                                  return const CircularProgressIndicator();
                                 }
                               },
                             );

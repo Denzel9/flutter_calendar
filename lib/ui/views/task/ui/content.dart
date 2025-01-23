@@ -37,7 +37,7 @@ class _ContentState extends State<Content> {
     List<Board> boards = context.watch<AppStore>().boards;
     setState(() {
       context.watch<TaskStoreLocal>().currentBoard =
-          boards.where((el) => el.title == widget.task.board).first.docId;
+          boards.where((el) => el.title == widget.task.board).first.docId ?? '';
     });
 
     super.didChangeDependencies();
@@ -69,7 +69,7 @@ class _ContentState extends State<Content> {
                   onClick: () => Navigator.pop(context),
                 ),
                 MenuButton(
-                  docId: widget.task.docId,
+                  docId: widget.task.docId ?? '',
                   boards: store.boards,
                 )
               ],
@@ -86,7 +86,7 @@ class _ContentState extends State<Content> {
                     title: widget.task.title,
                     isEdit: taskStoreLocal.isEdit,
                     editField: 'title',
-                    docId: widget.task.docId,
+                    docId: widget.task.docId ?? '',
                     maxFontSize: 40,
                     minFontSize: 20,
                     updateField: taskService.updateField,
@@ -138,7 +138,7 @@ class _ContentState extends State<Content> {
                       ),
                       if (!widget.task.done)
                         Assign(
-                          docId: widget.task.docId,
+                          docId: widget.task.docId ?? '',
                           assignList: widget.task.assign,
                         )
                     ],
@@ -149,7 +149,7 @@ class _ContentState extends State<Content> {
                       title: widget.task.description,
                       isEdit: taskStoreLocal.isEdit,
                       editField: 'description',
-                      docId: widget.task.docId,
+                      docId: widget.task.docId ?? '',
                       updateField: taskService.updateField,
                     ),
                   ),
@@ -166,7 +166,7 @@ class _ContentState extends State<Content> {
                     ),
                   ),
                   Attachments(
-                    docId: widget.task.docId,
+                    docId: widget.task.docId ?? '',
                     isDone: widget.task.done,
                   )
                 ],

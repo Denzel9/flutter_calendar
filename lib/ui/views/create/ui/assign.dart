@@ -54,16 +54,16 @@ class _AssignState extends State<Assign> {
                   Expanded(
                     child: SizedBox(
                       height: 40,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          for (var i = 0; i < createStore.assign.length; i++)
-                            Positioned(
-                              left: i * 30,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: createStore.assign.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index < createStore.assign.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
                               child: FutureBuilder(
                                 future: userService
-                                    .getAvatar(createStore.assign[i]),
+                                    .getAvatar(createStore.assign[index]),
                                 builder: (context, snap) {
                                   if (snap.hasData) {
                                     return ClipOval(
@@ -80,10 +80,9 @@ class _AssignState extends State<Assign> {
                                       child: const Icon(Icons.person));
                                 },
                               ),
-                            ),
-                          Positioned(
-                            left: createStore.assign.length * 30,
-                            child: DNIconButton(
+                            );
+                          } else {
+                            return DNIconButton(
                               onClick: () => showModalBottomSheet(
                                 backgroundColor:
                                     Theme.of(context).scaffoldBackgroundColor,
@@ -94,15 +93,15 @@ class _AssignState extends State<Assign> {
                                     width: double.infinity,
                                     child: StreamBuilder(
                                       stream: userService
-                                          .getFollowers(store.user.docId),
+                                          .getFollowers(store.user.docId ?? ''),
                                       builder: (context, snap) {
                                         if (snap.data?.docs.isNotEmpty ??
                                             false) {
                                           return ListView.builder(
                                             itemCount: snap.data?.docs.length,
                                             itemBuilder: (context, index) {
-                                              final User user =
-                                                  User.fromJsonWithId(
+                                              final UserModel user =
+                                                  UserModel.fromJsonWithId(
                                                       snap.data?.docs[index]
                                                           .data(),
                                                       snap.data?.docs[index]
@@ -117,8 +116,9 @@ class _AssignState extends State<Assign> {
                                                   title: user.lastName,
                                                 ),
                                                 leading: FutureBuilder(
-                                                    future: userService
-                                                        .getAvatar(user.docId),
+                                                    future:
+                                                        userService.getAvatar(
+                                                            user.docId ?? ''),
                                                     builder: (context, snap) {
                                                       if (snap.hasData) {
                                                         return ClipOval(
@@ -144,8 +144,8 @@ class _AssignState extends State<Assign> {
                                                 trailing:
                                                     Observer(builder: (_) {
                                                   return DNIconButton(
-                                                    onClick: () =>
-                                                        doAssign(user.docId),
+                                                    onClick: () => doAssign(
+                                                        user.docId ?? ''),
                                                     icon: createStore.assign
                                                             .contains(
                                                                 user.docId)
@@ -176,9 +176,9 @@ class _AssignState extends State<Assign> {
                                 Icons.add,
                                 color: Colors.black,
                               ),
-                            ),
-                          )
-                        ],
+                            );
+                          }
+                        },
                       ),
                     ),
                   ),

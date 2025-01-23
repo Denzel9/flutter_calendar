@@ -28,4 +28,6 @@ abstract interface class TaskService {
   Future<void> addAttachments(List<File> images, String id);
 
   Future<List<String>> getAttachments(String id);
+
+  Future<void> deleteAttachments(String id, String image);
 }

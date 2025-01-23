@@ -120,7 +120,7 @@ class _ImageSliverState extends State<ImageSliver> {
               DNIconButton(
                 backgroundColor: Colors.green,
                 onClick: () => userService
-                    .setAvatar(userStoreLocal.image!, store.user.docId)
+                    .setAvatar(userStoreLocal.image!, store.user.docId ?? '')
                     .then((_) => setState(() {
                           userStoreLocal.image = null;
                         })),

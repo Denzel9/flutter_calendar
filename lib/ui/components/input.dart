@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DNInput extends StatelessWidget {
   final String title;
-  final Function(String string) onClick;
+  final Function(String string)? onClick;
   final TextEditingController? controller;
   final bool withBoarder;
   final bool autoFocus;
@@ -16,7 +16,7 @@ class DNInput extends StatelessWidget {
   const DNInput({
     super.key,
     required this.title,
-    required this.onClick,
+    this.onClick,
     this.withBoarder = true,
     this.borderColor = Colors.white,
     this.fontSize = 18,
@@ -35,6 +35,7 @@ class DNInput extends StatelessWidget {
       textInputAction: TextInputAction.done,
       focusNode: focusNode,
       onSubmitted: onClick,
+      onChanged: onClick,
       controller: controller,
       style: const TextStyle(color: Colors.white),
       cursorColor: Colors.amberAccent,

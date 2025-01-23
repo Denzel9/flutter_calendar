@@ -4,7 +4,7 @@ class Board {
   final String description;
   final String createdAt;
   final String userId;
-  final String docId;
+  final String? docId;
   final List<dynamic> tasks;
 
   Board({
@@ -13,8 +13,8 @@ class Board {
     required this.description,
     required this.userId,
     required this.createdAt,
-    required this.docId,
     required this.tasks,
+    this.docId,
   });
 
   factory Board.fromJsonWithId(Map<String, dynamic>? json, String id) {
@@ -27,5 +27,16 @@ class Board {
       tasks: json?['tasks'] ?? [],
       docId: id,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'author': author,
+      'title': title,
+      'description': description,
+      'createdAt': createdAt,
+      'userId': userId,
+      'tasks': tasks,
+    };
   }
 }

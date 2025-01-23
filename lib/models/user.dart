@@ -1,24 +1,24 @@
-class User {
+class UserModel {
   String name;
   String lastName;
   String email;
-  String docId;
+  String? docId;
   String? about;
   List<dynamic> following;
   List<dynamic> followers;
 
-  User({
+  UserModel({
     required this.name,
     required this.lastName,
     required this.email,
-    required this.docId,
     required this.following,
     required this.followers,
+    this.docId,
     this.about,
   });
 
-  factory User.fromJsonWithId(Map<String, dynamic>? json, String id) {
-    return User(
+  factory UserModel.fromJsonWithId(Map<String, dynamic>? json, String id) {
+    return UserModel(
       email: json?["email"] ?? '',
       name: json?['name'] ?? '',
       lastName: json?['lastName'] ?? '',
@@ -27,5 +27,16 @@ class User {
       about: json?['about'] ?? '',
       docId: id,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "email": email,
+      'name': name,
+      'lastName': lastName,
+      'following': following,
+      'followers': followers,
+      'about': about,
+    };
   }
 }

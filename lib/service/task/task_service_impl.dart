@@ -18,6 +18,7 @@ class TaskServiceImpl implements TaskService {
 
   @override
   Future<void> deleteTask(String id) async {
+    isLoading = true;
     db.collection("tasks").doc(id).delete();
   }
 
@@ -97,5 +98,13 @@ class TaskServiceImpl implements TaskService {
       }
     });
     return listAttachments;
+  }
+
+  @override
+  Future<void> deleteAttachments(
+    String id,
+    String image,
+  ) async {
+    storage.ref().child("task_$id/attachments/$image.jpg").delete();
   }
 }

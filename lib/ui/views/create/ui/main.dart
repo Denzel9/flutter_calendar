@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-List<String> listBoards = ['Myself', "Work", 'Learning', "Default"];
+List<String> initialListBoards = ['Myself', "Work", 'Learning', "Default"];
 
 class Main extends StatefulWidget {
   final bool isTask;
@@ -20,11 +20,13 @@ class Main extends StatefulWidget {
 }
 
 class _InfoState extends State<Main> {
+  late List<String> listBoards;
+
   @override
   void didChangeDependencies() {
     final List<Board> boards = context.read<AppStore>().boards as List<Board>;
     final boardsTitles = boards.map((el) => el.title).toList();
-    listBoards = <String>{...listBoards, ...boardsTitles}.toList();
+    listBoards = {...initialListBoards, ...boardsTitles}.toList();
     super.didChangeDependencies();
   }
 

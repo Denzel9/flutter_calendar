@@ -17,7 +17,7 @@ abstract class XStore with Store {
   bool isEdit = false;
 
   @observable
-  User? user;
+  UserModel? user;
 
   @observable
   File? image;
@@ -31,7 +31,7 @@ abstract class XStore with Store {
     Stream<DocumentSnapshot<Map<String, dynamic>>> query =
         _userService.getUser(id);
     query.listen((event) {
-      user = User.fromJsonWithId(event.data(), event.id);
+      user = UserModel.fromJsonWithId(event.data(), event.id);
     });
   }
 }

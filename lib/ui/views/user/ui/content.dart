@@ -55,7 +55,7 @@ class _ContentState extends State<Content> {
                         title: toUpperCase(currentUser.name),
                         isEdit: userStoreLocal.isEdit,
                         editField: 'name',
-                        docId: currentUser.docId,
+                        docId: currentUser.docId ?? '',
                         maxFontSize: 40,
                         minFontSize: 30,
                         withTitle: false,
@@ -65,7 +65,7 @@ class _ContentState extends State<Content> {
                         title: toUpperCase(currentUser.lastName),
                         isEdit: userStoreLocal.isEdit,
                         editField: 'lastName',
-                        docId: currentUser.docId,
+                        docId: currentUser.docId ?? '',
                         maxFontSize: 40,
                         minFontSize: 30,
                         withTitle: false,
@@ -77,7 +77,7 @@ class _ContentState extends State<Content> {
                     GestureDetector(
                       onTap: () {
                         userService.setFollow(
-                            store.user.docId,
+                            store.user.docId ?? '',
                             userStoreLocal.user?.docId ?? '',
                             store.user.following);
                       },
@@ -109,7 +109,7 @@ class _ContentState extends State<Content> {
                         onTap: () => _showFollowBottomSheet(
                           context: context,
                           isFollowers: true,
-                          usersId: currentUser.docId,
+                          usersId: currentUser.docId ?? '',
                         ).then((_) => setState(() {})),
                         contentPadding: EdgeInsets.zero,
                         title: const DNText(
@@ -131,7 +131,7 @@ class _ContentState extends State<Content> {
                         onTap: () => _showFollowBottomSheet(
                           context: context,
                           isFollowers: false,
-                          usersId: currentUser.docId,
+                          usersId: currentUser.docId ?? '',
                         ).then((_) => setState(() {})),
                         contentPadding: EdgeInsets.zero,
                         title: const DNText(
@@ -149,7 +149,8 @@ class _ContentState extends State<Content> {
                     ),
                     Expanded(
                       child: FutureBuilder(
-                        future: taskService.getTasksCount(currentUser.docId),
+                        future:
+                            taskService.getTasksCount(currentUser.docId ?? ''),
                         builder: (context, snap) {
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
@@ -209,7 +210,7 @@ Future<dynamic> _showFollowBottomSheet({
                     child: ListView.builder(
                       itemCount: snap.data?.docs.length,
                       itemBuilder: (context, index) {
-                        final User user = User.fromJsonWithId(
+                        final UserModel user = UserModel.fromJsonWithId(
                             snap.data?.docs[index].data(),
                             snap.data?.docs[index].id ?? '');
 
@@ -224,7 +225,7 @@ Future<dynamic> _showFollowBottomSheet({
                             ),
                           ),
                           leading: FutureBuilder(
-                            future: userService.getAvatar(user.docId),
+                            future: userService.getAvatar(user.docId ?? ''),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return ClipOval(
@@ -238,7 +239,15 @@ Future<dynamic> _showFollowBottomSheet({
                               } else if (!snapshot.hasData &&
                                   snapshot.connectionState ==
                                       ConnectionState.done) {
-                                return const CircleAvatar();
+                                return CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  radius: 20,
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                  ),
+                                );
                               } else {
                                 return const CircularProgressIndicator();
                               }
