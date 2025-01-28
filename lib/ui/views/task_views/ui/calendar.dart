@@ -17,31 +17,11 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  final dates = {};
-  final String currentDate = now.toString().split(' ')[0];
-  double? currentOffset;
-
   late final ScrollController scrollController;
+  final String currentDate = getFormatDate(now.toString());
 
-  List<DateTime> generateCalendar(int month) {
-    DateTimeRange dateTimeRange = DateTimeRange(
-        start: DateTime(now.year, month + 1),
-        end: DateTime(now.year, month + 2));
-
-    final daysToGenerate =
-        dateTimeRange.end.difference(dateTimeRange.start).inDays;
-
-    final days = List.generate(
-      daysToGenerate,
-      (i) => DateTime(
-        dateTimeRange.start.year,
-        dateTimeRange.start.month,
-        dateTimeRange.start.day + (i),
-      ),
-    );
-
-    return days;
-  }
+  final dates = {};
+  double? currentOffset;
 
   @override
   void initState() {
@@ -55,7 +35,7 @@ class _CalendarState extends State<Calendar> {
   void didChangeDependencies() {
     final int month = context.watch<AppStore>().selectedDate.month;
     scrollController = ScrollController(
-        initialScrollOffset: currentOffset ?? (month - 1) * 250);
+        initialScrollOffset: currentOffset ?? (month - 1) * 270);
     super.didChangeDependencies();
   }
 
@@ -68,6 +48,7 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
+    final String selectDate = getSliceDate(store.selectedDate.toString());
 
     return Column(
       children: [
@@ -87,12 +68,12 @@ class _CalendarState extends State<Calendar> {
                   onTap: () => setState(
                     () {
                       scrollController.animateTo(
-                        (now.month - 1) * 250,
+                        (now.month - 1) * 270,
                         duration: const Duration(milliseconds: 300),
-                        curve: Curves.bounceIn,
+                        curve: Curves.easeInOut,
                       );
                       widget.onClick(dates[monthsFullNames[currentMonth - 1]]
-                          [currenDay - 1]);
+                          [currenDay + 1]);
                       currentOffset = scrollController.offset;
                     },
                   ),
@@ -110,10 +91,11 @@ class _CalendarState extends State<Calendar> {
           flex: 6,
           child: ListView.builder(
             controller: scrollController,
-            itemCount: 12,
+            itemCount: dates.length,
             itemBuilder: (context, month) {
+              final weekday = getWeekday(month);
               return SizedBox(
-                height: 250,
+                height: 270,
                 child: Column(
                   children: [
                     DNText(
@@ -133,58 +115,57 @@ class _CalendarState extends State<Calendar> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: dates[monthsFullNames[month]].length,
                         itemBuilder: (context, day) {
-                          final dayDate = dates[monthsFullNames[month]][day]
-                              .toString()
-                              .split(' ')[0];
-                          final String selectDate =
-                              store.selectedDate.toString().split(' ')[0];
+                          final dayDate = getSliceDate(
+                              dates[monthsFullNames[month]][day].toString());
                           final todayTasks = store.tasks
                               .where((element) =>
                                   element.date.split(' ')[0] == dayDate)
                               .toList();
-                          return GestureDetector(
-                            onTap: () {
-                              widget
-                                  .onClick(dates[monthsFullNames[month]][day]);
-                              currentOffset = scrollController.offset;
-                            },
-                            child: ColoredBox(
-                              color: currentDate == dayDate
-                                  ? Colors.black.withOpacity(.5)
-                                  : selectDate == dayDate
-                                      ? Colors.black.withOpacity(.1)
-                                      : Colors.transparent,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    child: Center(
-                                      child: DNText(
-                                        title: (day + 1).toString(),
-                                        fontWeight: FontWeight.normal,
-                                        color: currentDate == dayDate
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  for (final _ in todayTasks)
-                                    const Positioned(
-                                      left: 2,
-                                      top: 2,
-                                      child: ClipOval(
-                                        child: ColoredBox(
-                                          color: Colors.white,
-                                          child: SizedBox(
-                                            width: 6,
-                                            height: 6,
+                          return getSliceYear(dayDate) == 1000
+                              ? const SizedBox()
+                              : GestureDetector(
+                                  onTap: () {
+                                    widget.onClick(
+                                        dates[monthsFullNames[month]][day]);
+                                    currentOffset = scrollController.offset;
+                                  },
+                                  child: ColoredBox(
+                                    color: currentDate == dayDate
+                                        ? Colors.black.withOpacity(.5)
+                                        : selectDate == dayDate
+                                            ? Colors.black.withOpacity(.1)
+                                            : Colors.transparent,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          child: Center(
+                                            child: DNText(
+                                              title: (day - weekday + 1)
+                                                  .toString(),
+                                              color: currentDate == dayDate
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        for (final _ in todayTasks)
+                                          const Positioned(
+                                            right: 2,
+                                            top: 2,
+                                            child: ClipOval(
+                                              child: ColoredBox(
+                                                color: Colors.white,
+                                                child: SizedBox(
+                                                  width: 6,
+                                                  height: 6,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
-                                ],
-                              ),
-                            ),
-                          );
+                                  ),
+                                );
                         },
                       ),
                     ),

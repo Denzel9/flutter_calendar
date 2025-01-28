@@ -68,11 +68,7 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
                 );
               }),
               DNIconButton(
-                icon: const Icon(
-                  Icons.calendar_month,
-                  color: Colors.black,
-                ),
-                backgroundColor: Colors.amberAccent,
+                icon: const Icon(Icons.calendar_month),
                 onClick: () => setState(() {
                   taskViewsStoreLocal.isOpenCalendar =
                       !taskViewsStoreLocal.isOpenCalendar;

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 final now = DateTime.now();
 
 final currentMonth = now.month;
@@ -81,4 +83,33 @@ String getSliceDate(String date) {
 num getSliceDay(String date) {
   String newDate = date.split(' ')[0].split('-')[2];
   return num.parse(newDate);
+}
+
+num getSliceYear(String date) {
+  String newDate = date.split(' ')[0].split('-')[0];
+  return num.parse(newDate);
+}
+
+int getWeekday(int month) =>
+    DateTime(currenYear, month + 1, currenDay, 1, 12).weekday;
+
+List<DateTime> generateCalendar(int month) {
+  final int weekday = getWeekday(month);
+
+  DateTimeRange dateTimeRange = DateTimeRange(
+      start: DateTime(now.year, month + 1), end: DateTime(now.year, month + 2));
+
+  final daysToGenerate =
+      dateTimeRange.end.difference(dateTimeRange.start).inDays;
+
+  final days = List.generate(
+    daysToGenerate,
+    (i) => DateTime(
+      dateTimeRange.start.year,
+      dateTimeRange.start.month,
+      dateTimeRange.start.day + (i),
+    ),
+  );
+
+  return [...List.generate(weekday, (_) => DateTime(1000, 01, 01)), ...days];
 }
