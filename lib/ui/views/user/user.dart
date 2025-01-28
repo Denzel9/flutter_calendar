@@ -33,9 +33,7 @@ class _UserPageState extends State<UserPage> {
         return Scaffold(
           backgroundColor: Theme.of(context).primaryColorDark,
           body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              const ImageSliver(),
-            ],
+            headerSliverBuilder: (context, _) => [const ImageSliver()],
             body: Padding(
               padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
               child: ListView(

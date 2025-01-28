@@ -1,4 +1,4 @@
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';

@@ -1,15 +1,13 @@
 import 'package:calendar_flutter/core/config/routes/routes.dart';
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/home/store/home.dart';
-import 'package:calendar_flutter/ui/views/task_views/task_view_page.dart';
 import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -204,53 +202,14 @@ class _TaskTabState extends State<TaskTab> {
                   ),
                 ),
               if (tasks.isEmpty)
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const DNText(
-                        title: 'Empty',
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        opacity: .5,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      if (store.todayTasks.isEmpty &&
-                          store.nextTasks.isNotEmpty)
-                        GestureDetector(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              DNText(
-                                title:
-                                    'Next ${getFormatDate(store.nextTasks.first.date)}',
-                                opacity: .5,
-                              ),
-                              const Icon(
-                                Icons.north_east,
-                                color: Colors.white38,
-                              )
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TaskViewPage(
-                                  date: DateTime.parse(
-                                    getSliceDate(store.nextTasks.first.date)
-                                        .split('.')
-                                        .reversed
-                                        .join(),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ).animate().fadeIn()
-                    ],
+                const Expanded(
+                  child: Center(
+                    child: DNText(
+                      title: 'Empty',
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      opacity: .5,
+                    ),
                   ),
                 ),
             ],

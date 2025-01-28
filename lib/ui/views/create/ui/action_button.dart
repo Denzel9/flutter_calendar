@@ -2,7 +2,7 @@ import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:calendar_flutter/utils/date.dart';

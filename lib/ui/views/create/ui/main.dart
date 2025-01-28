@@ -1,5 +1,5 @@
 import 'package:calendar_flutter/models/board.dart';
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:calendar_flutter/ui/widgets/date_picker.dart';

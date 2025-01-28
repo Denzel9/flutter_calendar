@@ -4,6 +4,7 @@ import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/utils/format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class DNEditableField extends StatefulWidget {
   final String title;
@@ -106,7 +107,7 @@ class _EditableFieldState extends State<DNEditableField> {
                           Icons.edit,
                           color: Colors.white,
                         ),
-                      )
+                      ).animate().fadeIn()
                   ],
                 ),
               if (widget.title.isNotEmpty)
@@ -155,7 +156,7 @@ class _EditableFieldState extends State<DNEditableField> {
                           Icons.edit,
                           color: Colors.white,
                         ),
-                      )
+                      ).animate().fadeIn()
                   ],
                 ),
               if (widget.title.isEmpty)

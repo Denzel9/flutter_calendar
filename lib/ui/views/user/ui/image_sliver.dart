@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -44,14 +44,16 @@ class _ImageSliverState extends State<ImageSliver> {
             userStoreLocal.isGuest ? userStoreLocal.user : store.user;
 
         return SliverAppBar(
-          surfaceTintColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
           backgroundColor: Theme.of(context).primaryColorDark,
           elevation: 0,
           pinned: true,
           expandedHeight: 300,
-          leading: const BackButton(
-            color: Colors.white,
-            style: ButtonStyle(iconSize: WidgetStatePropertyAll(30)),
+          leading: BackButton(
+            color: Theme.of(context).primaryColor,
+            style: const ButtonStyle(
+              iconSize: WidgetStatePropertyAll(30),
+            ),
           ),
           actions: [
             if (!userStoreLocal.isGuest && !userStoreLocal.isEdit)
@@ -131,31 +133,31 @@ class _ImageSliverState extends State<ImageSliver> {
               ),
             const SizedBox(width: 10)
           ],
-          leadingWidth: 50,
           flexibleSpace: FlexibleSpaceBar(
-              background: FutureBuilder(
-            future: userService.getAvatar(currentUser?.docId ?? ''),
-            builder: (context, snap) {
-              if (userStoreLocal.image?.path.isNotEmpty ?? false) {
-                return Image.file(
-                  File(userStoreLocal.image!.path),
-                  fit: BoxFit.cover,
-                );
-              }
-              if (snap.hasData) {
-                return DNImage(
-                  url: snap.data ?? '',
-                );
-              }
-              if (!snap.hasData &&
-                  snap.connectionState == ConnectionState.done) {
-                return const DNImage(
-                    url:
-                        'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg');
-              }
-              return const SizedBox();
-            },
-          )),
+            background: FutureBuilder(
+              future: userService.getAvatar(currentUser?.docId ?? ''),
+              builder: (context, snap) {
+                if (userStoreLocal.image?.path.isNotEmpty ?? false) {
+                  return Image.file(
+                    File(userStoreLocal.image!.path),
+                    fit: BoxFit.cover,
+                  );
+                }
+                if (snap.hasData) {
+                  return DNImage(
+                    url: snap.data ?? '',
+                  );
+                }
+                if (!snap.hasData &&
+                    snap.connectionState == ConnectionState.done) {
+                  return const DNImage(
+                      url:
+                          'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg');
+                }
+                return const SizedBox();
+              },
+            ),
+          ),
         );
       },
     );

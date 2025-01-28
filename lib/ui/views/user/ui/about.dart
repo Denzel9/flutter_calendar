@@ -1,5 +1,5 @@
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
 import 'package:calendar_flutter/ui/widgets/editable_field.dart';
 import 'package:flutter/material.dart';

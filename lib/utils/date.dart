@@ -90,8 +90,7 @@ num getSliceYear(String date) {
   return num.parse(newDate);
 }
 
-int getWeekday(int month) =>
-    DateTime(currenYear, month + 1, currenDay, 1, 12).weekday;
+int getWeekday(int month) => DateTime(currenYear, month + 1).weekday - 1;
 
 List<DateTime> generateCalendar(int month) {
   final int weekday = getWeekday(month);

@@ -1,4 +1,4 @@
-import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
@@ -21,10 +21,9 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   late final ScrollController scrollController;
-  final String currentDate = getFormatDate(now.toString());
-
-  final dates = {};
+  final String currentDate = getSliceDate(now.toString());
   double? currentOffset;
+  final dates = {};
 
   @override
   void initState() {
@@ -127,56 +126,59 @@ class _CalendarState extends State<Calendar> {
                               dates[monthsFullNames[month]][day].toString());
                           final todayTasks = store.tasks
                               .where((element) =>
-                                  element.date.split(' ')[0] == dayDate)
+                                  getSliceDate(element.date.split(' ')[0]) ==
+                                  dayDate)
                               .toList();
-                          return SlideAnimation(
-                              target: taskViewsStoreLocal.isOpenCalendar,
-                              begin: const Offset(0, 3),
-                              delay: Duration(milliseconds: day * 5),
-                              widget: GestureDetector(
-                                onTap: () {
-                                  widget.onClick(
-                                      dates[monthsFullNames[month]][day]);
-                                  currentOffset = scrollController.offset;
-                                },
-                                child: ColoredBox(
-                                  color: currentDate == dayDate
-                                      ? Colors.black.withOpacity(.5)
-                                      : selectDate == dayDate
-                                          ? Colors.black.withOpacity(.1)
-                                          : Colors.transparent,
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        child: Center(
-                                          child: DNText(
-                                            title:
-                                                (day - weekday + 1).toString(),
-                                            fontWeight: FontWeight.normal,
-                                            color: currentDate == dayDate
-                                                ? Colors.white
-                                                : Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                      for (final _ in todayTasks)
-                                        const Positioned(
-                                          right: 2,
-                                          top: 2,
-                                          child: ClipOval(
-                                            child: ColoredBox(
-                                              color: Colors.white,
-                                              child: SizedBox(
-                                                width: 6,
-                                                height: 6,
+
+                          return getSliceYear(dayDate) == 1000
+                              ? const SizedBox()
+                              : SlideAnimation(
+                                  target: taskViewsStoreLocal.isOpenCalendar,
+                                  begin: const Offset(0, 3),
+                                  delay: Duration(milliseconds: day * 5),
+                                  widget: GestureDetector(
+                                    onTap: () {
+                                      widget.onClick(
+                                          dates[monthsFullNames[month]][day]);
+                                      currentOffset = scrollController.offset;
+                                    },
+                                    child: ColoredBox(
+                                      color: currentDate == dayDate
+                                          ? Colors.black.withOpacity(.5)
+                                          : selectDate == dayDate
+                                              ? Colors.black.withOpacity(.1)
+                                              : Colors.transparent,
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            child: Center(
+                                              child: DNText(
+                                                title: (day - weekday + 1)
+                                                    .toString(),
+                                                color: currentDate == dayDate
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                             ),
                                           ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ));
+                                          for (final _ in todayTasks)
+                                            const Positioned(
+                                              right: 2,
+                                              top: 2,
+                                              child: ClipOval(
+                                                child: ColoredBox(
+                                                  color: Colors.black,
+                                                  child: SizedBox(
+                                                    width: 6,
+                                                    height: 6,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
                         },
                       ),
                     ),
