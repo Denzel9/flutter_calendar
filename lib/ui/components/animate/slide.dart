@@ -8,6 +8,7 @@ class SlideAnimation extends StatelessWidget {
   final Duration? duration;
   final Duration? delay;
   final Curve? curve;
+  final bool? target;
 
   const SlideAnimation({
     super.key,
@@ -17,11 +18,19 @@ class SlideAnimation extends StatelessWidget {
     this.duration = const Duration(milliseconds: 500),
     this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeInOut,
+    this.target,
   });
 
   @override
   Widget build(BuildContext context) {
-    return widget.animate().slide(
+    return widget
+        .animate(
+            target: target != null
+                ? target!
+                    ? 1
+                    : 0
+                : null)
+        .slide(
           curve: curve,
           delay: delay,
           begin: begin,

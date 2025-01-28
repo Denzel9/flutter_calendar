@@ -1,7 +1,10 @@
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 class Calendar extends StatefulWidget {
@@ -68,6 +71,8 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
+    final TaskViewsStoreLocal taskViewsStoreLocal =
+        context.watch<TaskViewsStoreLocal>();
 
     return Column(
       children: [
@@ -121,7 +126,10 @@ class _CalendarState extends State<Calendar> {
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                    ),
+                    )
+                        .animate(
+                            target: taskViewsStoreLocal.isOpenCalendar ? 1 : 0)
+                        .fadeIn(),
                     Expanded(
                       child: GridView.builder(
                         gridDelegate:
@@ -142,46 +150,51 @@ class _CalendarState extends State<Calendar> {
                               .where((element) =>
                                   element.date.split(' ')[0] == dayDate)
                               .toList();
-                          return GestureDetector(
-                            onTap: () {
-                              widget
-                                  .onClick(dates[monthsFullNames[month]][day]);
-                              currentOffset = scrollController.offset;
-                            },
-                            child: ColoredBox(
-                              color: currentDate == dayDate
-                                  ? Colors.black.withOpacity(.5)
-                                  : selectDate == dayDate
-                                      ? Colors.black.withOpacity(.1)
-                                      : Colors.transparent,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    child: Center(
-                                      child: DNText(
-                                        title: (day + 1).toString(),
-                                        fontWeight: FontWeight.normal,
-                                        color: currentDate == dayDate
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  for (final _ in todayTasks)
-                                    const Positioned(
-                                      right: 2,
-                                      top: 2,
-                                      child: ClipOval(
-                                        child: ColoredBox(
-                                          color: Colors.white,
-                                          child: SizedBox(
-                                            width: 6,
-                                            height: 6,
-                                          ),
+                          return SlideAnimation(
+                            target: taskViewsStoreLocal.isOpenCalendar,
+                            begin: const Offset(0, 3),
+                            delay: Duration(milliseconds: day * 5),
+                            widget: GestureDetector(
+                              onTap: () {
+                                widget.onClick(
+                                    dates[monthsFullNames[month]][day]);
+                                currentOffset = scrollController.offset;
+                              },
+                              child: ColoredBox(
+                                color: currentDate == dayDate
+                                    ? Colors.black.withOpacity(.5)
+                                    : selectDate == dayDate
+                                        ? Colors.black.withOpacity(.1)
+                                        : Colors.transparent,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      child: Center(
+                                        child: DNText(
+                                          title: (day + 1).toString(),
+                                          fontWeight: FontWeight.normal,
+                                          color: currentDate == dayDate
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                       ),
                                     ),
-                                ],
+                                    for (final _ in todayTasks)
+                                      const Positioned(
+                                        right: 2,
+                                        top: 2,
+                                        child: ClipOval(
+                                          child: ColoredBox(
+                                            color: Colors.white,
+                                            child: SizedBox(
+                                              width: 6,
+                                              height: 6,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
