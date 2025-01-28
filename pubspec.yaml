@@ -24,7 +24,7 @@ dependencies:
     provider: ^6.1.2
     flutter_provider: ^2.1.0
     localstorage: ^5.0.0
-    animations: ^2.0.11
+    flutter_animate: ^4.5.2
 
 dev_dependencies:
     flutter_test:

@@ -26,7 +26,10 @@ class Content extends StatelessWidget {
           itemCount: filteredTaskToBoard(title, store.tasks).length,
           itemBuilder: (context, index) {
             final task = filteredTaskToBoard(title, store.tasks)[index];
-            return InfoCard(data: task);
+            return InfoCard(
+              data: task,
+              index: index,
+            );
           },
         ),
       );

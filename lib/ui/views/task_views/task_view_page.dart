@@ -29,11 +29,11 @@ class _TaskViewStatePage extends State<TaskViewPage>
 
   @override
   Widget build(BuildContext context) {
-    final AppStore store = context.watch<AppStore>();
+    final AppStore store = context.watch<AppStore>()
+      ..selectedDate = widget.date != null ? widget.date! : now;
 
     return Provider(
-      create: (context) => TaskViewsStoreLocal()
-        ..selectedDate = widget.date != null ? widget.date! : now,
+      create: (context) => TaskViewsStoreLocal(),
       child: Scaffold(
         body: SafeArea(
           child: Column(
