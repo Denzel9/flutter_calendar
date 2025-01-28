@@ -3,6 +3,7 @@ import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
@@ -118,18 +119,23 @@ class InfoSliver extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DNText(
-                      title: 'Good',
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                    SlideAnimation(
+                      widget: DNText(
+                        title: 'Good',
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
-                    DNText(
-                      title: getDayTitle(),
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                    SlideAnimation(
+                      widget: DNText(
+                        title: getDayTitle(),
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      begin: const Offset(-1, 0),
+                    )
                   ],
                 ),
               ),

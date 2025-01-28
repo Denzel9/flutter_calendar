@@ -1,5 +1,6 @@
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -9,6 +10,7 @@ import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -198,7 +200,7 @@ class _TaskTabState extends State<TaskTab> {
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       final task = tasks[index];
-                      return InfoCard(data: task);
+                      return InfoCard(data: task, index: index);
                     },
                   ),
                 ),
@@ -248,7 +250,7 @@ class _TaskTabState extends State<TaskTab> {
                               ),
                             );
                           },
-                        )
+                        ).animate().fadeIn()
                     ],
                   ),
                 ),

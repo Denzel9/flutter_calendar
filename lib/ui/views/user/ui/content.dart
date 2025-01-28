@@ -3,6 +3,7 @@ import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
@@ -51,25 +52,32 @@ class _ContentState extends State<Content> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DNEditableField(
-                        title: toUpperCase(currentUser.name),
-                        isEdit: userStoreLocal.isEdit,
-                        editField: 'name',
-                        docId: currentUser.docId ?? '',
-                        maxFontSize: 40,
-                        minFontSize: 30,
-                        withTitle: false,
-                        updateField: updateField,
+                      SlideAnimation(
+                        begin: const Offset(-1, 0),
+                        widget: DNEditableField(
+                          title: toUpperCase(currentUser.name),
+                          isEdit: userStoreLocal.isEdit,
+                          editField: 'name',
+                          docId: currentUser.docId ?? '',
+                          maxFontSize: 40,
+                          minFontSize: 30,
+                          withTitle: false,
+                          updateField: updateField,
+                        ),
                       ),
-                      DNEditableField(
-                        title: toUpperCase(currentUser.lastName),
-                        isEdit: userStoreLocal.isEdit,
-                        editField: 'lastName',
-                        docId: currentUser.docId ?? '',
-                        maxFontSize: 40,
-                        minFontSize: 30,
-                        withTitle: false,
-                        updateField: updateField,
+                      SlideAnimation(
+                        begin: const Offset(-1, 0),
+                        delay: const Duration(milliseconds: 200),
+                        widget: DNEditableField(
+                          title: toUpperCase(currentUser.lastName),
+                          isEdit: userStoreLocal.isEdit,
+                          editField: 'lastName',
+                          docId: currentUser.docId ?? '',
+                          maxFontSize: 40,
+                          minFontSize: 30,
+                          withTitle: false,
+                          updateField: updateField,
+                        ),
                       ),
                     ],
                   ),

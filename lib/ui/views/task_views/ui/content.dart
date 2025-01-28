@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
@@ -18,7 +19,7 @@ class Content extends StatelessWidget {
     final AppStore store = context.watch<AppStore>();
 
     return Observer(builder: (_) {
-      final tasks = filteredTask(
+      final List<TaskModel> tasks = filteredTask(
         searchText: taskViewsStoreLocal.searchtext,
         isAllTask: taskViewsStoreLocal.isAllTask,
         isActiveTask: taskViewsStoreLocal.isActiveTask,
@@ -41,6 +42,7 @@ class Content extends StatelessWidget {
                             final task = tasks[index];
                             return InfoCard(
                               data: task,
+                              index: index,
                             );
                           },
                         ),
@@ -73,6 +75,7 @@ class Content extends StatelessWidget {
                               final board = boards[index];
                               return InfoCard(
                                 data: board,
+                                index: index,
                               );
                             },
                           ),

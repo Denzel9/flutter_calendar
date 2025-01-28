@@ -169,7 +169,7 @@ class _CalendarState extends State<Calendar> {
                                   ),
                                   for (final _ in todayTasks)
                                     const Positioned(
-                                      left: 2,
+                                      right: 2,
                                       top: 2,
                                       child: ClipOval(
                                         child: ColoredBox(

@@ -52,9 +52,10 @@ class _MenuButtonState extends State<MenuButton> {
           )
         : PopupMenuButton(
             style: const ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
-                foregroundColor: WidgetStatePropertyAll(Colors.black)),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
+              foregroundColor: WidgetStatePropertyAll(Colors.black),
+            ),
+            itemBuilder: (BuildContext context) => [
               PopupMenuItem(
                 onTap: () => setState(
                   () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
