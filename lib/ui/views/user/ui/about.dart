@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
@@ -16,7 +17,7 @@ class About extends StatefulWidget {
 class _AboutState extends State<About> {
   @override
   Widget build(BuildContext context) {
-    final UserServiceImpl userService = UserServiceImpl();
+    final UserServiceImpl userService = UserServiceImpl(firestore);
     final AppStore store = context.watch<AppStore>();
     final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
 

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -38,7 +39,7 @@ class DNEditableField extends StatefulWidget {
 
 class _EditableFieldState extends State<DNEditableField> {
   final TextEditingController controller = TextEditingController();
-  final TaskServiceImpl taskService = TaskServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
 
   Future<dynamic> setOpenEditBottomSheet() {
     return showModalBottomSheet(

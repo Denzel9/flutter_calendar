@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/store/main/store.dart';
 import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:calendar_flutter/ui/views/home/ui/action_button.dart';
@@ -26,9 +27,10 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     final store = context.read<AppStore>();
-    store.initState();
+    final id = await localStorage.getItem('id');
+    store.initState(id);
     super.didChangeDependencies();
   }
 

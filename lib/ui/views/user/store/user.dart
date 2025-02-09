@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +9,7 @@ part 'user.g.dart';
 
 class UserStoreLocal = XStore with _$UserStoreLocal;
 
-final UserServiceImpl userService = UserServiceImpl();
-
-UserServiceImpl _userService = UserServiceImpl();
+final UserServiceImpl _userService = UserServiceImpl(firestore);
 
 abstract class XStore with Store {
   @observable

@@ -158,36 +158,36 @@ mixin _$AppStore on AppStoreBase, Store {
       AsyncAction('AppStoreBase.fetchCollaborationTasks', context: context);
 
   @override
-  Future<Null> fetchCollaborationTasks() {
+  Future<Null> fetchCollaborationTasks(String id) {
     return _$fetchCollaborationTasksAsyncAction
-        .run(() => super.fetchCollaborationTasks());
+        .run(() => super.fetchCollaborationTasks(id));
   }
 
   late final _$fetchTasksAsyncAction =
       AsyncAction('AppStoreBase.fetchTasks', context: context);
 
   @override
-  Future<Null> fetchTasks() {
-    return _$fetchTasksAsyncAction.run(() => super.fetchTasks());
+  Future<Null> fetchTasks(String id) {
+    return _$fetchTasksAsyncAction.run(() => super.fetchTasks(id));
   }
 
   late final _$fetchBoardsAsyncAction =
       AsyncAction('AppStoreBase.fetchBoards', context: context);
 
   @override
-  Future<Null> fetchBoards() {
-    return _$fetchBoardsAsyncAction.run(() => super.fetchBoards());
+  Future<Null> fetchBoards(String id) {
+    return _$fetchBoardsAsyncAction.run(() => super.fetchBoards(id));
   }
 
   late final _$AppStoreBaseActionController =
       ActionController(name: 'AppStoreBase', context: context);
 
   @override
-  void initState() {
+  void initState(String id) {
     final _$actionInfo = _$AppStoreBaseActionController.startAction(
         name: 'AppStoreBase.initState');
     try {
-      return super.initState();
+      return super.initState(id);
     } finally {
       _$AppStoreBaseActionController.endAction(_$actionInfo);
     }

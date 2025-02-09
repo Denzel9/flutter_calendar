@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -19,7 +20,7 @@ class Attachments extends StatefulWidget {
 
 class _AttachmentsState extends State<Attachments> {
   final ImagePicker imagePicker = ImagePicker();
-  final TaskServiceImpl taskService = TaskServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
 
   Future<void> pickImage(TaskStoreLocal store) async {
     XFile? xFileImage =

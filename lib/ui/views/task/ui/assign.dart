@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
@@ -19,8 +20,8 @@ class Assign extends StatefulWidget {
 }
 
 class _AssignState extends State<Assign> {
-  final UserServiceImpl userService = UserServiceImpl();
-  final TaskServiceImpl taskService = TaskServiceImpl();
+  final UserServiceImpl userService = UserServiceImpl(firestore);
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
 
   @override
   Widget build(BuildContext context) {

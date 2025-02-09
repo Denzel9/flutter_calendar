@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
@@ -16,7 +17,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final TaskServiceImpl taskService = TaskServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

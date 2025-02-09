@@ -60,7 +60,13 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const BackButton(color: Colors.amberAccent),
+              BackButton(
+                color: Colors.amberAccent,
+                onPressed: () {
+                  Navigator.pop(context);
+                  store.selectedDate = now;
+                },
+              ),
               Observer(builder: (_) {
                 return DNText(
                   title:

@@ -4,12 +4,16 @@ import 'package:calendar_flutter/service/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserServiceImpl implements UserService {
+  late FirebaseFirestore db;
+
+  UserServiceImpl(this.db);
+
   @override
   bool isLoading = false;
 
   @override
   Future<void> addUser(Map<String, dynamic> user, String id) async {
-    db.collection("users").doc(id).set(user);
+    firestore.collection("users").doc(id).set(user);
   }
 
   @override
@@ -17,18 +21,18 @@ class UserServiceImpl implements UserService {
       String id, String anotherId, List<dynamic> listFollowing) async {
     isLoading = true;
     if (listFollowing.contains(anotherId)) {
-      db.collection("users").doc(id).update({
+      firestore.collection("users").doc(id).update({
         "following": FieldValue.arrayRemove([anotherId])
       });
-      db.collection("users").doc(anotherId).update({
+      firestore.collection("users").doc(anotherId).update({
         "followers": FieldValue.arrayRemove([id])
       });
       return false;
     } else {
-      db.collection("users").doc(id).update({
+      firestore.collection("users").doc(id).update({
         "following": FieldValue.arrayUnion([anotherId])
       });
-      db.collection("users").doc(anotherId).update({
+      firestore.collection("users").doc(anotherId).update({
         "followers": FieldValue.arrayUnion([id])
       });
       return true;
@@ -37,18 +41,18 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<void> updateField(String id, String field, String data) async {
-    db.collection("users").doc(id).update({field: data});
+    firestore.collection("users").doc(id).update({field: data});
   }
 
   @override
   Future<Stream<DocumentSnapshot<Map<String, dynamic>>>> setUser(
       String id) async {
-    return db.collection("users").doc(id).snapshots();
+    return firestore.collection("users").doc(id).snapshots();
   }
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id) {
-    return db
+    return firestore
         .collection('users')
         .where("following", arrayContains: id)
         .snapshots();
@@ -56,7 +60,7 @@ class UserServiceImpl implements UserService {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getFollowings(String id) {
-    return db
+    return firestore
         .collection('users')
         .where("followers", arrayContains: id)
         .snapshots();
@@ -64,12 +68,12 @@ class UserServiceImpl implements UserService {
 
   @override
   Stream<DocumentSnapshot<Map<String, dynamic>>> getUser(String usersId) {
-    return db.collection("users").doc(usersId).snapshots();
+    return firestore.collection("users").doc(usersId).snapshots();
   }
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
-    return db.collection("users").snapshots();
+    return firestore.collection("users").snapshots();
   }
 
   @override

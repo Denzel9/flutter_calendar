@@ -1,4 +1,3 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/models/user.dart';
@@ -11,13 +10,21 @@ import 'package:mobx/mobx.dart';
 
 part 'store.g.dart';
 
-TaskServiceImpl _taskService = TaskServiceImpl();
-UserServiceImpl _userService = UserServiceImpl();
-BoardServiceImpl _boardService = BoardServiceImpl();
-
 class AppStore = AppStoreBase with _$AppStore;
 
 abstract class AppStoreBase with Store {
+  final FirebaseFirestore firestore;
+
+  late final TaskServiceImpl _taskService;
+  late final UserServiceImpl _userService;
+  late final BoardServiceImpl _boardService;
+
+  AppStoreBase(this.firestore) {
+    _taskService = TaskServiceImpl(firestore);
+    _userService = UserServiceImpl(firestore);
+    _boardService = BoardServiceImpl(firestore);
+  }
+
   @observable
   ObservableList<TaskModel> ownTasks = ObservableList<TaskModel>.of([]);
 
@@ -85,8 +92,7 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchCollaborationTasks() async {
-    final id = await localStorage.getItem('id');
+  Future<Null> fetchCollaborationTasks(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
         await _taskService.getCollaborationTasks(id);
 
@@ -102,8 +108,7 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchTasks() async {
-    final id = await localStorage.getItem('id');
+  Future<Null> fetchTasks(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
         await _taskService.getTasks(id);
 
@@ -118,8 +123,7 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchBoards() async {
-    final id = await localStorage.getItem('id');
+  Future<Null> fetchBoards(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
         await _boardService.getBoards(id);
     query.listen((event) {
@@ -133,9 +137,9 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  void initState() {
-    fetchTasks();
-    fetchCollaborationTasks();
-    fetchBoards();
+  void initState(String id) {
+    fetchTasks(id);
+    fetchCollaborationTasks(id);
+    fetchBoards(id);
   }
 }

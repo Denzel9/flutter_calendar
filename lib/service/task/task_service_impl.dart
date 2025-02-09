@@ -4,13 +4,20 @@ import 'package:calendar_flutter/service/task/task_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskServiceImpl implements TaskService {
+  late FirebaseFirestore firestore;
+
+  TaskServiceImpl(this.firestore);
+
   @override
   bool isLoading = false;
 
   @override
   Future<String> addTask(Map<String, dynamic> task) async {
     isLoading = true;
-    return db.collection("tasks").add(task).then((DocumentReference doc) {
+    return firestore
+        .collection("tasks")
+        .add(task)
+        .then((DocumentReference doc) {
       isLoading = false;
       return doc.id;
     });
@@ -19,19 +26,22 @@ class TaskServiceImpl implements TaskService {
   @override
   Future<void> deleteTask(String id) async {
     isLoading = true;
-    db.collection("tasks").doc(id).delete();
+    firestore.collection("tasks").doc(id).delete();
   }
 
   @override
   Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getTasks(
       String id) async {
-    return db.collection("tasks").where("userId", isEqualTo: id).snapshots();
+    return firestore
+        .collection("tasks")
+        .where("userId", isEqualTo: id)
+        .snapshots();
   }
 
   @override
   Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getCollaborationTasks(
       String id) async {
-    return db
+    return firestore
         .collection("tasks")
         .where("assign", arrayContains: id)
         .where("userId", isNotEqualTo: id)
@@ -40,24 +50,26 @@ class TaskServiceImpl implements TaskService {
 
   @override
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTask(String id) {
-    return db.collection('tasks').doc(id).snapshots();
+    return firestore.collection('tasks').doc(id).snapshots();
   }
 
   @override
   Future<void> updateField(String id, String field, String data) async {
-    db.collection("tasks").doc(id).update({field: data});
+    firestore.collection("tasks").doc(id).update({field: data});
   }
 
   @override
   Future<int> getTasksCount(String userId) async {
-    final resp =
-        await db.collection("tasks").where("userId", isEqualTo: userId).get();
+    final resp = await firestore
+        .collection("tasks")
+        .where("userId", isEqualTo: userId)
+        .get();
     return resp.docs.length;
   }
 
   @override
   Future<void> editAssign(String id, List<dynamic> listAssigned) async {
-    db
+    firestore
         .collection("tasks")
         .doc(id)
         .update({"assign": listAssigned, 'isCollaborated': true});
@@ -65,12 +77,12 @@ class TaskServiceImpl implements TaskService {
 
   @override
   Future<void> changeDone(String id, bool done) async {
-    db.collection("tasks").doc(id).update({"done": done});
+    firestore.collection("tasks").doc(id).update({"done": done});
   }
 
   @override
   Future<void> changeTitle(String id, String title) async {
-    db.collection("tasks").doc(id).update({"title": title});
+    firestore.collection("tasks").doc(id).update({"title": title});
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
@@ -22,8 +23,8 @@ class Content extends StatefulWidget {
 }
 
 class _ContentState extends State<Content> {
-  final TaskServiceImpl taskService = TaskServiceImpl();
-  final UserServiceImpl userService = UserServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+  final UserServiceImpl userService = UserServiceImpl(firestore);
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +199,7 @@ Future<dynamic> _showFollowBottomSheet({
   required bool isFollowers,
   required String usersId,
 }) {
-  final UserServiceImpl userService = UserServiceImpl();
+  final UserServiceImpl userService = UserServiceImpl(firestore);
   return showModalBottomSheet(
     backgroundColor: const Color.fromARGB(255, 35, 35, 35),
     context: context,

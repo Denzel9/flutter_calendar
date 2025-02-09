@@ -37,7 +37,7 @@ abstract class XStore with Store {
   @action
   Future getTasks() async {
     final userId = await localStorage.getItem('id');
-    db.collection("tasks").where("userId", isEqualTo: userId).get().then(
+    firestore.collection("tasks").where("userId", isEqualTo: userId).get().then(
       (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
           final task =

@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
@@ -16,8 +17,8 @@ class MenuButton extends StatefulWidget {
 }
 
 class _MenuButtonState extends State<MenuButton> {
-  final TaskServiceImpl taskService = TaskServiceImpl();
-  final BoardServiceImpl boardService = BoardServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
   late List<String> links;
   bool isDeleting = false;
 

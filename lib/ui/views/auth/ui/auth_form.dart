@@ -25,7 +25,7 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController secondPassword = TextEditingController();
 
   final AuthServiceImpl authService = AuthServiceImpl();
-  final UserServiceImpl userService = UserServiceImpl();
+  final UserServiceImpl userService = UserServiceImpl(firestore);
 
   @override
   void dispose() {

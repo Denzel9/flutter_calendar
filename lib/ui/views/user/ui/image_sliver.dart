@@ -21,7 +21,7 @@ class ImageSliver extends StatefulWidget {
 
 class _ImageSliverState extends State<ImageSliver> {
   final ImagePicker imagePicker = ImagePicker();
-  final UserServiceImpl userService = UserServiceImpl();
+  final UserServiceImpl userService = UserServiceImpl(firestore);
 
   Future<void> pickImage(UserStoreLocal userStoreLocal) async {
     XFile? xFileImage =

@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/store/main/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class _AppProviderState extends State<AppProvider> {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (context) => AppStore(),
+      create: (context) => AppStore(firestore),
       child: widget.child,
     );
   }

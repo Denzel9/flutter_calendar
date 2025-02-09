@@ -1,3 +1,4 @@
+import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/board/board_service_impl.dart';
@@ -20,8 +21,8 @@ class ActionButton extends StatefulWidget {
 }
 
 class _ActionButtonState extends State<ActionButton> {
-  final TaskServiceImpl taskService = TaskServiceImpl();
-  final BoardServiceImpl boardService = BoardServiceImpl();
+  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
 
   @override
   void dispose() {
