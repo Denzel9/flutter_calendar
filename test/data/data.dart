@@ -1,5 +1,6 @@
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
+import 'package:calendar_flutter/utils/date.dart';
 
 final task = TaskModel(
   author: 'author',
@@ -21,7 +22,7 @@ final collaborationTask = TaskModel(
   title: 'title',
   description: 'description',
   assign: ['userId'],
-  date: 'date',
+  date: now.toString(),
   createdAt: 'createdAt',
   isCollaborated: true,
   userId: 'anotherUserId',

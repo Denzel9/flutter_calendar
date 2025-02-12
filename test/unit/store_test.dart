@@ -1,5 +1,8 @@
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/utils/date.dart';
+import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -37,6 +40,47 @@ void main() {
 
     test('List all task is not empty', () async {
       expect(store.listAllTask.length, 2);
+    });
+  });
+
+  group('Test calendar', () {
+    test('Test compute month', () async {
+      DateTimeRange dateTimeRange = DateTimeRange(
+        start: DateTime(now.year, now.month + 1),
+        end: DateTime(now.year, now.month + 2),
+      );
+
+      final daysToGenerate =
+          dateTimeRange.end.difference(dateTimeRange.start).inDays;
+
+      final listDate =
+          generateCalendar(now.month).length - getWeekday(now.month);
+      expect(listDate, daysToGenerate);
+    });
+    test('List all task is not empty', () async {
+      final dates = computeDates(12);
+      expect(dates.length, 12);
+    });
+  });
+
+  group('Test filter tasks', () {
+    test('List todayTask task  is not empty', () async {
+      final tasks = filteredTask(store: store);
+      expect(tasks.length, 1);
+    });
+
+    test('List task with "isAllTask" is not empty', () async {
+      final tasks = filteredTask(store: store, isAllTask: true);
+      expect(tasks.length, 2);
+    });
+    test('List task with "isCollaborationTasks" is not empty', () async {
+      final tasks = filteredTask(store: store, isCollaborationTasks: true);
+      expect(tasks.length, 1);
+    });
+
+    test('List task with "date" is not empty', () async {
+      final tasks = filteredTask(store: store, date: now);
+      expect(tasks.length, 1);
     });
   });
 }
