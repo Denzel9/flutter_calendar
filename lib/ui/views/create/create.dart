@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreatePage extends StatefulWidget {
-  const CreatePage({super.key});
+  final String? selectedBoard;
+  const CreatePage({
+    super.key,
+    this.selectedBoard,
+  });
 
   @override
   State<CreatePage> createState() => _CreatePageState();
@@ -16,13 +20,18 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage>
     with SingleTickerProviderStateMixin {
-  late final _tabController =
-      TabController(length: 2, vsync: this, initialIndex: 0);
+  late TabController tabController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    super.initState();
+  }
+
+  @override
   void dispose() {
-    _tabController.dispose();
+    tabController.dispose();
     super.dispose();
   }
 
@@ -45,7 +54,7 @@ class _CreatePageState extends State<CreatePage>
             child: Column(
               children: [
                 TabBar(
-                  controller: _tabController,
+                  controller: tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicatorColor: Colors.amberAccent,
                   unselectedLabelColor: Colors.white54,
@@ -58,7 +67,7 @@ class _CreatePageState extends State<CreatePage>
                       child: DNText(
                         title: 'Tasks',
                         fontSize: 20,
-                        color: _tabController.index == 0
+                        color: tabController.index == 0
                             ? Colors.amberAccent
                             : Colors.white,
                       ),
@@ -67,7 +76,7 @@ class _CreatePageState extends State<CreatePage>
                       child: DNText(
                         title: 'Boards',
                         fontSize: 20,
-                        color: _tabController.index == 1
+                        color: tabController.index == 1
                             ? Colors.amberAccent
                             : Colors.white,
                       ),
@@ -78,13 +87,16 @@ class _CreatePageState extends State<CreatePage>
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: TabBarView(
-                      controller: _tabController,
+                      controller: tabController,
                       children: [
                         ListView(
-                          children: const [
-                            Main(isTask: true),
-                            Assign(),
-                            Media()
+                          children: [
+                            Main(
+                              isTask: true,
+                              selectedBoard: widget.selectedBoard,
+                            ),
+                            const Assign(),
+                            const Media()
                           ],
                         ),
                         ListView(
@@ -101,7 +113,7 @@ class _CreatePageState extends State<CreatePage>
           ),
         ),
         floatingActionButton:
-            ActionButton(controller: _tabController, scaffoldKey: scaffoldKey),
+            ActionButton(controller: tabController, scaffoldKey: scaffoldKey),
       ),
     );
   }

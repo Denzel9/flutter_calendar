@@ -6,6 +6,7 @@ import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
+import 'package:calendar_flutter/utils/parse_link_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -80,6 +81,7 @@ class _AttachmentsState extends State<Attachments> {
         FutureBuilder(
           future: taskService.getAttachments(widget.docId),
           builder: (context, snapshot) {
+            print('init ${snapshot.data?.length}');
             if (snapshot.hasData) {
               if (snapshot.data?.isEmpty ?? true) {
                 return const Padding(
@@ -113,9 +115,36 @@ class _AttachmentsState extends State<Attachments> {
                         },
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: snapshot.data![index],
-                      fit: BoxFit.cover,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: snapshot.data![index],
+                          fit: BoxFit.cover,
+                        ),
+                        if (taskStoreLocal.isEdit)
+                          Positioned(
+                            right: -10,
+                            top: -13,
+                            child: DNIconButton(
+                              key: GlobalKey(),
+                              backgroundColor:
+                                  Theme.of(context).primaryColorDark,
+                              color: Colors.red,
+                              icon: const Icon(Icons.cancel),
+                              onClick: () => taskService
+                                  .deleteAttachments(
+                                    widget.docId,
+                                    parseLinkImage(snapshot.data![index]),
+                                  )
+                                  .then(
+                                    (_) => Future.delayed(
+                                        const Duration(milliseconds: 100),
+                                        () => setState(() {})),
+                                  ),
+                            ),
+                          )
+                      ],
                     ),
                   );
                 },
