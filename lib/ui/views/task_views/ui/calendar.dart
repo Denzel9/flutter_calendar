@@ -79,7 +79,7 @@ class _CalendarState extends State<Calendar> {
                         curve: Curves.easeInOut,
                       );
                       widget.onClick(dates[monthsFullNames[currentMonth - 1]]
-                          [currenDay + 1]);
+                          [currenDay + getWeekday(currentMonth) - 1]);
                       currentOffset = scrollController.offset;
                     },
                   ),
@@ -180,7 +180,8 @@ class _CalendarState extends State<Calendar> {
                                         ],
                                       ),
                                     ),
-                                  ));
+                                  ),
+                                );
                         },
                       ),
                     ),
