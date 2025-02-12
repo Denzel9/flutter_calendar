@@ -92,6 +92,14 @@ num getSliceYear(String date) {
 
 int getWeekday(int month) => DateTime(currenYear, month + 1).weekday - 1;
 
+Map<dynamic, dynamic> computeDates(int value) {
+  final obj = {};
+  for (var i = 0; i < value; i++) {
+    obj[monthsFullNames[i]] = generateCalendar(i);
+  }
+  return obj;
+}
+
 List<DateTime> generateCalendar(int month) {
   final int weekday = getWeekday(month);
 

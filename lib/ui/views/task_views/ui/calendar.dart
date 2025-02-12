@@ -3,6 +3,7 @@ import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
 import 'package:calendar_flutter/utils/date.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class _CalendarState extends State<Calendar> {
   late final ScrollController scrollController;
   final String currentDate = getSliceDate(now.toString());
   double? currentOffset;
-  final dates = {};
+  Map<dynamic, dynamic> dates = {};
 
   @override
   void initState() {
@@ -34,10 +35,11 @@ class _CalendarState extends State<Calendar> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     final int month = context.watch<AppStore>().selectedDate.month;
     scrollController = ScrollController(
         initialScrollOffset: currentOffset ?? (month - 1) * 270);
+    dates = await compute(computeDates, 12);
     super.didChangeDependencies();
   }
 
