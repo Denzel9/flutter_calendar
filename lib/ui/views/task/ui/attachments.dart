@@ -3,9 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -98,9 +100,23 @@ class _AttachmentsState extends State<Attachments> {
                 ),
                 itemCount: snapshot.data?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
-                  return CachedNetworkImage(
-                    imageUrl: snapshot.data![index],
-                    fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        useSafeArea: false,
+                        builder: (BuildContext context) {
+                          return FullScreenCarousel(
+                            images: snapshot.data,
+                            initImage: index,
+                          );
+                        },
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: snapshot.data![index],
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               );
@@ -109,6 +125,39 @@ class _AttachmentsState extends State<Attachments> {
           },
         )
       ],
+    );
+  }
+}
+
+class FullScreenCarousel extends StatelessWidget {
+  final int initImage;
+  final List<String>? images;
+  const FullScreenCarousel(
+      {super.key, required this.images, required this.initImage});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Scaffold(
+        backgroundColor: Colors.black.withOpacity(.5),
+        body: Center(
+          child: FlutterCarousel(
+            options: FlutterCarouselOptions(
+              initialPage: initImage,
+              height: 400.0,
+              viewportFraction: 1,
+              showIndicator: true,
+              slideIndicator: CircularSlideIndicator(),
+            ),
+            items: List.generate(
+              images?.length ?? 0,
+              (index) {
+                return DNImage(url: images?[index] ?? '');
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
