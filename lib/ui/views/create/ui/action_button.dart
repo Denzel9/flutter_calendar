@@ -3,9 +3,10 @@ import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/service/task/task_service_impl.dart';
-import 'package:calendar_flutter/store/main/store.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
+import 'package:calendar_flutter/utils/compareString.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +66,8 @@ class _ActionButtonState extends State<ActionButton> {
               .then(
             (taskId) async {
               List<Board> foundBoard = store.boards
-                  .where((board) => board.title == createStoreLocal.board)
+                  .where((board) =>
+                      compareString(board.title, createStoreLocal.board))
                   .toList();
               if (foundBoard.isEmpty) {
                 boardService.addBoard(
@@ -93,34 +95,37 @@ class _ActionButtonState extends State<ActionButton> {
     }
 
     void addBoard() {
-      if (createStoreLocal.boardTitle.isEmpty) {
-        return showSnackbar("Title is required");
-      } else if (store.boards
-          .where((board) => board.title == createStoreLocal.boardTitle)
-          .isNotEmpty) {
-        return showSnackbar("The name board already exists");
-      }
-      setState(() {
-        boardService
-            .addBoard(
-          Board(
-              author: store.user.name,
-              title: createStoreLocal.board,
-              description: createStoreLocal.taskDescription,
-              userId: store.user.docId ?? '',
-              createdAt: now.toString(),
-              tasks: []).toJson(),
-        )
-            .then(
-          (_) {
-            if (context.mounted) {
-              setState(() {
-                Navigator.pop(context);
-              });
-            }
-          },
-        );
-      });
+      setState(
+        () {
+          if (createStoreLocal.boardTitle.isEmpty) {
+            return showSnackbar("Title is required");
+          }
+          if (store.boards
+              .where((board) =>
+                  compareString(board.title, createStoreLocal.boardTitle))
+              .isNotEmpty) {
+            return showSnackbar("The name board already exists");
+          }
+
+          boardService
+              .addBoard(Board(
+                  author: store.user.name,
+                  title: createStoreLocal.boardTitle,
+                  description: createStoreLocal.taskDescription,
+                  userId: store.user.docId ?? '',
+                  createdAt: now.toString(),
+                  tasks: []).toJson())
+              .then(
+            (_) {
+              if (context.mounted) {
+                setState(() {
+                  Navigator.pop(context);
+                });
+              }
+            },
+          );
+        },
+      );
     }
 
     return FloatingActionButton(

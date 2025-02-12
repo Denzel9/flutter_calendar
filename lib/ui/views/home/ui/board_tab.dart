@@ -1,7 +1,8 @@
-import 'package:calendar_flutter/store/main/store.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class BoardTab extends StatelessWidget {
@@ -14,14 +15,17 @@ class BoardTab extends StatelessWidget {
     final store = context.watch<AppStore>();
 
     return store.boards.isNotEmpty
-        ? ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-            itemCount: store.boards.length,
-            itemBuilder: (context, index) {
-              final board = store.boards[index];
-              return InfoCard(data: board);
-            },
-          )
+        ? Observer(builder: (_) {
+            return ListView.builder(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+              itemCount: store.boards.length,
+              itemBuilder: (context, index) {
+                final board = store.boards[index];
+                return InfoCard(data: board);
+              },
+            );
+          })
         : const Center(
             child: DNText(
               title: 'Empty',

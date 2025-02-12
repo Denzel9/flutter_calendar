@@ -2,7 +2,7 @@ import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/service/auth/auth_service_impl.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
-import 'package:calendar_flutter/store/main/store.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';

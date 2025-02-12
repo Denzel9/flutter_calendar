@@ -1,5 +1,5 @@
 import 'package:calendar_flutter/core/controller/firebase.dart';
-import 'package:calendar_flutter/store/main/store.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:calendar_flutter/ui/views/home/ui/action_button.dart';
 import 'package:calendar_flutter/ui/views/home/ui/board_tab.dart';

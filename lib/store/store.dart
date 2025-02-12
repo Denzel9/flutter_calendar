@@ -118,6 +118,7 @@ abstract class AppStoreBase with Store {
         listTasks.add(TaskModel.fromJsonWithId(
             doc.data() as Map<String, dynamic>?, doc.id));
       }
+
       ownTasks = ObservableList.of(listTasks);
     });
   }
@@ -126,12 +127,14 @@ abstract class AppStoreBase with Store {
   Future<Null> fetchBoards(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
         await _boardService.getBoards(id);
+
     query.listen((event) {
       final List<Board> listBoards = [];
       for (var doc in event.docs) {
         listBoards.add(
             Board.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id));
       }
+
       boards = ObservableList.of(listBoards);
     });
   }

@@ -1,4 +1,4 @@
-import 'package:calendar_flutter/store/main/store.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -33,6 +33,10 @@ void main() {
 
     test('Boards is not empty', () async {
       expect(store.boards.length, 1);
+    });
+
+    test('List all task is not empty', () async {
+      expect(store.listAllTask.length, 2);
     });
   });
 }
