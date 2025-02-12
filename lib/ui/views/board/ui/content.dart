@@ -1,4 +1,7 @@
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/button.dart';
+import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/create/create.dart';
 import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +21,50 @@ class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
+
     return Observer(builder: (_) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: ListView.builder(
-          controller: controller,
-          itemCount: filteredTaskToBoard(title, store.tasks).length,
-          itemBuilder: (context, index) {
-            final task = filteredTaskToBoard(title, store.tasks)[index];
-            return InfoCard(
-              data: task,
-              index: index,
-            );
-          },
-        ),
+        child: filteredTaskToBoard(title, store.tasks).isNotEmpty
+            ? ListView.builder(
+                controller: controller,
+                itemCount: filteredTaskToBoard(title, store.tasks).length,
+                itemBuilder: (context, index) {
+                  final task = filteredTaskToBoard(title, store.tasks)[index];
+                  return InfoCard(
+                    data: task,
+                    index: index,
+                  );
+                },
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const DNText(
+                    title: 'Empty',
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    opacity: .5,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DNButton(
+                    title: 'Add task',
+                    isPrimary: false,
+                    onClick: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CreatePage(
+                            selectedBoard: title,
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
       );
     });
   }

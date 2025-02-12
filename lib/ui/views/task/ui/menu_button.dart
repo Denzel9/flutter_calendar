@@ -19,20 +19,6 @@ class MenuButton extends StatefulWidget {
 class _MenuButtonState extends State<MenuButton> {
   final TaskServiceImpl taskService = TaskServiceImpl(firestore);
   final BoardServiceImpl boardService = BoardServiceImpl(firestore);
-  late List<String> links;
-  bool isDeleting = false;
-
-  @override
-  void initState() {
-    taskService.getAttachments(widget.docId).then((value) {
-      setState(() {
-        links =
-            value.map((el) => el.split('%2F').last.split('.').first).toList();
-      });
-    });
-
-    super.initState();
-  }
 
   void checkEmptyBoard(String taskId, List<Board> boards) {
     final emptyBoard = boards.where((el) => el.tasks.contains(taskId)).toList();
@@ -45,7 +31,7 @@ class _MenuButtonState extends State<MenuButton> {
   Widget build(BuildContext context) {
     final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
 
-    return isDeleting
+    return taskStoreLocal.isDeleting
         ? const SizedBox(
             width: 40,
             height: 40,
@@ -69,12 +55,12 @@ class _MenuButtonState extends State<MenuButton> {
               PopupMenuItem(
                 onTap: () {
                   setState(() {
-                    isDeleting = true;
+                    taskStoreLocal.isDeleting = true;
                     taskService.deleteTask(widget.docId).then((_) {
                       boardService.deleteTask(
                           taskStoreLocal.currentBoard, widget.docId);
                     }).then((_) {
-                      for (var el in links) {
+                      for (var el in taskStoreLocal.links) {
                         taskService.deleteAttachments(widget.docId, el);
                       }
                       checkEmptyBoard(widget.docId, widget.boards);

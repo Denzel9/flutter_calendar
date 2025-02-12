@@ -12,7 +12,8 @@ List<String> initialListBoards = ['Myself', "Work", 'Learning', "Default"];
 
 class Main extends StatefulWidget {
   final bool isTask;
-  const Main({super.key, required this.isTask});
+  final String? selectedBoard;
+  const Main({super.key, required this.isTask, this.selectedBoard});
 
   @override
   State<Main> createState() => _InfoState();
@@ -79,6 +80,7 @@ class _InfoState extends State<Main> {
           DNSelect(
             boards: listBoards,
             value: createStore.board,
+            initialValue: widget.selectedBoard,
             onClick: (int index) {
               setState(() {
                 createStore.board = listBoards[index];

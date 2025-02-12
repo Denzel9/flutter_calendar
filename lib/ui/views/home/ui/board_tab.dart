@@ -15,17 +15,16 @@ class BoardTab extends StatelessWidget {
     final store = context.watch<AppStore>();
 
     return store.boards.isNotEmpty
-        ? Observer(builder: (_) {
-            return ListView.builder(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-              itemCount: store.boards.length,
-              itemBuilder: (context, index) {
-                final board = store.boards[index];
-                return InfoCard(data: board);
-              },
-            );
-          })
+        ? Observer(
+            builder: (_) => ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 20),
+                  itemCount: store.boards.length,
+                  itemBuilder: (context, index) {
+                    final board = store.boards[index];
+                    return InfoCard(data: board);
+                  },
+                ))
         : const Center(
             child: DNText(
               title: 'Empty',

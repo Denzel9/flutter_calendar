@@ -14,6 +14,7 @@ import 'package:calendar_flutter/ui/views/task/ui/board_button.dart';
 import 'package:calendar_flutter/ui/views/task/ui/menu_button.dart';
 import 'package:calendar_flutter/ui/widgets/editable_field.dart';
 import 'package:calendar_flutter/utils/date.dart';
+import 'package:calendar_flutter/utils/parse_link_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -35,10 +36,21 @@ class _ContentState extends State<Content> {
 
   @override
   void didChangeDependencies() async {
-    List<Board> boards = context.watch<AppStore>().boards;
+    final List<Board> boards = context.watch<AppStore>().boards;
+    final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
+
     setState(() {
       context.watch<TaskStoreLocal>().currentBoard =
           boards.where((el) => el.title == widget.task.board).first.docId ?? '';
+
+      taskService.getAttachments(widget.task.docId ?? '').then((value) {
+        setState(() {
+          taskStoreLocal.links = value
+              .map(
+                  (el) => parseLinkImage(el.split('%2F').last.split('.').first))
+              .toList();
+        });
+      });
     });
 
     super.didChangeDependencies();

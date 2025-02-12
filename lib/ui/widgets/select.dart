@@ -1,24 +1,31 @@
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/utils/format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DNSelect extends StatelessWidget {
   final List<String> boards;
   final String value;
+  final String? initialValue;
+
   final Function(int index) onClick;
   const DNSelect(
       {super.key,
       required this.boards,
       required this.value,
-      required this.onClick});
+      required this.onClick,
+      this.initialValue});
 
   @override
   Widget build(BuildContext context) {
+    final int findedValue = boards.indexOf(initialValue ?? '');
+
     return GestureDetector(
       child: Row(
         children: [
           DNText(
-            title: value,
+            title:
+                toUpperCase(initialValue != null ? boards[findedValue] : value),
             fontWeight: FontWeight.bold,
             fontSize: 25,
             opacity: .5,
@@ -44,17 +51,20 @@ class DNSelect extends StatelessWidget {
                 useMagnifier: true,
                 itemExtent: 32,
                 scrollController: FixedExtentScrollController(
-                  initialItem: boards.indexOf(value),
+                  initialItem: findedValue | boards.indexOf(value),
                 ),
                 onSelectedItemChanged: onClick,
-                children: List.generate(boards.length, (int index) {
-                  return Center(
-                    child: DNText(
-                      title: boards[index],
-                      fontSize: 20,
-                    ),
-                  );
-                }),
+                children: List.generate(
+                  boards.length,
+                  (int index) {
+                    return Center(
+                      child: DNText(
+                        title: boards[index],
+                        fontSize: 20,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),

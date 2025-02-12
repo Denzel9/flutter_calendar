@@ -95,37 +95,35 @@ class _ActionButtonState extends State<ActionButton> {
     }
 
     void addBoard() {
-      setState(
-        () {
-          if (createStoreLocal.boardTitle.isEmpty) {
-            return showSnackbar("Title is required");
-          }
-          if (store.boards
-              .where((board) =>
-                  compareString(board.title, createStoreLocal.boardTitle))
-              .isNotEmpty) {
-            return showSnackbar("The name board already exists");
-          }
-
-          boardService
-              .addBoard(Board(
-                  author: store.user.name,
-                  title: createStoreLocal.boardTitle,
-                  description: createStoreLocal.taskDescription,
-                  userId: store.user.docId ?? '',
-                  createdAt: now.toString(),
-                  tasks: []).toJson())
-              .then(
-            (_) {
-              if (context.mounted) {
-                setState(() {
-                  Navigator.pop(context);
-                });
-              }
-            },
-          );
-        },
-      );
+      if (createStoreLocal.boardTitle.isEmpty) {
+        return showSnackbar("Title is required");
+      } else if (store.boards
+          .where((board) =>
+              compareString(board.title, createStoreLocal.boardTitle))
+          .isNotEmpty) {
+        return showSnackbar("The name board already exists");
+      }
+      setState(() {
+        boardService
+            .addBoard(
+          Board(
+              author: store.user.name,
+              title: createStoreLocal.boardTitle,
+              description: createStoreLocal.taskDescription,
+              userId: store.user.docId ?? '',
+              createdAt: now.toString(),
+              tasks: []).toJson(),
+        )
+            .then(
+          (_) {
+            if (context.mounted) {
+              setState(() {
+                Navigator.pop(context);
+              });
+            }
+          },
+        );
+      });
     }
 
     return FloatingActionButton(

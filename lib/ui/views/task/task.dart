@@ -18,6 +18,7 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

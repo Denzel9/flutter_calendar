@@ -1,21 +1,27 @@
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/controller/firebase.dart';
 
 class Header extends StatefulWidget {
+  final String id;
   final String title;
   final int countTask;
   final TabController controller;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   const Header({
     super.key,
     required this.controller,
     required this.title,
     required this.countTask,
+    required this.id,
+    required this.scaffoldKey,
   });
 
   @override
@@ -23,6 +29,15 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
+  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
+
+  void showSnackbar(String title) {
+    widget.scaffoldKey.currentState?.setState(() {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(title)));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
@@ -35,12 +50,41 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DNIconButton(
-                  icon: const Icon(
-                    Icons.arrow_downward,
-                    color: Colors.black,
+                icon: const Icon(
+                  Icons.arrow_downward,
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.amberAccent,
+                onClick: () => Navigator.pop(context),
+              ),
+              PopupMenuButton(
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
+                  foregroundColor: WidgetStatePropertyAll(Colors.black),
+                ),
+                itemBuilder: (BuildContext context) => [
+                  PopupMenuItem(
+                    onTap: () {
+                      final findedBoards =
+                          filteredTaskToBoard(widget.title, store.tasks);
+                      if (findedBoards.isEmpty) {
+                        boardService.deleteBoard(widget.id).then((_) {
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        });
+                      } else {
+                        return showSnackbar(
+                            'There are 2 issues that cannot be deleted');
+                      }
+                    },
+                    child: const DNText(
+                      title: 'Delete',
+                      color: Colors.black,
+                    ),
                   ),
-                  backgroundColor: Colors.amberAccent,
-                  onClick: () => Navigator.pop(context)),
+                ],
+              )
             ],
           ),
         ),

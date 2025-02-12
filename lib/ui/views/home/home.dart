@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage>
     return Provider(
       create: (context) => HomeStoreLocal(),
       child: Scaffold(
+        key: scaffoldKey,
         body: NestedScrollView(
           headerSliverBuilder: (context, _) =>
               [const InfoSliver(), TabsSliver(controller: tabController)],

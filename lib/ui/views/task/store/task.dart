@@ -18,4 +18,10 @@ abstract class XStore with Store {
 
   @observable
   List<File> image = [];
+
+  @observable
+  List<String> links = [];
+
+  @observable
+  bool isDeleting = false;
 }
