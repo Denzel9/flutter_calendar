@@ -6,4 +6,4 @@ import 'package:firebase_storage/firebase_storage.dart';
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
-final localStorage = LocalStorage();
+final LocalStorage localStorage = LocalStorage();

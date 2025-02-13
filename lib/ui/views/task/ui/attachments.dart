@@ -81,7 +81,6 @@ class _AttachmentsState extends State<Attachments> {
         FutureBuilder(
           future: taskService.getAttachments(widget.docId),
           builder: (context, snapshot) {
-            print('init ${snapshot.data?.length}');
             if (snapshot.hasData) {
               if (snapshot.data?.isEmpty ?? true) {
                 return const Padding(

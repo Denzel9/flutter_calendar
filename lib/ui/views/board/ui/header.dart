@@ -71,7 +71,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                         boardService.deleteBoard(widget.id);
                       } else {
                         return showSnackbar(
-                            'There are 2 issues that cannot be deleted');
+                            'There are ${findedBoards.length} tasks that cannot be deleted');
                       }
                     },
                     child: const DNText(
