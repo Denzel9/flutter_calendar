@@ -6,7 +6,7 @@ import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
-import 'package:calendar_flutter/utils/compareString.dart';
+import 'package:calendar_flutter/utils/compare_string.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
