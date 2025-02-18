@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "938597244001",
+    "project_id": "task-4d33a",
+    "storage_bucket": "task-4d33a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938597244001:android:7dcb2a83e8f76d0aa75e20",
+        "android_client_info": {
+          "package_name": "com.example.calendar_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKN-anXEBhCYMgvP9Jvw6UBM9FrFZMr2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,11 +26,12 @@ class _DatePickerState extends State<DatePicker> {
             child: SafeArea(
               top: false,
               child: CupertinoDatePicker(
-                  initialDateTime: DateTime.now(),
-                  mode: CupertinoDatePickerMode.dateAndTime,
-                  use24hFormat: true,
-                  showDayOfWeek: true,
-                  onDateTimeChanged: widget.onChanged),
+                initialDateTime: DateTime.now(),
+                mode: CupertinoDatePickerMode.date,
+                use24hFormat: true,
+                showDayOfWeek: true,
+                onDateTimeChanged: widget.onChanged,
+              ),
             ),
           ),
         );

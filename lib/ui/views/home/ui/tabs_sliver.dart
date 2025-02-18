@@ -28,7 +28,7 @@ class _TabsSliverState extends State<TabsSliver> {
       surfaceTintColor: Colors.white,
       elevation: 0,
       pinned: true,
-      toolbarHeight: 0,
+      toolbarHeight: 35,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,

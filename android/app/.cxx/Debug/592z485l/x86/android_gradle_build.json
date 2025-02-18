@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/Users/denisnikitin/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/denisnikitin/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/denisnikitin/Desktop/calendar_flutter/android/app/.cxx/Debug/592z485l/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/denisnikitin/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/denisnikitin/Desktop/calendar_flutter/android/app/.cxx/Debug/592z485l/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/denisnikitin/Library/Android/sdk/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/denisnikitin/Library/Android/sdk/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}

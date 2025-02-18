@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -52,12 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAXubD44ofwb72bPZ5SkzCUbPCMsmt8roE',
-    appId: '1:938597244001:ios:90413ad0e3cc2430a75e20',
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyBKN-anXEBhCYMgvP9Jvw6UBM9FrFZMr2g',
+    appId: '1:938597244001:android:7dcb2a83e8f76d0aa75e20',
     messagingSenderId: '938597244001',
     projectId: 'task-4d33a',
     storageBucket: 'task-4d33a.appspot.com',
-    iosBundleId: 'com.example.flutterApplication1.test',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAXubD44ofwb72bPZ5SkzCUbPCMsmt8roE',
+    appId: '1:938597244001:ios:bc599e633b5a8ecfa75e20',
+    messagingSenderId: '938597244001',
+    projectId: 'task-4d33a',
+    storageBucket: 'task-4d33a.appspot.com',
+    iosBundleId: 'com.example.calendarFlutter',
   );
 }

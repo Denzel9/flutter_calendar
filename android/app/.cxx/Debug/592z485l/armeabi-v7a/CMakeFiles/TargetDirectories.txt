@@ -1,0 +1,2 @@
+/Users/denisnikitin/Desktop/calendar_flutter/android/app/.cxx/Debug/592z485l/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/denisnikitin/Desktop/calendar_flutter/android/app/.cxx/Debug/592z485l/armeabi-v7a/CMakeFiles/rebuild_cache.dir
