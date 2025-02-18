@@ -64,28 +64,27 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
-  Future registerHandler(BuildContext context) async {
+  Future registerHandler(AppStore store) async {
     try {
       if (password.text == secondPassword.text) {
         await authService.register(login.text, password.text).then((User user) {
-          userService
-              .addUser(
-                  UserModel(
-                    name: user.displayName ?? '',
-                    email: user.email ?? '',
-                    followers: [],
-                    following: [],
-                    lastName: '',
-                    docId: user.uid,
-                  ).toJson(),
-                  user.uid)
-              .then((_) {
-            if (context.mounted) {
-              userService.setUser(user.uid);
-              localStorage.setItem('id', user.uid);
-              Navigator.pushReplacementNamed(context, routesList.home);
-            }
-          });
+          Future.wait([
+            userService.addUser(
+                UserModel(
+                  name: user.displayName ?? '',
+                  email: user.email ?? '',
+                  followers: [],
+                  following: [],
+                  lastName: '',
+                  docId: user.uid,
+                ).toJson(),
+                user.uid),
+            store.setUser(user.uid),
+            localStorage.setItem('id', user.uid)
+          ]);
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, routesList.home);
+          }
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +98,7 @@ class _AuthFormState extends State<AuthForm> {
         );
       }
     } on FirebaseAuthException catch (error) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.amberAccent,
@@ -161,7 +160,7 @@ class _AuthFormState extends State<AuthForm> {
             title: widget.islogin ? 'Sign In' : 'Sign Up',
             isPrimary: true,
             onClick: () => setState(() {
-              widget.islogin ? loginHandler(store) : registerHandler(context);
+              widget.islogin ? loginHandler(store) : registerHandler(store);
             }),
           ),
         ),

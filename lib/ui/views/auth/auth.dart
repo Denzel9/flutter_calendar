@@ -1,10 +1,6 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
-import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/ui/views/auth/ui/auth_form.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -15,22 +11,6 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   bool islogin = true;
-
-  @override
-  void didChangeDependencies() {
-    final store = context.read<AppStore>();
-
-    localStorage.getItem('id').then((id) {
-      if (id.isNotEmpty && context.mounted) {
-        store.setUser(id).then((_) {
-          if (mounted) {
-            Navigator.pushReplacementNamed(context, routesList.home);
-          }
-        });
-      }
-    });
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {

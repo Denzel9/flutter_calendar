@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
@@ -79,6 +80,13 @@ class _ImageSliverState extends State<ImageSliver> {
                               contentPadding: EdgeInsets.zero,
                               onTap: () async {
                                 await localStorage.deleteItem('id');
+                                store.user = UserModel(
+                                    name: '',
+                                    lastName: '',
+                                    email: '',
+                                    following: [],
+                                    followers: [],
+                                    docId: '');
                                 if (context.mounted) {
                                   Navigator.pushReplacementNamed(
                                       context, routesList.auth);

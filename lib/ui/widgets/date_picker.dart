@@ -27,9 +27,8 @@ class _DatePickerState extends State<DatePicker> {
               top: false,
               child: CupertinoDatePicker(
                 initialDateTime: DateTime.now(),
-                mode: CupertinoDatePickerMode.date,
+                mode: CupertinoDatePickerMode.dateAndTime,
                 use24hFormat: true,
-                showDayOfWeek: true,
                 onDateTimeChanged: widget.onChanged,
               ),
             ),

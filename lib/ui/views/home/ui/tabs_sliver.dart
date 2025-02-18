@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -28,7 +30,7 @@ class _TabsSliverState extends State<TabsSliver> {
       surfaceTintColor: Colors.white,
       elevation: 0,
       pinned: true,
-      toolbarHeight: 35,
+      toolbarHeight: Platform.isAndroid ? 35 : 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
