@@ -35,7 +35,6 @@ class DNInput extends StatelessWidget {
       textInputAction: TextInputAction.done,
       focusNode: focusNode,
       onSubmitted: onClick,
-      onChanged: onClick,
       controller: controller,
       style: const TextStyle(color: Colors.white),
       cursorColor: Colors.amberAccent,

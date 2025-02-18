@@ -129,11 +129,19 @@ class _ImageSliverState extends State<ImageSliver> {
             if (userStoreLocal.isEdit && userStoreLocal.image != null)
               DNIconButton(
                 backgroundColor: Colors.green,
-                onClick: () => userService
-                    .setAvatar(userStoreLocal.image!, store.user.docId ?? '')
-                    .then((_) => setState(() {
-                          userStoreLocal.image = null;
-                        })),
+                onClick: () {
+                  userService
+                      .setAvatar(userStoreLocal.image!, store.user.docId ?? '')
+                      .then((link) {
+                    store.user.avatar = link;
+                    userService.updateField(
+                        store.user.docId ?? '', 'avatar', link ?? '');
+                  }).then(
+                    (_) => setState(() {
+                      userStoreLocal.image = null;
+                    }),
+                  );
+                },
                 icon: const Icon(
                   Icons.done,
                   color: Colors.white,

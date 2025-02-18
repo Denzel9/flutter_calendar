@@ -64,41 +64,19 @@ class InfoSliver extends StatelessWidget {
                       ),
                       child: Observer(
                         builder: (_) {
-                          if (store.user.docId != null) {
-                            return FutureBuilder(
-                              future:
-                                  userService.getAvatar(store.user.docId ?? ''),
-                              builder: (context, snap) {
-                                if (snap.connectionState ==
-                                    ConnectionState.done) {
-                                  if (snap.hasData) {
-                                    return ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: snap.data ?? '',
-                                        fit: BoxFit.cover,
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                    );
-                                  } else {
-                                    return CircleAvatar(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
-                                      child: DNText(
-                                        title: store.user.email
-                                            .substring(0, 1)
-                                            .toUpperCase(),
-                                        color: Colors.black,
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              },
+                          if (store.user.avatar?.isNotEmpty ?? false) {
+                            return ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: store.user.avatar ?? '',
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
                             );
                           } else {
-                            return const SizedBox();
+                            return CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor,
+                            );
                           }
                         },
                       ),

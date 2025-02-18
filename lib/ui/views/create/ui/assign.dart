@@ -106,7 +106,9 @@ class _AssignState extends State<Assign> {
                                       stream: userService
                                           .getFollowers(store.user.docId ?? ''),
                                       builder: (context, snap) {
-                                        if (snap.hasData) {
+                                        if (snap.hasData &&
+                                            snap.connectionState ==
+                                                ConnectionState.done) {
                                           return ListView.builder(
                                             itemCount: snap.data?.docs.length,
                                             itemBuilder: (context, index) {
@@ -151,37 +153,34 @@ class _AssignState extends State<Assign> {
                                                         return const CircularProgressIndicator();
                                                       }
                                                     }),
-                                                trailing:
-                                                    Observer(builder: (_) {
-                                                  return DNIconButton(
-                                                    onClick: () => doAssign(
-                                                        user.docId ?? ''),
-                                                    icon: createStore.assign
-                                                            .contains(
-                                                                user.docId)
-                                                        ? const Icon(Icons.done)
-                                                        : const Icon(Icons.add),
-                                                  );
-                                                }),
+                                                trailing: Observer(
+                                                  builder: (_) {
+                                                    return DNIconButton(
+                                                      onClick: () => doAssign(
+                                                          user.docId ?? ''),
+                                                      icon: createStore.assign
+                                                              .contains(
+                                                                  user.docId)
+                                                          ? const Icon(
+                                                              Icons.done)
+                                                          : const Icon(
+                                                              Icons.add),
+                                                    );
+                                                  },
+                                                ),
                                               );
                                             },
                                           );
-                                        } else if (!snap.hasData &&
-                                            snap.connectionState ==
-                                                ConnectionState.done) {
-                                          return const Expanded(
-                                            child: Center(
-                                              child: DNText(
-                                                title: 'Empty',
-                                                color: Colors.white,
-                                                fontSize: 30,
-                                                opacity: .5,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        } else {
+                                          return const Center(
+                                            child: DNText(
+                                              title: 'Empty',
+                                              color: Colors.white,
+                                              fontSize: 30,
+                                              opacity: .5,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           );
-                                        } else {
-                                          return const CircularProgressIndicator();
                                         }
                                       },
                                     ),

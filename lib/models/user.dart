@@ -4,6 +4,7 @@ class UserModel {
   String email;
   String? docId;
   String? about;
+  String? avatar;
   List<dynamic> following;
   List<dynamic> followers;
 
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     required this.following,
     required this.followers,
+    this.avatar,
     this.docId,
     this.about,
   });
@@ -26,6 +28,7 @@ class UserModel {
       followers: json?['followers'] ?? [],
       about: json?['about'] ?? '',
       docId: id,
+      avatar: json?["avatar"] ?? '',
     );
   }
 
@@ -37,6 +40,7 @@ class UserModel {
       'following': following,
       'followers': followers,
       'about': about,
+      'avatar': avatar
     };
   }
 }

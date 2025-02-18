@@ -21,7 +21,7 @@ abstract interface class UserService {
 
   Future<String?> getAvatar(String id);
 
-  Future<void> setAvatar(File image, String id);
+  Future<String?> setAvatar(File image, String id);
 
   Future<void> updateField(String id, String field, String data);
 }

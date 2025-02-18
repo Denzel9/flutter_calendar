@@ -82,7 +82,11 @@ class UserServiceImpl implements UserService {
   }
 
   @override
-  Future<void> setAvatar(File image, String id) async {
-    await storage.ref().child("$id/avatar.jpg").putFile(image);
+  Future<String?> setAvatar(File image, String id) async {
+    String? link = '';
+    await storage.ref().child("$id/avatar.jpg").putFile(image).then((_) async {
+      link = await getAvatar(id);
+    });
+    return link;
   }
 }
