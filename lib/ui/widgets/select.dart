@@ -18,7 +18,7 @@ class DNSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int findedValue = boards.indexOf(initialValue ?? '');
+    final int findedValue = boards.indexOf(initialValue ?? value);
 
     return GestureDetector(
       child: Row(
@@ -51,7 +51,7 @@ class DNSelect extends StatelessWidget {
                 useMagnifier: true,
                 itemExtent: 32,
                 scrollController: FixedExtentScrollController(
-                  initialItem: findedValue | boards.indexOf(value),
+                  initialItem: findedValue,
                 ),
                 onSelectedItemChanged: onClick,
                 children: List.generate(
