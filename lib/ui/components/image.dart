@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class DNImage extends StatelessWidget {
   final double? width;
   final double? height;
-
   final String url;
+
   const DNImage({
     required this.url,
     super.key,

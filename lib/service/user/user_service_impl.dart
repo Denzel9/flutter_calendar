@@ -17,26 +17,31 @@ class UserServiceImpl implements UserService {
   }
 
   @override
-  Future<bool> setFollow(
-      String id, String anotherId, List<dynamic> listFollowing) async {
-    isLoading = true;
-    if (listFollowing.contains(anotherId)) {
-      firestore.collection("users").doc(id).update({
-        "following": FieldValue.arrayRemove([anotherId])
-      });
-      firestore.collection("users").doc(anotherId).update({
-        "followers": FieldValue.arrayRemove([id])
-      });
-      return false;
-    } else {
-      firestore.collection("users").doc(id).update({
-        "following": FieldValue.arrayUnion([anotherId])
-      });
-      firestore.collection("users").doc(anotherId).update({
-        "followers": FieldValue.arrayUnion([id])
-      });
-      return true;
-    }
+  Future<void> setFollowers(String userId, String anotherId) async {
+    firestore.collection("users").doc(anotherId).update({
+      "followers": FieldValue.arrayUnion([userId])
+    });
+  }
+
+  @override
+  Future<void> setUnFollowers(String userId, String anotherId) async {
+    firestore.collection("users").doc(anotherId).update({
+      "followers": FieldValue.arrayRemove([userId])
+    });
+  }
+
+  @override
+  Future<void> setFollowing(String userId, String anotherId) async {
+    firestore.collection("users").doc(userId).update({
+      "following": FieldValue.arrayUnion([anotherId])
+    });
+  }
+
+  @override
+  Future<void> setUnFollowing(String userId, String anotherId) async {
+    firestore.collection("users").doc(userId).update({
+      "following": FieldValue.arrayRemove([anotherId])
+    });
   }
 
   @override

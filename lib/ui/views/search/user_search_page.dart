@@ -48,7 +48,7 @@ class _UserSearchStatePage extends State<UserSearchPage> {
                     title: 'Search users',
                     controller: controller,
                     autoFocus: true,
-                    onClick: (_) => setState(() {}),
+                    onChanged: (_) => setState(() {}),
                   ),
                 ),
               ],

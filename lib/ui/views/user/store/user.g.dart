@@ -27,13 +27,13 @@ mixin _$UserStoreLocal on XStore, Store {
   late final _$userAtom = Atom(name: 'XStore.user', context: context);
 
   @override
-  UserModel? get user {
+  UserModel get user {
     _$userAtom.reportRead();
     return super.user;
   }
 
   @override
-  set user(UserModel? value) {
+  set user(UserModel value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });
@@ -75,6 +75,13 @@ mixin _$UserStoreLocal on XStore, Store {
   @override
   Future<Null> getUser(String id) {
     return _$getUserAsyncAction.run(() => super.getUser(id));
+  }
+
+  late final _$resetAsyncAction = AsyncAction('XStore.reset', context: context);
+
+  @override
+  Future<Null> reset() {
+    return _$resetAsyncAction.run(() => super.reset());
   }
 
   @override

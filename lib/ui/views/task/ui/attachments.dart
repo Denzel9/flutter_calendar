@@ -114,6 +114,11 @@ class _AttachmentsState extends State<Attachments> {
                         },
                       );
                     },
+                    onLongPress: () {
+                      setState(() {
+                        taskStoreLocal.isEdit = true;
+                      });
+                    },
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
@@ -167,7 +172,7 @@ class FullScreenCarousel extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(.5),
+        backgroundColor: Colors.black54,
         body: Center(
           child: FlutterCarousel(
             options: FlutterCarouselOptions(

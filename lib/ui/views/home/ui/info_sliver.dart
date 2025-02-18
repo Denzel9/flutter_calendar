@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/task.dart';
@@ -6,6 +5,7 @@ import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
 import 'package:calendar_flutter/utils/date.dart';
@@ -66,9 +66,8 @@ class InfoSliver extends StatelessWidget {
                         builder: (_) {
                           if (store.user.avatar?.isNotEmpty ?? false) {
                             return ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl: store.user.avatar ?? '',
-                                fit: BoxFit.cover,
+                              child: DNImage(
+                                url: store.user.avatar ?? '',
                                 width: 40,
                                 height: 40,
                               ),
@@ -76,6 +75,7 @@ class InfoSliver extends StatelessWidget {
                           } else {
                             return CircleAvatar(
                               backgroundColor: Theme.of(context).primaryColor,
+                              child: const Icon(Icons.person),
                             );
                           }
                         },

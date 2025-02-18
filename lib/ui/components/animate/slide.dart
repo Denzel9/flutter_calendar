@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class SlideAnimation extends StatelessWidget {
+  final AnimationController? controller;
   final Widget widget;
   final Offset? begin;
   final Offset? end;
@@ -19,12 +20,14 @@ class SlideAnimation extends StatelessWidget {
     this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeInOut,
     this.target,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return widget
         .animate(
+            controller: controller,
             target: target != null
                 ? target!
                     ? 1

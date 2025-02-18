@@ -43,7 +43,7 @@ class _TaskTabState extends State<TaskTab> {
                     clipBehavior: Clip.none,
                     children: [
                       DNButton(
-                        title: 'Active',
+                        title: 'Opened',
                         onClick: () => setState(() {
                           homeStoreLocal.isActiveTask = true;
                         }),
@@ -76,7 +76,7 @@ class _TaskTabState extends State<TaskTab> {
                     clipBehavior: Clip.none,
                     children: [
                       DNButton(
-                        title: 'Archive',
+                        title: 'Closed',
                         onClick: () =>
                             setState(() => homeStoreLocal.isActiveTask = false),
                         isPrimary: !homeStoreLocal.isActiveTask,

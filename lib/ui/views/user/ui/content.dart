@@ -16,7 +16,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class Content extends StatefulWidget {
-  const Content({super.key});
+  final UserModel user;
+  const Content({super.key, required this.user});
 
   @override
   State<Content> createState() => _ContentState();
@@ -26,169 +27,181 @@ class _ContentState extends State<Content> {
   final TaskServiceImpl taskService = TaskServiceImpl(firestore);
   final UserServiceImpl userService = UserServiceImpl(firestore);
 
+  Future<void> updateField(
+    String id,
+    String field,
+    String data,
+  ) async {
+    await userService.updateField(id, field, data);
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
     final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
 
-    Future<void> updateField(
-      String id,
-      String field,
-      String data,
-    ) async {
-      await userService.updateField(id, field, data);
-    }
-
     return Observer(
       builder: (_) {
-        final currentUser =
-            userStoreLocal.isGuest ? userStoreLocal.user : store.user;
-        if (currentUser != null) {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SlideAnimation(
-                        begin: const Offset(-1, 0),
-                        widget: DNEditableField(
-                          title: toUpperCase(currentUser.name),
-                          isEdit: userStoreLocal.isEdit,
-                          editField: 'name',
-                          docId: currentUser.docId ?? '',
-                          maxFontSize: 40,
-                          minFontSize: 30,
-                          withTitle: false,
-                          updateField: updateField,
-                        ),
-                      ),
-                      SlideAnimation(
-                        begin: const Offset(-1, 0),
-                        delay: const Duration(milliseconds: 200),
-                        widget: DNEditableField(
-                          title: toUpperCase(currentUser.lastName),
-                          isEdit: userStoreLocal.isEdit,
-                          editField: 'lastName',
-                          docId: currentUser.docId ?? '',
-                          maxFontSize: 40,
-                          minFontSize: 30,
-                          withTitle: false,
-                          updateField: updateField,
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (userStoreLocal.isGuest)
-                    GestureDetector(
-                      onTap: () {
-                        userService.setFollow(
-                            store.user.docId ?? '',
-                            userStoreLocal.user?.docId ?? '',
-                            store.user.following);
-                      },
-                      child: DNText(
-                        title: store.user.following.contains(currentUser.docId)
-                            ? "Unfollow"
-                            : 'Follow',
-                        height: 3,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  if (!userStoreLocal.isGuest)
-                    DNIconButton(
-                      icon:
-                          Icon(userStoreLocal.isEdit ? Icons.done : Icons.edit),
-                      onClick: () => setState(
-                        () => userStoreLocal.isEdit = !userStoreLocal.isEdit,
-                      ),
-                    ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ListTile(
-                        splashColor: Colors.transparent,
-                        onTap: () => _showFollowBottomSheet(
-                          context: context,
-                          isFollowers: true,
-                          usersId: currentUser.docId ?? '',
-                        ).then((_) => setState(() {})),
-                        contentPadding: EdgeInsets.zero,
-                        title: const DNText(
-                          title: 'Followers',
-                          opacity: .5,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: DNText(
-                            title: currentUser.followers.length.toString(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    SlideAnimation(
+                      begin: const Offset(-1, 0),
+                      widget: DNEditableField(
+                        title: toUpperCase(widget.user.name),
+                        isEdit: userStoreLocal.isEdit,
+                        editField: 'name',
+                        docId: widget.user.docId ?? '',
+                        maxFontSize: 40,
+                        minFontSize: 30,
+                        withTitle: false,
+                        updateField: updateField,
                       ),
                     ),
-                    Expanded(
-                      child: ListTile(
-                        splashColor: Colors.transparent,
-                        onTap: () => _showFollowBottomSheet(
-                          context: context,
-                          isFollowers: false,
-                          usersId: currentUser.docId ?? '',
-                        ).then((_) => setState(() {})),
-                        contentPadding: EdgeInsets.zero,
-                        title: const DNText(
-                          title: 'Following',
-                          opacity: .5,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: DNText(
-                            title: currentUser.following.length.toString(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: FutureBuilder(
-                        future:
-                            taskService.getTasksCount(currentUser.docId ?? ''),
-                        builder: (context, snap) {
-                          return ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: const DNText(
-                              title: 'Tasks',
-                              opacity: .5,
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: DNText(
-                                title: snap.data.toString(),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
+                    SlideAnimation(
+                      begin: const Offset(-1, 0),
+                      delay: const Duration(milliseconds: 200),
+                      widget: DNEditableField(
+                        title: toUpperCase(widget.user.lastName),
+                        isEdit: userStoreLocal.isEdit,
+                        editField: 'lastName',
+                        docId: widget.user.docId ?? '',
+                        maxFontSize: 40,
+                        minFontSize: 30,
+                        withTitle: false,
+                        updateField: updateField,
                       ),
                     ),
                   ],
                 ),
+                if (userStoreLocal.isGuest)
+                  GestureDetector(
+                    onTap: () async {
+                      if (store.user.following.contains(widget.user.docId)) {
+                        Future.wait([
+                          userService.setUnFollowers(
+                            store.user.docId ?? '',
+                            userStoreLocal.user.docId ?? '',
+                          ),
+                          userService.setUnFollowing(
+                            store.user.docId ?? '',
+                            userStoreLocal.user.docId ?? '',
+                          )
+                        ]);
+                      } else {
+                        Future.wait([
+                          userService.setFollowers(
+                            store.user.docId ?? '',
+                            userStoreLocal.user.docId ?? '',
+                          ),
+                          userService.setFollowing(
+                            store.user.docId ?? '',
+                            userStoreLocal.user.docId ?? '',
+                          )
+                        ]);
+                      }
+                    },
+                    child: DNText(
+                      title: store.user.following.contains(widget.user.docId)
+                          ? "Unfollow"
+                          : 'Follow',
+                      height: 3,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                if (!userStoreLocal.isGuest)
+                  DNIconButton(
+                    icon: Icon(userStoreLocal.isEdit ? Icons.done : Icons.edit),
+                    onClick: () => setState(
+                      () => userStoreLocal.isEdit = !userStoreLocal.isEdit,
+                    ),
+                  ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      splashColor: Colors.transparent,
+                      onTap: () => _showFollowBottomSheet(
+                        context: context,
+                        isFollowers: true,
+                        usersId: widget.user.docId ?? '',
+                      ).then((_) => setState(() {})),
+                      contentPadding: EdgeInsets.zero,
+                      title: const DNText(
+                        title: 'Followers',
+                        opacity: .5,
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: DNText(
+                          title: widget.user.followers.length.toString(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      splashColor: Colors.transparent,
+                      onTap: () => _showFollowBottomSheet(
+                        context: context,
+                        isFollowers: false,
+                        usersId: widget.user.docId ?? '',
+                      ).then((_) => setState(() {})),
+                      contentPadding: EdgeInsets.zero,
+                      title: const DNText(
+                        title: 'Following',
+                        opacity: .5,
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: DNText(
+                          title: widget.user.following.length.toString(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: FutureBuilder(
+                      future:
+                          taskService.getTasksCount(widget.user.docId ?? ''),
+                      builder: (context, snap) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: const DNText(
+                            title: 'Tasks',
+                            opacity: .5,
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: DNText(
+                              title: snap.data.toString(),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              const Divider(
-                color: Colors.white60,
-              )
-            ],
-          );
-        } else {
-          return const SizedBox();
-        }
+            ),
+            const Divider(
+              color: Colors.white60,
+            )
+          ],
+        );
       },
     );
   }

@@ -62,12 +62,8 @@ class _NavigateState extends State<Navigate> {
                   unselectedLabelColor: Colors.white54,
                   labelColor: Colors.amberAccent,
                   onTap: (value) => setState(() {
-                    setState(() {
-                      taskViewsStoreLocal.isShowSearch = false;
-                    });
+                    taskViewsStoreLocal.isShowSearch = false;
                   }),
-                  overlayColor: WidgetStateProperty.all(
-                      Colors.amberAccent.withOpacity(0.1)),
                   tabs: [
                     Tab(
                       child: DNText(
@@ -99,8 +95,11 @@ class _NavigateState extends State<Navigate> {
                           height: 50,
                           child: DNInput(
                             title: 'Search',
-                            onClick: (string) => setState(() {
+                            onChanged: (string) => setState(() {
                               taskViewsStoreLocal.searchtext = string;
+                            }),
+                            onSubmitted: (string) => setState(() {
+                              taskViewsStoreLocal.isShowSearch = false;
                             }),
                           ),
                         )),
@@ -108,12 +107,18 @@ class _NavigateState extends State<Navigate> {
                         icon: Icon(
                           taskViewsStoreLocal.isShowSearch
                               ? Icons.clear
-                              : Icons.search,
+                              : taskViewsStoreLocal.searchtext.isNotEmpty
+                                  ? Icons.clear
+                                  : Icons.search,
                           color: Colors.black,
                         ),
                         onClick: () => setState(() {
-                          taskViewsStoreLocal.isShowSearch =
-                              !taskViewsStoreLocal.isShowSearch;
+                          if (taskViewsStoreLocal.searchtext.isNotEmpty) {
+                            taskViewsStoreLocal.isShowSearch = false;
+                          } else {
+                            taskViewsStoreLocal.isShowSearch =
+                                !taskViewsStoreLocal.isShowSearch;
+                          }
                           taskViewsStoreLocal.searchtext = '';
                         }),
                       ),
@@ -122,6 +127,7 @@ class _NavigateState extends State<Navigate> {
                         Stack(
                           children: [
                             PopupMenuButton(
+                              color: Theme.of(context).primaryColorDark,
                               icon: const Icon(
                                 Icons.filter_alt,
                                 color: Colors.black,
@@ -141,10 +147,10 @@ class _NavigateState extends State<Navigate> {
                                   ),
                                   child: DNText(
                                     title:
-                                        'Active ${store.listActiveTask.length}',
+                                        'Opened ${store.listActiveTask.length}',
                                     color: taskViewsStoreLocal.isActiveTask
                                         ? Theme.of(context).primaryColor
-                                        : Colors.black,
+                                        : Colors.white,
                                   ),
                                 ),
                                 PopupMenuItem(
@@ -155,10 +161,10 @@ class _NavigateState extends State<Navigate> {
                                   ),
                                   child: DNText(
                                     title:
-                                        'Archive ${store.listActiveTask.length}',
+                                        'Closed ${store.listArchiveTasks.length}',
                                     color: !taskViewsStoreLocal.isActiveTask
                                         ? Theme.of(context).primaryColor
-                                        : Colors.black,
+                                        : Colors.white,
                                   ),
                                 ),
                               ],
@@ -199,8 +205,11 @@ class _NavigateState extends State<Navigate> {
                           widget.controller.index == 0)
                         DNButton(
                           title: 'All',
-                          onClick: () => setState(() => taskViewsStoreLocal
-                              .isAllTask = !taskViewsStoreLocal.isAllTask),
+                          onClick: () => setState(() {
+                            taskViewsStoreLocal.isAllTask =
+                                !taskViewsStoreLocal.isAllTask;
+                            taskViewsStoreLocal.isActiveTask = true;
+                          }),
                           isPrimary: taskViewsStoreLocal.isAllTask,
                         ),
                     ],

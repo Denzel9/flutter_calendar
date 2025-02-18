@@ -20,9 +20,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class Content extends StatefulWidget {
-  final ScrollController controller;
+  final GlobalKey<ScaffoldState> scaffoldKey;
   final TaskModel task;
-  const Content({super.key, required this.task, required this.controller});
+  const Content({
+    super.key,
+    required this.task,
+    required this.scaffoldKey,
+  });
 
   @override
   State<Content> createState() => _ContentState();
@@ -76,20 +80,26 @@ class _ContentState extends State<Content> {
               children: [
                 DNIconButton(
                   icon: const Icon(
-                    Icons.arrow_downward,
+                    Icons.chevron_left,
                     color: Colors.black,
                   ),
-                  onClick: () => Navigator.pop(context),
+                  onClick: () {
+                    widget.scaffoldKey.currentState!.setState(() {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    });
+                    Navigator.pop(context);
+                  },
                 ),
                 MenuButton(
                   docId: widget.task.docId ?? '',
                   boards: store.boards,
+                  scaffoldKey: widget.scaffoldKey,
                 )
               ],
             ),
             Expanded(
               child: ListView(
-                controller: widget.controller,
+                padding: const EdgeInsets.only(bottom: 30),
                 children: [
                   BoardButton(
                     board: widget.task.board,

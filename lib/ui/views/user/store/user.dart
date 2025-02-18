@@ -16,7 +16,13 @@ abstract class XStore with Store {
   bool isEdit = false;
 
   @observable
-  UserModel? user;
+  UserModel user = UserModel(
+      name: '',
+      lastName: '',
+      email: '',
+      following: [],
+      followers: [],
+      avatar: '');
 
   @observable
   File? image;
@@ -32,5 +38,17 @@ abstract class XStore with Store {
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
     });
+  }
+
+  @action
+  Future<Null> reset() async {
+    isGuest = false;
+    user = UserModel(
+        name: '',
+        lastName: '',
+        email: '',
+        following: [],
+        followers: [],
+        avatar: '');
   }
 }

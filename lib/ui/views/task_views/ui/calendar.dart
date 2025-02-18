@@ -146,9 +146,9 @@ class _CalendarState extends State<Calendar> {
                                     },
                                     child: ColoredBox(
                                       color: currentDate == dayDate
-                                          ? Colors.black.withOpacity(.5)
+                                          ? Colors.black54
                                           : selectDate == dayDate
-                                              ? Colors.black.withOpacity(.1)
+                                              ? Colors.black12
                                               : Colors.transparent,
                                       child: Stack(
                                         children: [

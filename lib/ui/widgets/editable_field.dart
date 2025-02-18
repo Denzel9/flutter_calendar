@@ -59,7 +59,7 @@ class _EditableFieldState extends State<DNEditableField> {
                   widget.editField[0],
                   widget.editField[0].toUpperCase(),
                 ),
-                onClick: (String data) => setState(() {
+                onSubmitted: (String data) => setState(() {
                   if (controller.text.isNotEmpty) {
                     widget
                         .updateField(widget.docId, widget.editField, data)

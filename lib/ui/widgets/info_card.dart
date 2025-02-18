@@ -23,7 +23,10 @@ class InfoCard extends StatefulWidget {
   State<InfoCard> createState() => _InfoCardState();
 }
 
-class _InfoCardState extends State<InfoCard> {
+class _InfoCardState extends State<InfoCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
   String assignTitle(String owner) {
     final String author =
         widget.data.author == owner ? 'me' : widget.data.author;
@@ -33,22 +36,44 @@ class _InfoCardState extends State<InfoCard> {
   }
 
   @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
 
     return SlideAnimation(
-        key: GlobalKey(),
+        controller: _controller,
         delay: Duration(
             milliseconds: widget.index != null ? widget.index! * 100 : 0),
         begin: const Offset(0, 3),
         widget: GestureDetector(
-          onTap: () => showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => widget.data is TaskModel
-                ? TaskPage(id: widget.data.docId)
-                : BoardViewPage(id: widget.data.docId),
-          ),
+          onTap: () {
+            widget.data is TaskModel
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TaskPage(id: widget.data.docId)))
+                : showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => BoardViewPage(id: widget.data.docId),
+                  );
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             margin: const EdgeInsets.only(bottom: 10),

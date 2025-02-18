@@ -71,13 +71,46 @@ mixin _$TaskStoreLocal on XStore, Store {
     });
   }
 
+  late final _$linksAtom = Atom(name: 'XStore.links', context: context);
+
+  @override
+  List<String> get links {
+    _$linksAtom.reportRead();
+    return super.links;
+  }
+
+  @override
+  set links(List<String> value) {
+    _$linksAtom.reportWrite(value, super.links, () {
+      super.links = value;
+    });
+  }
+
+  late final _$isDeletingAtom =
+      Atom(name: 'XStore.isDeleting', context: context);
+
+  @override
+  bool get isDeleting {
+    _$isDeletingAtom.reportRead();
+    return super.isDeleting;
+  }
+
+  @override
+  set isDeleting(bool value) {
+    _$isDeletingAtom.reportWrite(value, super.isDeleting, () {
+      super.isDeleting = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 currentBoard: ${currentBoard},
 isEdit: ${isEdit},
 isDoneTask: ${isDoneTask},
-image: ${image}
+image: ${image},
+links: ${links},
+isDeleting: ${isDeleting}
     ''';
   }
 }

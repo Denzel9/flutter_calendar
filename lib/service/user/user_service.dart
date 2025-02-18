@@ -6,8 +6,13 @@ abstract interface class UserService {
 
   Future<void> addUser(Map<String, dynamic> user, String id);
 
-  Future<bool> setFollow(
-      String id, String anotherId, List<dynamic> listFollowing);
+  Future<void> setFollowers(String id, String anotherId);
+
+  Future<void> setFollowing(String id, String anotherId);
+
+  Future<void> setUnFollowers(String id, String anotherId);
+
+  Future<void> setUnFollowing(String id, String anotherId);
 
   Future<Stream<DocumentSnapshot<Map<String, dynamic>>>> setUser(String id);
 

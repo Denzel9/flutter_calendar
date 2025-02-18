@@ -13,8 +13,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+const String emptyPersonLink =
+    'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg';
+
 class ImageSliver extends StatefulWidget {
-  const ImageSliver({super.key});
+  final String userId;
+  final String? image;
+  const ImageSliver({super.key, required this.userId, required this.image});
 
   @override
   State<ImageSliver> createState() => _ImageSliverState();
@@ -39,11 +44,25 @@ class _ImageSliverState extends State<ImageSliver> {
     final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
     final AppStore store = context.watch<AppStore>();
 
+    Widget getImage() {
+      if (userStoreLocal.image?.path.isNotEmpty ?? false) {
+        return Image.file(
+          File(userStoreLocal.image!.path),
+          fit: BoxFit.cover,
+        );
+      }
+      if (widget.image?.isNotEmpty ?? false) {
+        return DNImage(
+          url: widget.image ?? '',
+        );
+      }
+      return const DNImage(
+        url: emptyPersonLink,
+      );
+    }
+
     return Observer(
       builder: (_) {
-        final currentUser =
-            userStoreLocal.isGuest ? userStoreLocal.user : store.user;
-
         return SliverAppBar(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Theme.of(context).primaryColorDark,
@@ -55,6 +74,10 @@ class _ImageSliverState extends State<ImageSliver> {
             style: const ButtonStyle(
               iconSize: WidgetStatePropertyAll(30),
             ),
+            onPressed: () {
+              Navigator.pop(context);
+              userStoreLocal.reset();
+            },
           ),
           actions: [
             if (!userStoreLocal.isGuest && !userStoreLocal.isEdit)
@@ -147,33 +170,9 @@ class _ImageSliverState extends State<ImageSliver> {
                   color: Colors.white,
                 ),
               ),
-            const SizedBox(width: 10)
+            const SizedBox(width: 10),
           ],
-          flexibleSpace: FlexibleSpaceBar(
-            background: FutureBuilder(
-              future: userService.getAvatar(currentUser?.docId ?? ''),
-              builder: (context, snap) {
-                if (userStoreLocal.image?.path.isNotEmpty ?? false) {
-                  return Image.file(
-                    File(userStoreLocal.image!.path),
-                    fit: BoxFit.cover,
-                  );
-                }
-                if (snap.hasData) {
-                  return DNImage(
-                    url: snap.data ?? '',
-                  );
-                }
-                if (!snap.hasData &&
-                    snap.connectionState == ConnectionState.done) {
-                  return const DNImage(
-                      url:
-                          'https://ardexpert.ru/uploads/avatars/0/0/0/big-638dd962a81810.96619622.jpg');
-                }
-                return const SizedBox();
-              },
-            ),
-          ),
+          flexibleSpace: FlexibleSpaceBar(background: getImage()),
         );
       },
     );

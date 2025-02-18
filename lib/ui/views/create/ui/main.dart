@@ -46,7 +46,7 @@ class _InfoState extends State<Main> {
           fontSize: 25,
           opacity: .5,
           borderColor: Colors.white12,
-          onClick: (value) => setState(() {
+          onChanged: (value) => setState(() {
             widget.isTask
                 ? createStore.taskTitle = value
                 : createStore.boardTitle = value;
@@ -61,7 +61,7 @@ class _InfoState extends State<Main> {
             opacity: .5,
             countLines: 3,
             borderColor: Colors.white12,
-            onClick: (value) => setState(() {
+            onChanged: (value) => setState(() {
               widget.isTask
                   ? createStore.taskDescription = value
                   : createStore.boardDescription = value;
