@@ -54,7 +54,7 @@ class TaskServiceImpl implements TaskService {
   }
 
   @override
-  Future<void> updateField(String id, String field, String data) async {
+  Future<void> updateField(String id, String field, dynamic data) async {
     firestore.collection("tasks").doc(id).update({field: data});
   }
 

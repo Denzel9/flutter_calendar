@@ -107,7 +107,7 @@ class _ContentState extends State<Content> {
                   ),
                   DNEditableField(
                     title: widget.task.title,
-                    isEdit: taskStoreLocal.isEdit,
+                    isEdit: taskStoreLocal.isEdit && !widget.task.done,
                     editField: 'title',
                     docId: widget.task.docId ?? '',
                     maxFontSize: 40,
@@ -170,7 +170,7 @@ class _ContentState extends State<Content> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: DNEditableField(
                       title: widget.task.description,
-                      isEdit: taskStoreLocal.isEdit,
+                      isEdit: taskStoreLocal.isEdit && !widget.task.done,
                       editField: 'description',
                       docId: widget.task.docId ?? '',
                       updateField: taskService.updateField,

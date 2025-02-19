@@ -239,7 +239,8 @@ class _ContentState extends State<Content> {
                           title: 'Collaborated users',
                           opacity: .5,
                         ),
-                        store.user.followers.isNotEmpty
+                        store.user.followers.isNotEmpty &&
+                                store.listAllCollaborationTask.isNotEmpty
                             ? Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

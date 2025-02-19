@@ -10,6 +10,9 @@ import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+final UserServiceImpl userService = UserServiceImpl(firestore);
+final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+
 class Assign extends StatefulWidget {
   final String docId;
   final List<dynamic> assignList;
@@ -20,8 +23,13 @@ class Assign extends StatefulWidget {
 }
 
 class _AssignState extends State<Assign> {
-  final UserServiceImpl userService = UserServiceImpl(firestore);
-  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
+  List<dynamic> initAssignList = [];
+
+  @override
+  void initState() {
+    initAssignList = [...widget.assignList];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +81,21 @@ class _AssignState extends State<Assign> {
                               ),
                               trailing: DNIconButton(
                                 onClick: () {
-                                  if (widget.assignList
+                                  if (initAssignList
                                       .where((el) => el == user.docId)
                                       .isEmpty) {
                                     setStateModal(() {
-                                      widget.assignList.add(user.docId);
+                                      initAssignList.add(user.docId);
                                     });
                                   } else {
                                     setStateModal(() {
-                                      widget.assignList.remove(user.docId);
+                                      initAssignList.remove(user.docId);
                                     });
                                   }
+                                  print('ass ${widget.assignList}');
+                                  print('init ${initAssignList}');
                                 },
-                                icon: widget.assignList.contains(user.docId)
+                                icon: initAssignList.contains(user.docId)
                                     ? const Icon(Icons.delete)
                                     : const Icon(Icons.add),
                               ),
@@ -105,17 +115,24 @@ class _AssignState extends State<Assign> {
                       }
                     },
                   ),
-                  if (widget.assignList.isNotEmpty)
+                  if (widget.assignList.length != initAssignList.length)
                     Positioned(
                       right: 30,
                       bottom: 40,
                       child: DNButton(
                         title: 'Save',
                         onClick: () {
-                          taskService.editAssign(
+                          taskService
+                              .editAssign(
                             widget.docId,
-                            widget.assignList,
-                          );
+                            initAssignList,
+                          )
+                              .then((_) {
+                            taskService.updateField(
+                                widget.docId,
+                                'isCollaborated',
+                                initAssignList.isEmpty ? false : true);
+                          });
                           Navigator.pop(context);
                         },
                         isPrimary: true,
@@ -126,6 +143,10 @@ class _AssignState extends State<Assign> {
             ),
           );
         },
+      ).then(
+        (_) => setState(() {
+          initAssignList = [...widget.assignList];
+        }),
       ),
       child: widget.assignList.isEmpty
           ? Container(
@@ -133,8 +154,9 @@ class _AssignState extends State<Assign> {
               width: 30,
               height: 30,
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+              ),
               child: const Icon(Icons.add),
             )
           : SizedBox(
@@ -160,8 +182,9 @@ class _AssignState extends State<Assign> {
                             );
                           } else {
                             return CircleAvatar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: const Icon(Icons.person));
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: const Icon(Icons.person),
+                            );
                           }
                         },
                       ),
