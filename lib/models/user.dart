@@ -27,8 +27,8 @@ class UserModel {
       following: json?['following'] ?? [],
       followers: json?['followers'] ?? [],
       about: json?['about'] ?? '',
-      docId: id,
       avatar: json?["avatar"] ?? '',
+      docId: id,
     );
   }
 
@@ -40,7 +40,8 @@ class UserModel {
       'following': following,
       'followers': followers,
       'about': about,
-      'avatar': avatar
+      'avatar': avatar,
+      'docId': docId
     };
   }
 }

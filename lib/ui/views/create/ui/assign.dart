@@ -106,9 +106,7 @@ class _AssignState extends State<Assign> {
                                       stream: userService
                                           .getFollowers(store.user.docId ?? ''),
                                       builder: (context, snap) {
-                                        if (snap.hasData &&
-                                            snap.connectionState ==
-                                                ConnectionState.done) {
+                                        if (snap.hasData) {
                                           return ListView.builder(
                                             itemCount: snap.data?.docs.length,
                                             itemBuilder: (context, index) {

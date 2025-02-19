@@ -27,9 +27,9 @@ class _InfoCardState extends State<InfoCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  String assignTitle(String owner) {
+  String assignTitle(String ownerId) {
     final String author =
-        widget.data.author == owner ? 'me' : widget.data.author;
+        widget.data.userId == ownerId ? 'me' : widget.data.author;
     return widget.data is TaskModel && widget.data.isCollaborated
         ? 'Assigned by $author'
         : '';
@@ -108,7 +108,7 @@ class _InfoCardState extends State<InfoCard>
                           width: 10,
                         ),
                         DNText(
-                          title: assignTitle(store.user.name),
+                          title: assignTitle(store.user.docId ?? ''),
                           color: Colors.white54,
                           fontSize: 14,
                         ),
