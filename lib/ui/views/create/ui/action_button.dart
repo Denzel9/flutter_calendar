@@ -60,11 +60,10 @@ class _ActionButtonState extends State<ActionButton> {
           ).toJson())
               .then(
             (taskId) async {
-              List<Board> foundBoard = store.boards
-                  .where((board) =>
-                      compareString(board.title, createStoreLocal.board))
-                  .toList();
-              if (foundBoard.isEmpty) {
+              Board foundBoard = store.boards.firstWhere((board) =>
+                  compareString(board.title, createStoreLocal.board));
+
+              if (foundBoard.title.isEmpty) {
                 boardService.addBoard(
                   Board(
                       author: store.user.name,
@@ -75,7 +74,7 @@ class _ActionButtonState extends State<ActionButton> {
                       tasks: [taskId]).toJson(),
                 );
               } else {
-                boardService.addTask(foundBoard.first.docId ?? '', taskId);
+                boardService.addTask(foundBoard.docId ?? '', taskId);
               }
               await taskService.addAttachments(createStoreLocal.image, taskId);
             },

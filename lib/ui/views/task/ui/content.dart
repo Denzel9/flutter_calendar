@@ -1,5 +1,4 @@
 import 'package:calendar_flutter/core/controller/controller.dart';
-import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
@@ -34,14 +33,15 @@ class _ContentState extends State<Content> {
 
   @override
   void didChangeDependencies() async {
-    final List<Board> boards = context.watch<AppStore>().boards;
+    final AppStore store = context.watch<AppStore>();
     final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
 
     setState(() {
-      if (!widget.task.isCollaborated) {
-        context.watch<TaskStoreLocal>().currentBoard =
-            boards.firstWhere((el) => el.title == widget.task.board).docId ??
-                '';
+      if (widget.task.userId == store.user.docId) {
+        context.watch<TaskStoreLocal>().currentBoard = store.boards
+                .firstWhere((el) => el.title == widget.task.board)
+                .docId ??
+            '';
       }
 
       taskService.getAttachments(widget.task.docId ?? '').then((value) {
@@ -101,7 +101,7 @@ class _ContentState extends State<Content> {
                   BoardButton(
                     board: widget.task.board,
                     boards: store.boards,
-                    isCollaborated: widget.task.isCollaborated,
+                    taskId: widget.task.userId,
                   ),
                   DNEditableField(
                     title: widget.task.title,

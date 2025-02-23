@@ -1,19 +1,21 @@
 import 'package:calendar_flutter/models/board.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/board/board.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BoardButton extends StatefulWidget {
   final String board;
+  final String taskId;
   final List<Board> boards;
-  final bool isCollaborated;
 
   const BoardButton({
     super.key,
     required this.board,
     required this.boards,
-    required this.isCollaborated,
+    required this.taskId,
   });
 
   @override
@@ -23,6 +25,9 @@ class BoardButton extends StatefulWidget {
 class _BoardButtonState extends State<BoardButton> {
   @override
   Widget build(BuildContext context) {
+    final String userId =
+        context.select<AppStore, String>((store) => store.user.docId ?? '');
+
     return SlideAnimation(
       begin: const Offset(-1, 0),
       widget: Align(
@@ -31,7 +36,7 @@ class _BoardButtonState extends State<BoardButton> {
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: GestureDetector(
             onTap: () {
-              if (!widget.isCollaborated) {
+              if (widget.taskId == userId) {
                 final docId = widget.boards
                     .firstWhere((element) => element.title == widget.board)
                     .docId;
