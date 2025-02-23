@@ -60,7 +60,6 @@ class TaskServiceImpl implements TaskService {
 
   @override
   Future<int> getTasksCount(String userId) async {
-    isLoading = true;
     final resp = await firestore
         .collection("tasks")
         .where("userId", isEqualTo: userId)
