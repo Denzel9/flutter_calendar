@@ -4,6 +4,7 @@ import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
+import 'package:calendar_flutter/utils/format.dart';
 import 'package:calendar_flutter/utils/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,8 +99,9 @@ class _UserSearchStatePage extends State<SearchPage> {
                                     return const CircularProgressIndicator();
                                   }
                                 }),
-                            title:
-                                DNText(title: '${user.name} ${user.lastName}'),
+                            title: DNText(
+                                title:
+                                    '${toUpperCase(user.name)} ${toUpperCase(user.lastName)}'),
                             subtitle: DNText(
                               title: user.email,
                               fontSize: 15,

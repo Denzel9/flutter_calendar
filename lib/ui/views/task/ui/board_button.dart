@@ -7,7 +7,14 @@ import 'package:flutter/material.dart';
 class BoardButton extends StatefulWidget {
   final String board;
   final List<Board> boards;
-  const BoardButton({super.key, required this.board, required this.boards});
+  final bool isCollaborated;
+
+  const BoardButton({
+    super.key,
+    required this.board,
+    required this.boards,
+    required this.isCollaborated,
+  });
 
   @override
   State<BoardButton> createState() => _BoardButtonState();
@@ -24,15 +31,16 @@ class _BoardButtonState extends State<BoardButton> {
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: GestureDetector(
             onTap: () {
-              final docId = widget.boards
-                  .where((element) => element.title == widget.board)
-                  .first
-                  .docId;
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => BoardViewPage(id: docId ?? ''),
-              );
+              if (!widget.isCollaborated) {
+                final docId = widget.boards
+                    .firstWhere((element) => element.title == widget.board)
+                    .docId;
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => BoardViewPage(id: docId ?? ''),
+                );
+              }
             },
             child: Chip(
               padding: const EdgeInsets.symmetric(

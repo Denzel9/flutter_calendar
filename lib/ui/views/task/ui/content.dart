@@ -38,8 +38,11 @@ class _ContentState extends State<Content> {
     final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
 
     setState(() {
-      context.watch<TaskStoreLocal>().currentBoard =
-          boards.where((el) => el.title == widget.task.board).first.docId ?? '';
+      if (!widget.task.isCollaborated) {
+        context.watch<TaskStoreLocal>().currentBoard =
+            boards.firstWhere((el) => el.title == widget.task.board).docId ??
+                '';
+      }
 
       taskService.getAttachments(widget.task.docId ?? '').then((value) {
         setState(() {
@@ -98,6 +101,7 @@ class _ContentState extends State<Content> {
                   BoardButton(
                     board: widget.task.board,
                     boards: store.boards,
+                    isCollaborated: widget.task.isCollaborated,
                   ),
                   DNEditableField(
                     title: widget.task.title,

@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     final store = context.read<AppStore>();
     store.initState(widget.id ?? '');
     super.didChangeDependencies();

@@ -95,6 +95,7 @@ class _NavigateState extends State<Navigate> {
                           height: 50,
                           child: DNInput(
                             title: 'Search',
+                            autoFocus: taskViewsStoreLocal.isShowSearch,
                             onChanged: (string) => setState(() {
                               taskViewsStoreLocal.searchtext = string;
                             }),

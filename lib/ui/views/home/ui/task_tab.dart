@@ -32,7 +32,6 @@ class _TaskTabState extends State<TaskTab> {
           isArchive: !homeStoreLocal.isActiveTask,
           isCollaborationTasks: homeStoreLocal.isCollaborationTasks,
         );
-
         return Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
           child: Column(

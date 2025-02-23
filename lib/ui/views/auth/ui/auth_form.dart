@@ -1,9 +1,9 @@
-import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,14 @@ class _AuthFormState extends State<AuthForm> {
         store.setUser(user.uid).then((_) {
           if (mounted) {
             localStorage.setItem('id', user.uid);
-            Navigator.pushReplacementNamed(context, routesList.home);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  id: user.uid,
+                ),
+              ),
+            );
           }
         });
       });
@@ -78,7 +85,14 @@ class _AuthFormState extends State<AuthForm> {
             localStorage.setItem('id', user.uid)
           ]);
           if (mounted) {
-            Navigator.pushReplacementNamed(context, routesList.home);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  id: user.uid,
+                ),
+              ),
+            );
           }
         });
       } else {
