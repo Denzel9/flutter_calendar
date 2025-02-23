@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/widgets/editable_field.dart';
 import 'package:calendar_flutter/utils/date.dart';
@@ -18,7 +17,6 @@ class Information extends StatefulWidget {
 
 class _InformationState extends State<Information> {
   final TextEditingController controller = TextEditingController();
-  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
 
   @override
   void dispose() {

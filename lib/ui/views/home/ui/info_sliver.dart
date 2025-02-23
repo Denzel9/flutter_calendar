@@ -1,7 +1,5 @@
 import 'package:calendar_flutter/core/config/routes/routes.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/models/task.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
@@ -12,8 +10,6 @@ import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
-final UserServiceImpl userService = UserServiceImpl(firestore);
 
 class InfoSliver extends StatelessWidget {
   const InfoSliver({super.key});

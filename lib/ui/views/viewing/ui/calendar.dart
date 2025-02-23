@@ -1,7 +1,7 @@
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
+import 'package:calendar_flutter/ui/views/viewing/store/viewing.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +53,8 @@ class _CalendarState extends State<Calendar> {
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
     final String selectDate = getSliceDate(store.selectedDate.toString());
-    final TaskViewsStoreLocal taskViewsStoreLocal =
-        context.watch<TaskViewsStoreLocal>();
+    final ViewingStoreLocal taskViewsStoreLocal =
+        context.watch<ViewingStoreLocal>();
 
     return Column(
       children: [

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/service/task/task_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -60,6 +60,7 @@ class TaskServiceImpl implements TaskService {
 
   @override
   Future<int> getTasksCount(String userId) async {
+    isLoading = true;
     final resp = await firestore
         .collection("tasks")
         .where("userId", isEqualTo: userId)

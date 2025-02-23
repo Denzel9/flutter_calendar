@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/image.dart';
@@ -27,7 +26,6 @@ class ImageSliver extends StatefulWidget {
 
 class _ImageSliverState extends State<ImageSliver> {
   final ImagePicker imagePicker = ImagePicker();
-  final UserServiceImpl userService = UserServiceImpl(firestore);
 
   Future<void> pickImage(UserStoreLocal userStoreLocal) async {
     XFile? xFileImage =

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -9,15 +8,14 @@ import 'package:calendar_flutter/utils/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UserSearchPage extends StatefulWidget {
-  const UserSearchPage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  State<UserSearchPage> createState() => _UserSearchStatePage();
+  State<SearchPage> createState() => _UserSearchStatePage();
 }
 
-class _UserSearchStatePage extends State<UserSearchPage> {
-  final UserServiceImpl userService = UserServiceImpl(firestore);
+class _UserSearchStatePage extends State<SearchPage> {
   final TextEditingController controller = TextEditingController();
 
   @override

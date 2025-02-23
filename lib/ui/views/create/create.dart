@@ -60,8 +60,7 @@ class _CreatePageState extends State<CreatePage>
                   unselectedLabelColor: Colors.white54,
                   labelColor: Colors.amberAccent,
                   overlayColor: WidgetStateProperty.all(
-                    Colors.amberAccent.withOpacity(0.1),
-                  ),
+                      Colors.amberAccent.withAlpha((0.1 * 255).toInt())),
                   tabs: [
                     Tab(
                       child: DNText(

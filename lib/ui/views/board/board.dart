@@ -1,6 +1,5 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/ui/views/board/ui/content.dart';
 import 'package:calendar_flutter/ui/views/board/ui/header.dart';
 import 'package:calendar_flutter/ui/views/board/ui/information.dart';
@@ -22,7 +21,6 @@ class BoardViewPage extends StatefulWidget {
 
 class _BoardViewStatePage extends State<BoardViewPage>
     with SingleTickerProviderStateMixin {
-  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
   late final tabController =
       TabController(length: 2, vsync: this, initialIndex: 0);
   final scaffoldKey = GlobalKey<ScaffoldState>();

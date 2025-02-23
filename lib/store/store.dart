@@ -1,9 +1,7 @@
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/models/user.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
@@ -15,15 +13,7 @@ class AppStore = AppStoreBase with _$AppStore;
 abstract class AppStoreBase with Store {
   final FirebaseFirestore firestore;
 
-  late final TaskServiceImpl _taskService;
-  late final UserServiceImpl _userService;
-  late final BoardServiceImpl _boardService;
-
-  AppStoreBase(this.firestore) {
-    _taskService = TaskServiceImpl(firestore);
-    _userService = UserServiceImpl(firestore);
-    _boardService = BoardServiceImpl(firestore);
-  }
+  AppStoreBase(this.firestore);
 
   @observable
   ObservableList<TaskModel> ownTasks = ObservableList<TaskModel>.of([]);
@@ -85,7 +75,7 @@ abstract class AppStoreBase with Store {
   @action
   Future<Null> setUser(String id) async {
     Stream<DocumentSnapshot<Map<String, dynamic>>> query =
-        await _userService.setUser(id);
+        await userService.setUser(id);
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
     });
@@ -94,7 +84,7 @@ abstract class AppStoreBase with Store {
   @action
   Future<Null> fetchCollaborationTasks(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await _taskService.getCollaborationTasks(id);
+        await taskService.getCollaborationTasks(id);
 
     query.listen((event) {
       final List<TaskModel> listTasks = [];
@@ -110,7 +100,7 @@ abstract class AppStoreBase with Store {
   @action
   Future<Null> fetchTasks(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await _taskService.getTasks(id);
+        await taskService.getTasks(id);
 
     query.listen((event) {
       final List<TaskModel> listTasks = [];
@@ -126,7 +116,7 @@ abstract class AppStoreBase with Store {
   @action
   Future<Null> fetchBoards(String id) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await _boardService.getBoards(id);
+        await boardService.getBoards(id);
 
     query.listen((event) {
       final List<Board> listBoards = [];

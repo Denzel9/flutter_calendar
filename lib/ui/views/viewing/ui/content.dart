@@ -1,7 +1,7 @@
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
+import 'package:calendar_flutter/ui/views/viewing/store/viewing.dart';
 import 'package:calendar_flutter/ui/widgets/info_card.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,8 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TaskViewsStoreLocal taskViewsStoreLocal =
-        context.watch<TaskViewsStoreLocal>();
+    final ViewingStoreLocal taskViewsStoreLocal =
+        context.watch<ViewingStoreLocal>();
     final AppStore store = context.watch<AppStore>();
 
     return Observer(builder: (_) {

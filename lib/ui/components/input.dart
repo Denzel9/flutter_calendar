@@ -49,7 +49,7 @@ class DNInput extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: fontWeight,
-            color: Colors.white.withOpacity(.5),
+            color: Colors.white54,
             height: .5,
           ),
         ),

@@ -1,4 +1,4 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

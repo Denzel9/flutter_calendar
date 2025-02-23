@@ -3,7 +3,7 @@ import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
-import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
+import 'package:calendar_flutter/ui/views/viewing/store/viewing.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,8 +25,8 @@ class _NavigateState extends State<Navigate> {
   @override
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
-    final TaskViewsStoreLocal taskViewsStoreLocal =
-        context.watch<TaskViewsStoreLocal>();
+    final ViewingStoreLocal taskViewsStoreLocal =
+        context.watch<ViewingStoreLocal>();
 
     return Observer(
       builder: (_) {

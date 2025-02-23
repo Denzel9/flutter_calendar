@@ -1,7 +1,5 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +20,6 @@ class MenuButton extends StatefulWidget {
 }
 
 class _MenuButtonState extends State<MenuButton> {
-  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
-  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
-
   void checkEmptyBoard(String taskId, List<Board> boards) {
     final emptyBoard = boards.where((el) => el.tasks.contains(taskId)).toList();
     if (emptyBoard.first.tasks.length == 1) {

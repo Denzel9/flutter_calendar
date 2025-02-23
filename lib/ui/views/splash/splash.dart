@@ -1,7 +1,8 @@
 import 'package:calendar_flutter/core/config/routes/routes.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,16 +14,16 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  @override
-  void didChangeDependencies() async {
-    final store = context.read<AppStore>();
-
+  void _checkId(AppStore store) {
     Future.delayed(const Duration(seconds: 2), () async {
       await localStorage.getItem('id').then((id) {
         if (id.isNotEmpty) {
           store.setUser(id).then((_) {
             if (mounted) {
-              Navigator.pushReplacementNamed(context, routesList.home);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return HomePage(id: id);
+              }));
             }
           });
         } else {
@@ -32,7 +33,12 @@ class _SplashPageState extends State<SplashPage> {
         }
       });
     });
+  }
 
+  @override
+  void didChangeDependencies() async {
+    final store = context.read<AppStore>();
+    _checkId(store);
     super.didChangeDependencies();
   }
 

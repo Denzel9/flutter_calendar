@@ -1,9 +1,6 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -34,9 +31,6 @@ class Content extends StatefulWidget {
 
 class _ContentState extends State<Content> {
   final editController = TextEditingController();
-  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
-  final UserServiceImpl userService = UserServiceImpl(firestore);
-  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
 
   @override
   void didChangeDependencies() async {

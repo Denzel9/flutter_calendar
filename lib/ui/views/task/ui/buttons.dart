@@ -1,6 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -23,8 +22,6 @@ class Buttons extends StatefulWidget {
 }
 
 class _ButtonsState extends State<Buttons> {
-  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
-
   @override
   void didChangeDependencies() {
     context.watch<TaskStoreLocal>().isDoneTask = widget.isDone;

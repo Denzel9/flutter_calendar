@@ -1,7 +1,5 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/button.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
@@ -9,9 +7,6 @@ import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-final UserServiceImpl userService = UserServiceImpl(firestore);
-final TaskServiceImpl taskService = TaskServiceImpl(firestore);
 
 class Assign extends StatefulWidget {
   final String docId;
@@ -92,8 +87,6 @@ class _AssignState extends State<Assign> {
                                       initAssignList.remove(user.docId);
                                     });
                                   }
-                                  print('ass ${widget.assignList}');
-                                  print('init ${initAssignList}');
                                 },
                                 icon: initAssignList.contains(user.docId)
                                     ? const Icon(Icons.delete)

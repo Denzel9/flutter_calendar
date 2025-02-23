@@ -1,9 +1,9 @@
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:mobx/mobx.dart';
 
-part 'task_views.g.dart';
+part 'viewing.g.dart';
 
-class TaskViewsStoreLocal = XStore with _$TaskViewsStoreLocal;
+class ViewingStoreLocal = XStore with _$ViewingStoreLocal;
 
 abstract class XStore with Store {
   @observable

@@ -23,7 +23,7 @@ class DNText extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        color: color.withOpacity(opacity),
+        color: color.withAlpha((opacity * 255).toInt()),
         fontSize: fontSize,
         fontWeight: fontWeight,
         height: height,

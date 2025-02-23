@@ -1,4 +1,3 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:calendar_flutter/ui/views/home/ui/action_button.dart';
@@ -10,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String? id;
+  const HomePage({super.key, this.id});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,8 +29,7 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeDependencies() async {
     final store = context.read<AppStore>();
-    final id = await localStorage.getItem('id');
-    store.initState(id);
+    store.initState(widget.id ?? '');
     super.didChangeDependencies();
   }
 

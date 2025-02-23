@@ -1,12 +1,11 @@
 import 'package:calendar_flutter/store/store.dart';
-import 'package:calendar_flutter/service/board/board_service_impl.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/utils/filter_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/controller/firebase.dart';
+import '../../../../core/controller/controller.dart';
 
 class Header extends StatefulWidget {
   final String id;
@@ -29,8 +28,6 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
-  final BoardServiceImpl boardService = BoardServiceImpl(firestore);
-
   void showSnackbar(String title) {
     widget.scaffoldKey.currentState?.setState(() {
       ScaffoldMessenger.of(context)
@@ -95,8 +92,8 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
           indicatorColor: Colors.amberAccent,
           unselectedLabelColor: Colors.white54,
           labelColor: Colors.amberAccent,
-          overlayColor:
-              WidgetStateProperty.all(Colors.amberAccent.withOpacity(0.1)),
+          overlayColor: WidgetStateProperty.all(
+              Colors.amberAccent.withAlpha((0.1 * 255).toInt())),
           tabs: [
             Observer(
               builder: (_) {

@@ -1,6 +1,5 @@
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/task.dart';
-import 'package:calendar_flutter/service/task/task_service_impl.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:calendar_flutter/ui/views/task/ui/buttons.dart';
 import 'package:calendar_flutter/ui/views/task/ui/content.dart';
@@ -17,7 +16,6 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final TaskServiceImpl taskService = TaskServiceImpl(firestore);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override

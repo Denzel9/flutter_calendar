@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
@@ -18,8 +17,6 @@ class Assign extends StatefulWidget {
 }
 
 class _AssignState extends State<Assign> {
-  final UserServiceImpl userService = UserServiceImpl(firestore);
-
   @override
   Widget build(BuildContext context) {
     final CreateStoreLocal createStore = context.watch<CreateStoreLocal>();

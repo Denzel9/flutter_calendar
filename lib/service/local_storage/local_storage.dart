@@ -9,9 +9,7 @@ class LocalStorage {
     return localStorage.setItem(key, value);
   }
 
-  Future deleteItem(
-    String key,
-  ) async {
+  Future deleteItem(String key) async {
     return localStorage.removeItem(key);
   }
 }

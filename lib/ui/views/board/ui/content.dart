@@ -22,50 +22,52 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppStore store = context.watch<AppStore>();
 
-    return Observer(builder: (_) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: filteredTaskToBoard(title, store.tasks).isNotEmpty
-            ? ListView.builder(
-                controller: controller,
-                itemCount: filteredTaskToBoard(title, store.tasks).length,
-                itemBuilder: (context, index) {
-                  final task = filteredTaskToBoard(title, store.tasks)[index];
-                  return InfoCard(
-                    data: task,
-                    index: index,
-                  );
-                },
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const DNText(
-                    title: 'Empty',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    opacity: .5,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  DNButton(
-                    title: 'Add task',
-                    isPrimary: false,
-                    onClick: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CreatePage(
-                            selectedBoard: title,
-                          );
-                        },
-                      ),
+    return Observer(
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: filteredTaskToBoard(title, store.tasks).isNotEmpty
+              ? ListView.builder(
+                  controller: controller,
+                  itemCount: filteredTaskToBoard(title, store.tasks).length,
+                  itemBuilder: (context, index) {
+                    final task = filteredTaskToBoard(title, store.tasks)[index];
+                    return InfoCard(
+                      data: task,
+                      index: index,
+                    );
+                  },
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const DNText(
+                      title: 'Empty',
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      opacity: .5,
                     ),
-                  )
-                ],
-              ),
-      );
-    });
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DNButton(
+                      title: 'Add task',
+                      isPrimary: false,
+                      onClick: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CreatePage(
+                              selectedBoard: title,
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+        );
+      },
+    );
   }
 }

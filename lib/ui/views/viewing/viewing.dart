@@ -1,22 +1,23 @@
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/store/store.dart';
-import 'package:calendar_flutter/ui/views/task_views/store/task_views.dart';
-import 'package:calendar_flutter/ui/views/task_views/ui/content.dart';
-import 'package:calendar_flutter/ui/views/task_views/ui/header_calendar.dart';
-import 'package:calendar_flutter/ui/views/task_views/ui/navigate.dart';
+import 'package:calendar_flutter/ui/views/viewing/store/viewing.dart';
+import 'package:calendar_flutter/ui/views/viewing/ui/content.dart';
+import 'package:calendar_flutter/ui/views/viewing/ui/header_calendar.dart';
+import 'package:calendar_flutter/ui/views/viewing/ui/navigate.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-class TaskViewPage extends StatefulWidget {
+class ViewingPage extends StatefulWidget {
   final DateTime? date;
-  const TaskViewPage({super.key, this.date});
+  const ViewingPage({super.key, this.date});
 
   @override
-  State<TaskViewPage> createState() => _TaskViewStatePage();
+  State<ViewingPage> createState() => _TaskViewStatePage();
 }
 
-class _TaskViewStatePage extends State<TaskViewPage>
+class _TaskViewStatePage extends State<ViewingPage>
     with SingleTickerProviderStateMixin {
   late final _tabController =
       TabController(length: 2, vsync: this, initialIndex: 0);
@@ -33,7 +34,7 @@ class _TaskViewStatePage extends State<TaskViewPage>
       ..selectedDate = widget.date != null ? widget.date! : now;
 
     return Provider(
-      create: (context) => TaskViewsStoreLocal(),
+      create: (context) => ViewingStoreLocal(),
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -42,20 +43,34 @@ class _TaskViewStatePage extends State<TaskViewPage>
                 tasks: store.tasks,
                 controller: _tabController,
               ),
-              Expanded(
-                child: NestedScrollView(
-                  floatHeaderSlivers: true,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    Navigate(
-                      controller: _tabController,
-                      innerBoxIsScrolled: innerBoxIsScrolled,
-                    )
-                  ],
-                  body: Content(
-                    controller: _tabController,
+              Expanded(child: Observer(builder: (context) {
+                final ViewingStoreLocal taskViewsStoreLocal =
+                    context.read<ViewingStoreLocal>();
+                return GestureDetector(
+                  onTap: () {
+                    if (taskViewsStoreLocal.isOpenCalendar) {
+                      setState(() {
+                        taskViewsStoreLocal.isOpenCalendar = false;
+                      });
+                    }
+                  },
+                  child: AbsorbPointer(
+                    absorbing: taskViewsStoreLocal.isOpenCalendar,
+                    child: NestedScrollView(
+                      floatHeaderSlivers: true,
+                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                        Navigate(
+                          controller: _tabController,
+                          innerBoxIsScrolled: innerBoxIsScrolled,
+                        )
+                      ],
+                      body: Content(
+                        controller: _tabController,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              })),
             ],
           ),
         ),

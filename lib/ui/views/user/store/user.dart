@@ -1,15 +1,12 @@
 import 'dart:io';
-import 'package:calendar_flutter/core/controller/firebase.dart';
+import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
-import 'package:calendar_flutter/service/user/user_service_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 
 part 'user.g.dart';
 
 class UserStoreLocal = XStore with _$UserStoreLocal;
-
-final UserServiceImpl _userService = UserServiceImpl(firestore);
 
 abstract class XStore with Store {
   @observable
@@ -34,7 +31,7 @@ abstract class XStore with Store {
   Future<Null> getUser(String id) async {
     isGuest = true;
     Stream<DocumentSnapshot<Map<String, dynamic>>> query =
-        _userService.getUser(id);
+        userService.getUser(id);
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
     });
