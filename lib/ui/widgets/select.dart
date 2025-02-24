@@ -9,12 +9,13 @@ class DNSelect extends StatelessWidget {
   final String? initialValue;
 
   final Function(int index) onClick;
-  const DNSelect(
-      {super.key,
-      required this.boards,
-      required this.value,
-      required this.onClick,
-      this.initialValue});
+  const DNSelect({
+    super.key,
+    required this.boards,
+    required this.value,
+    required this.onClick,
+    this.initialValue,
+  });
 
   @override
   Widget build(BuildContext context) {

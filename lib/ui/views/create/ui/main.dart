@@ -1,4 +1,3 @@
-import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
@@ -11,8 +10,8 @@ import 'package:provider/provider.dart';
 List<String> initialListBoards = ['Myself', "Work", 'Learning', "Default"];
 
 class Main extends StatefulWidget {
-  final bool isTask;
   final String? selectedBoard;
+  final bool isTask;
   const Main({super.key, required this.isTask, this.selectedBoard});
 
   @override
@@ -21,19 +20,21 @@ class Main extends StatefulWidget {
 
 class _InfoState extends State<Main> {
   late List<String> listBoards;
+  late CreateStoreLocal createStore;
+  late AppStore store;
 
   @override
   void didChangeDependencies() {
-    final List<Board> boards = context.read<AppStore>().boards as List<Board>;
-    final boardsTitles = boards.map((el) => el.title).toList();
+    store = context.read<AppStore>();
+    createStore = context.read<CreateStoreLocal>();
+    final boardsTitles = store.boards.map((el) => el.title).toList();
     listBoards = {...initialListBoards, ...boardsTitles}.toList();
+    createStore.board = widget.selectedBoard ?? 'Default';
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final CreateStoreLocal createStore = context.watch<CreateStoreLocal>();
-    final AppStore store = context.watch<AppStore>();
     final datePickerTitle =
         '${weekDaysSlice[store.selectedDate.weekday - 1]} ${formatDatePadLeft(store.selectedDate.day)}, ${store.selectedDate.year} ${formatDatePadLeft(store.selectedDate.hour)}:${formatDatePadLeft(store.selectedDate.minute)}';
 

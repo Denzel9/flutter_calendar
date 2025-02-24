@@ -79,6 +79,7 @@ class _ActionButtonState extends State<ActionButton> {
         setState(() {
           Navigator.pop(context);
           taskService.isLoading = false;
+          boardService.isLoading = false;
         });
       }
     }
@@ -101,18 +102,16 @@ class _ActionButtonState extends State<ActionButton> {
         Board(
             author: store.user.name,
             title: createStoreLocal.boardTitle,
-            description: createStoreLocal.taskDescription,
+            description: createStoreLocal.boardDescription,
             userId: store.user.docId ?? '',
             createdAt: now.toString(),
             tasks: []).toJson(),
       );
 
-      if (context.mounted) {
-        setState(() {
-          boardService.isLoading = false;
-          Navigator.pop(context);
-        });
-      }
+      setState(() {
+        boardService.isLoading = false;
+        Navigator.pop(context);
+      });
     }
 
     bool isLoading = taskService.isLoading || boardService.isLoading;
