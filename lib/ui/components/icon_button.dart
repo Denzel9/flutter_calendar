@@ -15,14 +15,12 @@ class DNIconButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onClick,
-      icon: icon,
-      color: color,
-      style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(backgroundColor),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => IconButton(
+        onPressed: onClick,
+        icon: icon,
+        color: color,
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(backgroundColor),
+        ),
+      );
 }

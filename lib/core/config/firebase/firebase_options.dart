@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,20 +50,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBKN-anXEBhCYMgvP9Jvw6UBM9FrFZMr2g',
-    appId: '1:938597244001:android:7dcb2a83e8f76d0aa75e20',
-    messagingSenderId: '938597244001',
-    projectId: 'task-4d33a',
-    storageBucket: 'task-4d33a.appspot.com',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.get('ANDROID_FIREBASE_API_KEY'),
+    appId: dotenv.get('ANDROID_FIREBASE_API_KEY'),
+    messagingSenderId: dotenv.get('ANDROID_FIREBASE_API_KEY'),
+    projectId: dotenv.get('ANDROID_FIREBASE_API_KEY'),
+    storageBucket: dotenv.get('ANDROID_FIREBASE_API_KEY'),
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAXubD44ofwb72bPZ5SkzCUbPCMsmt8roE',
-    appId: '1:938597244001:ios:bc599e633b5a8ecfa75e20',
-    messagingSenderId: '938597244001',
-    projectId: 'task-4d33a',
-    storageBucket: 'task-4d33a.appspot.com',
-    iosBundleId: 'com.example.calendarFlutter',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.get('IOS_FIREBASE_API_KEY'),
+    appId: dotenv.get('IOS_FIREBASE_APP_ID'),
+    messagingSenderId: dotenv.get('IOS_FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: dotenv.get('IOS_FIREBASE_PROJECT_ID'),
+    storageBucket: dotenv.get('IOS_FIREBASE_STORAGE_BUCKET'),
+    iosBundleId: dotenv.get('IOS_FIREBASE_IOS_BUNDLE_ID'),
   );
 }
