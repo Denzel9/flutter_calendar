@@ -43,6 +43,7 @@ class _TabsSliverState extends State<TabsSliver> {
           builder: (_) => TabBar(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             controller: widget.controller,
+            onTap: (value) => setState(() {}),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorColor: Colors.amberAccent,
             unselectedLabelColor: Colors.white54,

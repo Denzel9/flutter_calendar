@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/input.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
 import 'package:calendar_flutter/utils/format.dart';
 import 'package:calendar_flutter/utils/search.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,13 @@ class SearchPage extends StatefulWidget {
 
 class _UserSearchStatePage extends State<SearchPage> {
   final TextEditingController controller = TextEditingController();
+  late Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser;
+
+  @override
+  void initState() {
+    getAllUser = userService.getAllUser();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -55,7 +63,7 @@ class _UserSearchStatePage extends State<SearchPage> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: userService.getAllUser(),
+              stream: getAllUser,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -80,11 +88,10 @@ class _UserSearchStatePage extends State<SearchPage> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: snapshot.data ?? '',
+                                      child: DNImage(
+                                        url: snapshot.data ?? '',
                                         width: 40,
                                         height: 40,
-                                        fit: BoxFit.cover,
                                       ),
                                     );
                                   } else if (!snapshot.hasData &&

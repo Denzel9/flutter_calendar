@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/user/user.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +47,10 @@ Future<dynamic> showFollowBottomSheet({
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ClipOval(
-                                child: CachedNetworkImage(
-                                  imageUrl: snapshot.data ?? '',
+                                child: DNImage(
+                                  url: snapshot.data ?? '',
                                   width: 40,
                                   height: 40,
-                                  fit: BoxFit.cover,
                                 ),
                               );
                             } else if (!snapshot.hasData &&

@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
+import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:flutter/material.dart';
@@ -130,13 +130,11 @@ class _AssignState extends State<Assign> {
                                                     builder: (context, snap) {
                                                       if (snap.hasData) {
                                                         return ClipOval(
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl:
+                                                          child: DNImage(
+                                                            url:
                                                                 snap.data ?? '',
                                                             width: 40,
                                                             height: 40,
-                                                            fit: BoxFit.cover,
                                                           ),
                                                         );
                                                       } else if (!snap
@@ -144,7 +142,14 @@ class _AssignState extends State<Assign> {
                                                           snap.connectionState ==
                                                               ConnectionState
                                                                   .done) {
-                                                        return const CircleAvatar();
+                                                        return CircleAvatar(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          child: const Icon(
+                                                            Icons.person,
+                                                          ),
+                                                        );
                                                       } else {
                                                         return const CircularProgressIndicator();
                                                       }
