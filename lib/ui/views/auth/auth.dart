@@ -16,41 +16,39 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Stack(
-          children: [
-            AuthForm(
-              islogin: islogin,
-            ),
-            Positioned(
-              bottom: 50,
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DNText(
-                      title: islogin
-                          ? "Don't have an account?"
-                          : "Alredy a member?",
-                    ),
-                    GestureDetector(
-                      onTap: () => setState(() {
-                        islogin = !islogin;
-                      }),
-                      child: DNText(
-                        title: islogin ? ' Sign Up' : ' Sign In',
-                        color: Colors.amberAccent,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Stack(
+            children: [
+              AuthForm(islogin: islogin),
+              Positioned(
+                bottom: 50,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DNText(
+                        title: islogin
+                            ? "Don't have an account?"
+                            : "Alredy a member?",
                       ),
-                    )
-                  ],
+                      GestureDetector(
+                        onTap: () => setState(() => islogin = !islogin),
+                        child: DNText(
+                          title: islogin ? ' Sign Up' : ' Sign In',
+                          color: Colors.amberAccent,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

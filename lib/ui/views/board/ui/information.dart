@@ -25,51 +25,49 @@ class _InformationState extends State<Information> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: ListView(
-        children: [
-          const DNText(
-            title: 'Board',
-            opacity: .5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: AutoSizeText(
-              widget.board?.title ?? '',
-              style: const TextStyle(
-                color: Colors.white,
-                height: 1.2,
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: ListView(
+          children: [
+            const DNText(
+              title: 'Board',
+              opacity: .5,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: AutoSizeText(
+                widget.board?.title ?? '',
+                style: const TextStyle(
+                  color: Colors.white,
+                  height: 1.2,
+                  fontWeight: FontWeight.bold,
+                ),
+                minFontSize: 30,
+                maxFontSize: 40,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const DNText(
+              title: 'CreatedAt',
+              opacity: .5,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 10),
+              child: DNText(
+                title: getFormatDate(widget.board?.createdAt ?? ''),
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
-              minFontSize: 30,
-              maxFontSize: 40,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          const DNText(
-            title: 'CreatedAt',
-            opacity: .5,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 10),
-            child: DNText(
-              title: getFormatDate(widget.board?.createdAt ?? ''),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            DNEditableField(
+              title: widget.board?.description ?? '',
+              isEdit: false,
+              editField: 'description',
+              docId: widget.board?.docId ?? '',
+              updateField: boardService.updateField,
             ),
-          ),
-          DNEditableField(
-            title: widget.board?.description ?? '',
-            isEdit: false,
-            editField: 'description',
-            docId: widget.board?.docId ?? '',
-            updateField: boardService.updateField,
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }

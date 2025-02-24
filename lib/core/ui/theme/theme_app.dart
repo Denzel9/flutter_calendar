@@ -20,5 +20,6 @@ final ThemeData theme = ThemeData(
     seedColor: ColorsApp.bg,
     primary: ColorsApp.primary,
     secondary: ColorsApp.secondary,
+    error: ColorsApp.error,
   ),
 );

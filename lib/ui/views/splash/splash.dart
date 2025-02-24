@@ -43,17 +43,15 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
-      body: const Center(
-        child: DNText(
-          title: 'DNTask',
-          fontWeight: FontWeight.bold,
-          color: Colors.amberAccent,
-          fontSize: 40,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).primaryColorDark,
+        body: const Center(
+          child: DNText(
+            title: 'DNTask',
+            fontWeight: FontWeight.bold,
+            color: Colors.amberAccent,
+            fontSize: 40,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

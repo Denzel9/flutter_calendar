@@ -60,16 +60,14 @@ class _AttachmentsState extends State<Attachments> {
                           size: 15,
                         ),
                         onClick: () async {
-                          await pickImage(taskStoreLocal)
-                              .then(
-                                (_) => taskService.addAttachments(
-                                    taskStoreLocal.image, widget.docId),
-                              )
-                              .then(
-                                (_) => setState(() {
-                                  taskService.isLoading = false;
-                                }),
-                              );
+                          await pickImage(taskStoreLocal);
+
+                          await taskService.addAttachments(
+                              taskStoreLocal.image, widget.docId);
+
+                          setState(() {
+                            taskService.isLoading = false;
+                          });
                         },
                       ),
               )
@@ -166,29 +164,27 @@ class FullScreenCarousel extends StatelessWidget {
   const FullScreenCarousel(
       {super.key, required this.images, required this.initImage});
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pop(context),
-      child: Scaffold(
-        backgroundColor: Colors.black54,
-        body: Center(
-          child: FlutterCarousel(
-            options: FlutterCarouselOptions(
-              initialPage: initImage,
-              height: 400.0,
-              viewportFraction: 1,
-              showIndicator: true,
-              slideIndicator: CircularSlideIndicator(),
-            ),
-            items: List.generate(
-              images?.length ?? 0,
-              (index) {
-                return DNImage(url: images?[index] ?? '');
-              },
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: Scaffold(
+          backgroundColor: Colors.black54,
+          body: Center(
+            child: FlutterCarousel(
+              options: FlutterCarouselOptions(
+                initialPage: initImage,
+                height: 400.0,
+                viewportFraction: 1,
+                showIndicator: true,
+                slideIndicator: CircularSlideIndicator(),
+              ),
+              items: List.generate(
+                images?.length ?? 0,
+                (index) {
+                  return DNImage(url: images?[index] ?? '');
+                },
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

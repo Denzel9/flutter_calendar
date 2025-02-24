@@ -61,11 +61,9 @@ class _InfoState extends State<Main> {
             opacity: .5,
             countLines: 3,
             borderColor: Colors.white12,
-            onChanged: (value) => setState(() {
-              widget.isTask
-                  ? createStore.taskDescription = value
-                  : createStore.boardDescription = value;
-            }),
+            onChanged: (value) => setState(() => widget.isTask
+                ? createStore.taskDescription = value
+                : createStore.boardDescription = value),
           ),
         ),
         DatePicker(

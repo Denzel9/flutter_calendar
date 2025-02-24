@@ -2,14 +2,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract interface class TaskService {
-  bool isLoading = false;
-
   Future<String> addTask(Map<String, dynamic> task);
 
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getTasks(String id);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getTasks(String id);
 
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getCollaborationTasks(
-      String id);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCollaborationTasks(String id);
 
   Future<void> editAssign(String id, List<dynamic> listAssigned);
 

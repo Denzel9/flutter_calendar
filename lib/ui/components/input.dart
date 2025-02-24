@@ -31,37 +31,35 @@ class DNInput extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return TextField(
-      autofocus: autoFocus,
-      textInputAction: TextInputAction.done,
-      focusNode: focusNode,
-      onSubmitted: onSubmitted,
-      onChanged: onChanged,
-      controller: controller,
-      style: const TextStyle(color: Colors.white),
-      cursorColor: Colors.amberAccent,
-      minLines: countLines,
-      maxLines: countLines,
-      decoration: InputDecoration(
-        label: Text(
-          title,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: fontWeight,
-            color: Colors.white54,
-            height: .5,
+  Widget build(BuildContext context) => TextField(
+        autofocus: autoFocus,
+        textInputAction: TextInputAction.done,
+        focusNode: focusNode,
+        onSubmitted: onSubmitted,
+        onChanged: onChanged,
+        controller: controller,
+        style: const TextStyle(color: Colors.white),
+        cursorColor: Colors.amberAccent,
+        minLines: countLines,
+        maxLines: countLines,
+        decoration: InputDecoration(
+          label: Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: fontWeight,
+              color: Colors.white54,
+              height: .5,
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide:
+                withBoarder ? BorderSide(color: borderColor) : BorderSide.none,
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide:
+                withBoarder ? BorderSide(color: borderColor) : BorderSide.none,
           ),
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide:
-              withBoarder ? BorderSide(color: borderColor) : BorderSide.none,
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide:
-              withBoarder ? BorderSide(color: borderColor) : BorderSide.none,
-        ),
-      ),
-    );
-  }
+      );
 }

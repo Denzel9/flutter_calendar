@@ -4,87 +4,74 @@ import 'package:calendar_flutter/service/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserServiceImpl implements UserService {
-  late FirebaseFirestore db;
+  final FirebaseFirestore firestore;
 
-  UserServiceImpl(this.db);
+  UserServiceImpl(this.firestore);
 
-  @override
   bool isLoading = false;
 
   @override
-  Future<void> addUser(Map<String, dynamic> user, String id) async {
-    firestore.collection("users").doc(id).set(user);
-  }
+  Future<void> addUser(Map<String, dynamic> user, String id) =>
+      firestore.collection("users").doc(id).set(user);
 
   @override
-  Future<void> setFollowers(String userId, String anotherId) async {
-    firestore.collection("users").doc(anotherId).update({
-      "followers": FieldValue.arrayUnion([userId])
-    });
-  }
+  Future<void> setFollowers(String userId, String anotherId) =>
+      firestore.collection("users").doc(anotherId).update({
+        "followers": FieldValue.arrayUnion([userId])
+      });
 
   @override
-  Future<void> setUnFollowers(String userId, String anotherId) async {
-    firestore.collection("users").doc(anotherId).update({
-      "followers": FieldValue.arrayRemove([userId])
-    });
-  }
+  Future<void> setUnFollowers(String userId, String anotherId) =>
+      firestore.collection("users").doc(anotherId).update({
+        "followers": FieldValue.arrayRemove([userId])
+      });
 
   @override
-  Future<void> setFollowing(String userId, String anotherId) async {
-    firestore.collection("users").doc(userId).update({
-      "following": FieldValue.arrayUnion([anotherId])
-    });
-  }
+  Future<void> setFollowing(String userId, String anotherId) =>
+      firestore.collection("users").doc(userId).update({
+        "following": FieldValue.arrayUnion([anotherId])
+      });
 
   @override
-  Future<void> setUnFollowing(String userId, String anotherId) async {
-    firestore.collection("users").doc(userId).update({
-      "following": FieldValue.arrayRemove([anotherId])
-    });
-  }
+  Future<void> setUnFollowing(String userId, String anotherId) =>
+      firestore.collection("users").doc(userId).update({
+        "following": FieldValue.arrayRemove([anotherId])
+      });
 
   @override
-  Future<void> updateField(String id, String field, String data) async {
-    firestore.collection("users").doc(id).update({field: data});
-  }
+  Future<void> updateField(String id, String field, String data) =>
+      firestore.collection("users").doc(id).update({field: data});
 
   @override
   Future<Stream<DocumentSnapshot<Map<String, dynamic>>>> setUser(
-      String id) async {
-    return firestore.collection("users").doc(id).snapshots();
-  }
+          String id) async =>
+      firestore.collection("users").doc(id).snapshots();
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id) {
-    return firestore
-        .collection('users')
-        .where("following", arrayContains: id)
-        .snapshots();
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowers(String id) =>
+      firestore
+          .collection('users')
+          .where("following", arrayContains: id)
+          .snapshots();
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowings(String id) {
-    return firestore
-        .collection('users')
-        .where("followers", arrayContains: id)
-        .snapshots();
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFollowings(String id) =>
+      firestore
+          .collection('users')
+          .where("followers", arrayContains: id)
+          .snapshots();
 
   @override
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getUser(String usersId) {
-    return firestore.collection("users").doc(usersId).snapshots();
-  }
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getUser(String usersId) =>
+      firestore.collection("users").doc(usersId).snapshots();
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
-    return firestore.collection("users").snapshots();
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() =>
+      firestore.collection("users").snapshots();
 
   @override
-  Future<String?> getAvatar(String id) async {
-    return storage.ref().child("$id/avatar.jpg").getDownloadURL();
-  }
+  Future<String?> getAvatar(String id) =>
+      storage.ref().child("$id/avatar.jpg").getDownloadURL();
 
   @override
   Future<String?> setAvatar(File image, String id) async {

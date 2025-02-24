@@ -53,9 +53,7 @@ class InfoSliver extends StatelessWidget {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) {
-                            return const UserPage();
-                          },
+                          builder: (context) => const UserPage(),
                         ),
                       ),
                       child: Observer(
@@ -132,11 +130,9 @@ class InfoSliver extends StatelessWidget {
                       title: Align(
                         alignment: Alignment.centerRight,
                         child: Observer(
-                          builder: (_) {
-                            return DNText(
-                              title: "${getPercent(store.tasks)}% done",
-                            );
-                          },
+                          builder: (_) => DNText(
+                            title: "${getPercent(store.tasks)}% done",
+                          ),
                         ),
                       ),
                       subtitle: const Align(

@@ -7,12 +7,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/controller/controller.dart';
 
-class Header extends StatefulWidget {
+class Header extends StatelessWidget {
   final String id;
   final String title;
   final int countTask;
   final TabController controller;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
   const Header({
     super.key,
@@ -20,20 +19,7 @@ class Header extends StatefulWidget {
     required this.title,
     required this.countTask,
     required this.id,
-    required this.scaffoldKey,
   });
-
-  @override
-  State<Header> createState() => _HeaderState();
-}
-
-class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
-  void showSnackbar(String title) {
-    widget.scaffoldKey.currentState?.setState(() {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(title)));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +47,23 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
                 ),
                 itemBuilder: (BuildContext context) => [
                   PopupMenuItem(
-                    onTap: () {
+                    onTap: () async {
                       final findedBoards =
-                          filteredTaskToBoard(widget.title, store.tasks);
+                          filteredTaskToBoard(title, store.tasks);
+
                       if (findedBoards.isEmpty) {
-                        boardService.deleteBoard(widget.id).then((_) {
-                          if (context.mounted) {
-                            Navigator.pop(context);
-                          }
-                        });
+                        await boardService.deleteBoard(id);
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
                       } else {
-                        return showSnackbar(
-                            'There are ${findedBoards.length} tasks that cannot be deleted');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'There are ${findedBoards.length} tasks that cannot be deleted'),
+                          ),
+                        );
                       }
                     },
                     child: const DNText(
@@ -87,7 +78,7 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
         ),
         TabBar(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-          controller: widget.controller,
+          controller: controller,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: Colors.amberAccent,
           unselectedLabelColor: Colors.white54,
@@ -96,28 +87,24 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
               Colors.amberAccent.withAlpha((0.1 * 255).toInt())),
           tabs: [
             Observer(
-              builder: (_) {
-                return Tab(
-                  height: 50,
-                  child: DNText(
-                    title:
-                        '${filteredTaskToBoard(widget.title, store.tasks).length} Tasks',
-                    fontSize: 25,
-                    color: widget.controller.index == 0
-                        ? Colors.amberAccent
-                        : Colors.white,
-                  ),
-                );
-              },
+              builder: (_) => Tab(
+                height: 50,
+                child: DNText(
+                  title:
+                      '${filteredTaskToBoard(title, store.tasks).length} Tasks',
+                  fontSize: 25,
+                  color:
+                      controller.index == 0 ? Colors.amberAccent : Colors.white,
+                ),
+              ),
             ),
             Tab(
               height: 50,
               child: DNText(
                 title: 'Information',
                 fontSize: 25,
-                color: widget.controller.index == 1
-                    ? Colors.amberAccent
-                    : Colors.white,
+                color:
+                    controller.index == 1 ? Colors.amberAccent : Colors.white,
               ),
             )
           ],

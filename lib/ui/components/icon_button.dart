@@ -4,7 +4,7 @@ class DNIconButton extends StatelessWidget {
   final Widget icon;
   final Color color;
   final Color backgroundColor;
-  final Function() onClick;
+  final VoidCallback onClick;
 
   const DNIconButton({
     super.key,

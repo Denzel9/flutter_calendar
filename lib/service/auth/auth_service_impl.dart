@@ -5,11 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/controller/controller.dart';
 
 class AuthServiceImpl implements AuthService {
-  late FirebaseFirestore firestore;
+  final FirebaseFirestore firestore;
 
   AuthServiceImpl(this.firestore);
 
-  @override
   bool isLoading = false;
 
   @override

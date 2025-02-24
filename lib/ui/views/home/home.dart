@@ -40,20 +40,18 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => HomeStoreLocal(),
-      child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (context, _) =>
-              [const InfoSliver(), TabsSliver(controller: tabController)],
-          body: TabBarView(
-            controller: tabController,
-            children: const [TaskTab(), BoardTab()],
+  Widget build(BuildContext context) => Provider(
+        create: (context) => HomeStoreLocal(),
+        child: Scaffold(
+          body: NestedScrollView(
+            headerSliverBuilder: (context, _) =>
+                [const InfoSliver(), TabsSliver(controller: tabController)],
+            body: TabBarView(
+              controller: tabController,
+              children: const [TaskTab(), BoardTab()],
+            ),
           ),
+          floatingActionButton: const ActionButton(),
         ),
-        floatingActionButton: const ActionButton(),
-      ),
-    );
-  }
+      );
 }

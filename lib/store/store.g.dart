@@ -150,37 +150,45 @@ mixin _$AppStore on AppStoreBase, Store {
       AsyncAction('AppStoreBase.setUser', context: context);
 
   @override
-  Future<Null> setUser(String id) {
+  Future<dynamic> setUser(String id) {
     return _$setUserAsyncAction.run(() => super.setUser(id));
-  }
-
-  late final _$fetchCollaborationTasksAsyncAction =
-      AsyncAction('AppStoreBase.fetchCollaborationTasks', context: context);
-
-  @override
-  Future<Null> fetchCollaborationTasks(String id) {
-    return _$fetchCollaborationTasksAsyncAction
-        .run(() => super.fetchCollaborationTasks(id));
-  }
-
-  late final _$fetchTasksAsyncAction =
-      AsyncAction('AppStoreBase.fetchTasks', context: context);
-
-  @override
-  Future<Null> fetchTasks(String id) {
-    return _$fetchTasksAsyncAction.run(() => super.fetchTasks(id));
-  }
-
-  late final _$fetchBoardsAsyncAction =
-      AsyncAction('AppStoreBase.fetchBoards', context: context);
-
-  @override
-  Future<Null> fetchBoards(String id) {
-    return _$fetchBoardsAsyncAction.run(() => super.fetchBoards(id));
   }
 
   late final _$AppStoreBaseActionController =
       ActionController(name: 'AppStoreBase', context: context);
+
+  @override
+  void fetchCollaborationTasks(String id) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.fetchCollaborationTasks');
+    try {
+      return super.fetchCollaborationTasks(id);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void fetchTasks(String id) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.fetchTasks');
+    try {
+      return super.fetchTasks(id);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void fetchBoards(String id) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.fetchBoards');
+    try {
+      return super.fetchBoards(id);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void initState(String id) {

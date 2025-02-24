@@ -4,11 +4,10 @@ import 'package:calendar_flutter/service/task/task_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskServiceImpl implements TaskService {
-  late FirebaseFirestore firestore;
+  final FirebaseFirestore firestore;
 
   TaskServiceImpl(this.firestore);
 
-  @override
   bool isLoading = false;
 
   @override
@@ -17,10 +16,7 @@ class TaskServiceImpl implements TaskService {
     return firestore
         .collection("tasks")
         .add(task)
-        .then((DocumentReference doc) {
-      isLoading = false;
-      return doc.id;
-    });
+        .then((DocumentReference doc) => doc.id);
   }
 
   @override
@@ -30,33 +26,25 @@ class TaskServiceImpl implements TaskService {
   }
 
   @override
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getTasks(
-      String id) async {
-    return firestore
-        .collection("tasks")
-        .where("userId", isEqualTo: id)
-        .snapshots();
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getTasks(String id) =>
+      firestore.collection("tasks").where("userId", isEqualTo: id).snapshots();
 
   @override
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getCollaborationTasks(
-      String id) async {
-    return firestore
-        .collection("tasks")
-        .where("assign", arrayContains: id)
-        .where("userId", isNotEqualTo: id)
-        .snapshots();
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCollaborationTasks(
+          String id) =>
+      firestore
+          .collection("tasks")
+          .where("assign", arrayContains: id)
+          .where("userId", isNotEqualTo: id)
+          .snapshots();
 
   @override
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getTask(String id) {
-    return firestore.collection('tasks').doc(id).snapshots();
-  }
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getTask(String id) =>
+      firestore.collection('tasks').doc(id).snapshots();
 
   @override
-  Future<void> updateField(String id, String field, dynamic data) async {
-    firestore.collection("tasks").doc(id).update({field: data});
-  }
+  Future<void> updateField(String id, String field, dynamic data) =>
+      firestore.collection("tasks").doc(id).update({field: data});
 
   @override
   Future<int> getTasksCount(String userId) async {
@@ -68,22 +56,18 @@ class TaskServiceImpl implements TaskService {
   }
 
   @override
-  Future<void> editAssign(String id, List<dynamic> listAssigned) async {
-    firestore
-        .collection("tasks")
-        .doc(id)
-        .update({"assign": listAssigned, 'isCollaborated': true});
-  }
+  Future<void> editAssign(String id, List<dynamic> listAssigned) => firestore
+      .collection("tasks")
+      .doc(id)
+      .update({"assign": listAssigned, 'isCollaborated': true});
 
   @override
-  Future<void> changeDone(String id, bool done) async {
-    firestore.collection("tasks").doc(id).update({"done": done});
-  }
+  Future<void> changeDone(String id, bool done) =>
+      firestore.collection("tasks").doc(id).update({"done": done});
 
   @override
-  Future<void> changeTitle(String id, String title) async {
-    firestore.collection("tasks").doc(id).update({"title": title});
-  }
+  Future<void> changeTitle(String id, String title) =>
+      firestore.collection("tasks").doc(id).update({"title": title});
 
   @override
   Future<void> addAttachments(List<File> images, String id) async {
@@ -116,7 +100,6 @@ class TaskServiceImpl implements TaskService {
   Future<void> deleteAttachments(
     String id,
     String image,
-  ) async {
-    storage.ref().child("task_$id/attachments/$image.jpg").delete();
-  }
+  ) =>
+      storage.ref().child("task_$id/attachments/$image.jpg").delete();
 }

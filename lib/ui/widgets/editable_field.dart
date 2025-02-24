@@ -38,42 +38,40 @@ class DNEditableField extends StatefulWidget {
 class _EditableFieldState extends State<DNEditableField> {
   final TextEditingController controller = TextEditingController();
 
-  Future<dynamic> setOpenEditBottomSheet() {
-    return showModalBottomSheet(
-      backgroundColor: const Color.fromARGB(255, 35, 35, 35),
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(top: 20),
-          child: Column(
-            children: [
-              DNInput(
-                controller: controller..clear(),
-                autoFocus: true,
-                countLines: 2,
-                title: widget.editField.replaceFirst(
-                  widget.editField[0],
-                  widget.editField[0].toUpperCase(),
+  Future<dynamic> setOpenEditBottomSheet() => showModalBottomSheet(
+        backgroundColor: const Color.fromARGB(255, 35, 35, 35),
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                DNInput(
+                  controller: controller..clear(),
+                  autoFocus: true,
+                  countLines: 2,
+                  title: widget.editField.replaceFirst(
+                    widget.editField[0],
+                    widget.editField[0].toUpperCase(),
+                  ),
+                  onSubmitted: (String data) => setState(() {
+                    if (controller.text.isNotEmpty) {
+                      widget
+                          .updateField(widget.docId, widget.editField, data)
+                          .then((_) {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      });
+                    }
+                  }),
                 ),
-                onSubmitted: (String data) => setState(() {
-                  if (controller.text.isNotEmpty) {
-                    widget
-                        .updateField(widget.docId, widget.editField, data)
-                        .then((_) {
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    });
-                  }
-                }),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+              ],
+            ),
+          );
+        },
+      );
 
   @override
   void dispose() {

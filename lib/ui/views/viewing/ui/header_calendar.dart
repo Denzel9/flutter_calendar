@@ -67,12 +67,12 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
                   store.selectedDate = now;
                 },
               ),
-              Observer(builder: (_) {
-                return DNText(
+              Observer(
+                builder: (_) => DNText(
                   title:
                       '${taskViewsStoreLocal.selectedDate.day} ${monthsFullNames[store.selectedDate.month - 1]}, ${taskViewsStoreLocal.selectedDate.year}',
-                );
-              }),
+                ),
+              ),
               DNIconButton(
                 icon: const Icon(Icons.calendar_month),
                 onClick: () => setState(() {

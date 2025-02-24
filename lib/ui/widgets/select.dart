@@ -37,39 +37,37 @@ class DNSelect extends StatelessWidget {
           )
         ],
       ),
-      onTap: () {
-        showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext context) => Container(
-            height: 300,
-            color: Theme.of(context).primaryColorDark,
-            child: SafeArea(
-              top: false,
-              child: CupertinoPicker(
-                magnification: 1.22,
-                squeeze: 1.2,
-                useMagnifier: true,
-                itemExtent: 32,
-                scrollController: FixedExtentScrollController(
-                  initialItem: findedValue,
-                ),
-                onSelectedItemChanged: onClick,
-                children: List.generate(
-                  boards.length,
-                  (int index) {
-                    return Center(
-                      child: DNText(
-                        title: boards[index],
-                        fontSize: 20,
-                      ),
-                    );
-                  },
-                ),
+      onTap: () => showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) => Container(
+          height: 300,
+          color: Theme.of(context).primaryColorDark,
+          child: SafeArea(
+            top: false,
+            child: CupertinoPicker(
+              magnification: 1.22,
+              squeeze: 1.2,
+              useMagnifier: true,
+              itemExtent: 32,
+              scrollController: FixedExtentScrollController(
+                initialItem: findedValue,
+              ),
+              onSelectedItemChanged: onClick,
+              children: List.generate(
+                boards.length,
+                (int index) {
+                  return Center(
+                    child: DNText(
+                      title: boards[index],
+                      fontSize: 20,
+                    ),
+                  );
+                },
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

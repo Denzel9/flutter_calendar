@@ -1,3 +1,2 @@
-bool compareString(String first, String second) {
-  return first.toLowerCase() == second.toLowerCase();
-}
+bool compareString(String first, String second) =>
+    first.toLowerCase() == second.toLowerCase();

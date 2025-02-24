@@ -32,33 +32,35 @@ class _AuthFormState extends State<AuthForm> {
 
   Future loginHandler(AppStore store) async {
     try {
-      await authService.login(login.text, password.text).then((User user) {
-        store.setUser(user.uid).then((_) {
-          if (mounted) {
-            localStorage.setItem('id', user.uid);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(
-                  id: user.uid,
-                ),
-              ),
-            );
-          }
-        });
-      });
-    } on FirebaseAuthException catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.amberAccent,
-            content: Text(
-              error.message.toString(),
-              style: const TextStyle(color: Colors.black),
-            ),
+      final user = await authService.login(login.text, password.text);
+
+      Future.wait([
+        store.setUser(user.uid),
+        localStorage.setItem('id', user.uid),
+      ]);
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            id: user.uid,
           ),
-        );
-      }
+        ),
+      );
+    } on FirebaseAuthException catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.amberAccent,
+          content: Text(
+            error.message.toString(),
+            style: const TextStyle(color: Colors.black),
+          ),
+        ),
+      );
     } finally {
       setState(() {
         authService.isLoading = false;
@@ -69,32 +71,33 @@ class _AuthFormState extends State<AuthForm> {
   Future registerHandler(AppStore store) async {
     try {
       if (password.text == secondPassword.text) {
-        await authService.register(login.text, password.text).then((User user) {
-          Future.wait([
-            userService.addUser(
-                UserModel(
-                  name: user.displayName ?? '',
-                  email: user.email ?? '',
-                  followers: [],
-                  following: [],
-                  lastName: '',
-                  docId: user.uid,
-                ).toJson(),
-                user.uid),
-            store.setUser(user.uid),
-            localStorage.setItem('id', user.uid)
-          ]);
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(
-                  id: user.uid,
-                ),
-              ),
-            );
-          }
-        });
+        final user = await authService.register(login.text, password.text);
+
+        Future.wait([
+          userService.addUser(
+              UserModel(
+                name: user.displayName ?? '',
+                email: user.email ?? '',
+                followers: [],
+                following: [],
+                lastName: '',
+                docId: user.uid,
+              ).toJson(),
+              user.uid),
+          store.setUser(user.uid),
+          localStorage.setItem('id', user.uid)
+        ]);
+
+        if (!mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(
+              id: user.uid,
+            ),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

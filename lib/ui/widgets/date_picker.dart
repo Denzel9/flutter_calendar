@@ -4,7 +4,12 @@ import 'package:flutter/cupertino.dart';
 class DatePicker extends StatefulWidget {
   final String title;
   final void Function(DateTime) onChanged;
-  const DatePicker({super.key, required this.title, required this.onChanged});
+
+  const DatePicker({
+    super.key,
+    required this.title,
+    required this.onChanged,
+  });
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -12,10 +17,8 @@ class DatePicker extends StatefulWidget {
 
 class _DatePickerState extends State<DatePicker> {
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoModalPopup(
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => showCupertinoModalPopup(
           context: context,
           builder: (BuildContext context) => Container(
             height: 216,
@@ -33,14 +36,12 @@ class _DatePickerState extends State<DatePicker> {
               ),
             ),
           ),
-        );
-      },
-      child: DNText(
-        title: widget.title,
-        opacity: .5,
-        fontSize: 25,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
+        ),
+        child: DNText(
+          title: widget.title,
+          opacity: .5,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      );
 }

@@ -110,7 +110,7 @@ class _UserSearchStatePage extends State<SearchPage> {
                           ),
                         );
                       }
-                      return Container();
+                      return const SizedBox();
                     },
                   );
                 } else {

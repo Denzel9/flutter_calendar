@@ -27,6 +27,12 @@ abstract class XStore with Store {
   @observable
   bool isGuest = false;
 
+  @observable
+  int attachmentsCount = 0;
+
+  @observable
+  List<String?> collaborationUserIds = [];
+
   @action
   Future<Null> getUser(String id) async {
     isGuest = true;

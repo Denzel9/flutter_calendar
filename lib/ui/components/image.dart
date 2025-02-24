@@ -14,12 +14,10 @@ class DNImage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url,
-      fit: BoxFit.cover,
-      width: width,
-      height: height,
-    );
-  }
+  Widget build(BuildContext context) => CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        width: width,
+        height: height,
+      );
 }

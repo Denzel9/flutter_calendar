@@ -19,16 +19,14 @@ class DNText extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        color: color.withAlpha((opacity * 255).toInt()),
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        height: height,
-        overflow: TextOverflow.clip,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Text(
+        title,
+        style: TextStyle(
+          color: color.withAlpha((opacity * 255).toInt()),
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          overflow: TextOverflow.clip,
+        ),
+      );
 }

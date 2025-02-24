@@ -10,18 +10,17 @@ import 'package:calendar_flutter/ui/views/task/ui/board_button.dart';
 import 'package:calendar_flutter/ui/views/task/ui/menu_button.dart';
 import 'package:calendar_flutter/ui/widgets/editable_field.dart';
 import 'package:calendar_flutter/utils/date.dart';
+import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:calendar_flutter/utils/parse_link_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class Content extends StatefulWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
   final TaskModel task;
   const Content({
     super.key,
     required this.task,
-    required this.scaffoldKey,
   });
 
   @override
@@ -39,7 +38,10 @@ class _ContentState extends State<Content> {
     setState(() {
       if (widget.task.userId == store.user.docId) {
         context.watch<TaskStoreLocal>().currentBoard = store.boards
-                .firstWhere((el) => el.title == widget.task.board)
+                .firstWhere(
+                  (el) => el.title == widget.task.board,
+                  orElse: () => emptyBoard,
+                )
                 .docId ??
             '';
       }
@@ -81,16 +83,13 @@ class _ContentState extends State<Content> {
                     color: Colors.black,
                   ),
                   onClick: () {
-                    widget.scaffoldKey.currentState!.setState(() {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    });
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     Navigator.pop(context);
                   },
                 ),
                 MenuButton(
                   docId: widget.task.docId ?? '',
                   boards: store.boards,
-                  scaffoldKey: widget.scaffoldKey,
                 )
               ],
             ),

@@ -21,7 +21,6 @@ class CreatePage extends StatefulWidget {
 class _CreatePageState extends State<CreatePage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -40,7 +39,6 @@ class _CreatePageState extends State<CreatePage>
     return Provider(
       create: (context) => CreateStoreLocal(),
       child: Scaffold(
-        key: scaffoldKey,
         backgroundColor: Theme.of(context).primaryColorDark,
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColorDark,
@@ -111,8 +109,7 @@ class _CreatePageState extends State<CreatePage>
             ),
           ),
         ),
-        floatingActionButton:
-            ActionButton(controller: tabController, scaffoldKey: scaffoldKey),
+        floatingActionButton: ActionButton(controller: tabController),
       ),
     );
   }

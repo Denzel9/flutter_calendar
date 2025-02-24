@@ -40,46 +40,43 @@ class _TabsSliverState extends State<TabsSliver> {
           ),
         ),
         child: Observer(
-          builder: (_) {
-            return TabBar(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              onTap: (_) => setState(() {}),
-              controller: widget.controller,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorColor: Colors.amberAccent,
-              unselectedLabelColor: Colors.white54,
-              labelColor: Colors.amberAccent,
-              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-              tabs: [
-                Tab(
-                  height: 60,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: DNText(
-                      title: '${store.todayTasks.length} Tasks',
-                      fontSize: 25,
-                      color: widget.controller.index == 0
-                          ? Colors.amberAccent
-                          : Colors.white,
-                    ),
+          builder: (_) => TabBar(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            controller: widget.controller,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorColor: Colors.amberAccent,
+            unselectedLabelColor: Colors.white54,
+            labelColor: Colors.amberAccent,
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+            tabs: [
+              Tab(
+                height: 60,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: DNText(
+                    title: '${store.todayTasks.length} Tasks',
+                    fontSize: 25,
+                    color: widget.controller.index == 0
+                        ? Colors.amberAccent
+                        : Colors.white,
                   ),
                 ),
-                Tab(
-                  height: 60,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: DNText(
-                      title: '${store.boards.length} Boards',
-                      fontSize: 25,
-                      color: widget.controller.index == 1
-                          ? Colors.amberAccent
-                          : Colors.white,
-                    ),
+              ),
+              Tab(
+                height: 60,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: DNText(
+                    title: '${store.boards.length} Boards',
+                    fontSize: 25,
+                    color: widget.controller.index == 1
+                        ? Colors.amberAccent
+                        : Colors.white,
                   ),
-                )
-              ],
-            );
-          },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

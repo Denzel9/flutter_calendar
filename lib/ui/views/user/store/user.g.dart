@@ -69,6 +69,39 @@ mixin _$UserStoreLocal on XStore, Store {
     });
   }
 
+  late final _$attachmentsCountAtom =
+      Atom(name: 'XStore.attachmentsCount', context: context);
+
+  @override
+  int get attachmentsCount {
+    _$attachmentsCountAtom.reportRead();
+    return super.attachmentsCount;
+  }
+
+  @override
+  set attachmentsCount(int value) {
+    _$attachmentsCountAtom.reportWrite(value, super.attachmentsCount, () {
+      super.attachmentsCount = value;
+    });
+  }
+
+  late final _$collaborationUserIdsAtom =
+      Atom(name: 'XStore.collaborationUserIds', context: context);
+
+  @override
+  List<String?> get collaborationUserIds {
+    _$collaborationUserIdsAtom.reportRead();
+    return super.collaborationUserIds;
+  }
+
+  @override
+  set collaborationUserIds(List<String?> value) {
+    _$collaborationUserIdsAtom.reportWrite(value, super.collaborationUserIds,
+        () {
+      super.collaborationUserIds = value;
+    });
+  }
+
   late final _$getUserAsyncAction =
       AsyncAction('XStore.getUser', context: context);
 
@@ -90,7 +123,9 @@ mixin _$UserStoreLocal on XStore, Store {
 isEdit: ${isEdit},
 user: ${user},
 image: ${image},
-isGuest: ${isGuest}
+isGuest: ${isGuest},
+attachmentsCount: ${attachmentsCount},
+collaborationUserIds: ${collaborationUserIds}
     ''';
   }
 }

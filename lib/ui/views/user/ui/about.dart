@@ -22,30 +22,28 @@ class _AboutState extends State<About> {
     final UserStoreLocal userStoreLocal = context.watch<UserStoreLocal>();
 
     return Observer(
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: DNEditableField(
-            title: widget.user.about ?? '',
-            isEdit: userStoreLocal.isEdit,
-            editField: 'about',
-            docId: widget.user.docId ?? '',
-            updateField: (
-              String id,
-              String field,
-              String data,
-            ) {
-              return userService.updateField(id, field, data).then(
-                ((res) {
-                  setState(() {
-                    store.user.about = data;
-                  });
-                }),
-              );
-            },
-          ),
-        );
-      },
+      builder: (_) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: DNEditableField(
+          title: widget.user.about ?? '',
+          isEdit: userStoreLocal.isEdit,
+          editField: 'about',
+          docId: widget.user.docId ?? '',
+          updateField: (
+            String id,
+            String field,
+            String data,
+          ) {
+            return userService.updateField(id, field, data).then(
+              ((res) {
+                setState(() {
+                  store.user.about = data;
+                });
+              }),
+            );
+          },
+        ),
+      ),
     );
   }
 }

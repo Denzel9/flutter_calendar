@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract interface class UserService {
-  bool isLoading = false;
-
   Future<void> addUser(Map<String, dynamic> user, String id);
 
   Future<void> setFollowers(String id, String anotherId);

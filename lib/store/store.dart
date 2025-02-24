@@ -27,12 +27,13 @@ abstract class AppStoreBase with Store {
 
   @observable
   UserModel user = UserModel(
-      name: '',
-      lastName: '',
-      email: '',
-      docId: '',
-      following: [],
-      followers: []);
+    name: '',
+    lastName: '',
+    email: '',
+    docId: '',
+    following: [],
+    followers: [],
+  );
 
   @observable
   DateTime selectedDate = now;
@@ -73,7 +74,7 @@ abstract class AppStoreBase with Store {
       .toList();
 
   @action
-  Future<Null> setUser(String id) async {
+  Future setUser(String id) async {
     Stream<DocumentSnapshot<Map<String, dynamic>>> query =
         await userService.setUser(id);
     query.listen((event) {
@@ -82,13 +83,13 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchCollaborationTasks(String id) async {
+  void fetchCollaborationTasks(String id) {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await taskService.getCollaborationTasks(id);
+        taskService.getCollaborationTasks(id);
 
     query.listen((event) {
       final List<TaskModel> listTasks = [];
-      for (var doc in event.docs) {
+      for (final doc in event.docs) {
         listTasks.add(TaskModel.fromJsonWithId(
             doc.data() as Map<String, dynamic>?, doc.id));
       }
@@ -98,13 +99,13 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchTasks(String id) async {
+  void fetchTasks(String id) {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await taskService.getTasks(id);
+        taskService.getTasks(id);
 
     query.listen((event) {
       final List<TaskModel> listTasks = [];
-      for (var doc in event.docs) {
+      for (final doc in event.docs) {
         listTasks.add(TaskModel.fromJsonWithId(
             doc.data() as Map<String, dynamic>?, doc.id));
       }
@@ -114,13 +115,13 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  Future<Null> fetchBoards(String id) async {
+  void fetchBoards(String id) {
     Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        await boardService.getBoards(id);
+        boardService.getBoards(id);
 
     query.listen((event) {
       final List<Board> listBoards = [];
-      for (var doc in event.docs) {
+      for (final doc in event.docs) {
         listBoards.add(
             Board.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id));
       }

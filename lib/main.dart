@@ -17,13 +17,11 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AppProvider(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: theme,
-        routes: routes,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AppProvider(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme,
+          routes: routes,
+        ),
+      );
 }

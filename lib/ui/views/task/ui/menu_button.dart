@@ -2,18 +2,19 @@ import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
+import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MenuButton extends StatefulWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
   final String docId;
   final List<Board> boards;
-  const MenuButton(
-      {super.key,
-      required this.docId,
-      required this.boards,
-      required this.scaffoldKey});
+
+  const MenuButton({
+    super.key,
+    required this.docId,
+    required this.boards,
+  });
 
   @override
   State<MenuButton> createState() => _MenuButtonState();
@@ -21,13 +22,15 @@ class MenuButton extends StatefulWidget {
 
 class _MenuButtonState extends State<MenuButton> {
   void checkEmptyBoard(String taskId, List<Board> boards) {
-    final emptyBoard = boards.where((el) => el.tasks.contains(taskId)).toList();
-    if (emptyBoard.first.tasks.length == 1) {
-      boardService.deleteBoard(emptyBoard.first.docId ?? '');
+    final Board foundBoard = boards.firstWhere(
+      (el) => el.tasks.contains(taskId),
+      orElse: () => emptyBoard,
+    );
+
+    if (foundBoard.tasks.length == 1) {
+      boardService.deleteBoard(foundBoard.docId ?? '');
     }
   }
-
-  void showSnackBar() {}
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +38,8 @@ class _MenuButtonState extends State<MenuButton> {
 
     return taskStoreLocal.isDeleting
         ? const SizedBox(
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
             child: CircularProgressIndicator(),
           )
         : PopupMenuButton(
@@ -56,39 +59,45 @@ class _MenuButtonState extends State<MenuButton> {
               ),
               PopupMenuItem(
                 onTap: () {
-                  widget.scaffoldKey.currentState!.setState(() {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
                       content: const Text(
                           'Are you sure you want to delete the task?'),
                       action: SnackBarAction(
-                          textColor: Colors.red,
-                          label: 'Delete',
-                          onPressed: () {
-                            setState(() {
-                              taskStoreLocal.isDeleting = true;
-                              taskService.deleteTask(widget.docId).then((_) {
-                                boardService.deleteTask(
-                                    taskStoreLocal.currentBoard, widget.docId);
-                              }).then((_) {
-                                for (var el in taskStoreLocal.links) {
-                                  taskService.deleteAttachments(
-                                      widget.docId, el);
-                                }
-                                checkEmptyBoard(widget.docId, widget.boards);
-                              }).then((_) {
-                                taskService.isLoading = false;
-                                if (context.mounted) {
-                                  Navigator.pop(context);
-                                }
-                              });
-                            });
-                          }),
-                    ));
-                  });
+                        textColor: Theme.of(context).colorScheme.error,
+                        label: 'Delete',
+                        onPressed: () {
+                          setState(() {
+                            taskStoreLocal.isDeleting = true;
+                          });
+
+                          Future.wait([
+                            taskService.deleteTask(widget.docId),
+                            boardService.deleteTask(
+                                taskStoreLocal.currentBoard, widget.docId),
+                          ]);
+
+                          if (taskStoreLocal.links.isNotEmpty) {
+                            for (final link in taskStoreLocal.links) {
+                              taskService.deleteAttachments(widget.docId, link);
+                            }
+                          }
+
+                          checkEmptyBoard(widget.docId, widget.boards);
+
+                          setState(() {
+                            Navigator.pop(context);
+                            taskService.isLoading = false;
+                            taskStoreLocal.isDeleting = false;
+                          });
+                        },
+                      ),
+                    ),
+                  );
                 },
-                child: const DNText(
+                child: DNText(
                   title: 'Delete',
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
             ],

@@ -3,10 +3,11 @@ import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/board/board.dart';
+import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BoardButton extends StatefulWidget {
+class BoardButton extends StatelessWidget {
   final String board;
   final String taskId;
   final List<Board> boards;
@@ -18,11 +19,6 @@ class BoardButton extends StatefulWidget {
     required this.taskId,
   });
 
-  @override
-  State<BoardButton> createState() => _BoardButtonState();
-}
-
-class _BoardButtonState extends State<BoardButton> {
   @override
   Widget build(BuildContext context) {
     final String userId =
@@ -36,9 +32,10 @@ class _BoardButtonState extends State<BoardButton> {
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: GestureDetector(
             onTap: () {
-              if (widget.taskId == userId) {
-                final docId = widget.boards
-                    .firstWhere((element) => element.title == widget.board)
+              if (taskId == userId) {
+                final String? docId = boards
+                    .firstWhere((element) => element.title == board,
+                        orElse: () => emptyBoard)
                     .docId;
                 showModalBottomSheet(
                   context: context,
@@ -64,7 +61,7 @@ class _BoardButtonState extends State<BoardButton> {
                   1),
               label: DNText(
                 color: Theme.of(context).primaryColor,
-                title: widget.board,
+                title: board,
                 fontSize: 16,
               ),
             ),

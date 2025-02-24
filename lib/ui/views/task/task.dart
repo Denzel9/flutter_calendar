@@ -3,6 +3,7 @@ import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:calendar_flutter/ui/views/task/ui/buttons.dart';
 import 'package:calendar_flutter/ui/views/task/ui/content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,34 +17,33 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> getTask;
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) {
-          setState(() {
-            setState(() {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            });
-          });
-        }
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        body: StreamBuilder(
-          stream: taskService.getTask(widget.id),
-          builder: (context, snapshot) {
-            final TaskModel task = TaskModel.fromJsonWithId(
-                snapshot.data?.data(), snapshot.data?.id ?? '');
+  void initState() {
+    getTask = taskService.getTask(widget.id);
+    super.initState();
+  }
 
-            if (task.userId.isNotEmpty) {
-              return Provider(
-                create: (context) => TaskStoreLocal(),
-                builder: (context, _) {
-                  return Container(
+  @override
+  Widget build(BuildContext context) => PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          }
+        },
+        child: Scaffold(
+          body: StreamBuilder(
+            stream: getTask,
+            builder: (context, snapshot) {
+              final TaskModel task = TaskModel.fromJsonWithId(
+                  snapshot.data?.data(), snapshot.data?.id ?? '');
+
+              if (task.userId.isNotEmpty) {
+                return Provider(
+                  create: (context) => TaskStoreLocal(),
+                  builder: (context, _) => Container(
                     padding:
                         const EdgeInsets.only(top: 60, left: 10, right: 10),
                     decoration: BoxDecoration(
@@ -53,7 +53,6 @@ class _TaskPageState extends State<TaskPage> {
                       children: [
                         Content(
                           task: task,
-                          scaffoldKey: scaffoldKey,
                         ),
                         Positioned(
                           bottom: 30,
@@ -66,15 +65,13 @@ class _TaskPageState extends State<TaskPage> {
                         )
                       ],
                     ),
-                  );
-                },
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
+                  ),
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
