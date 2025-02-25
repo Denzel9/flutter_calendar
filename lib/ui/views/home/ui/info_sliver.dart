@@ -131,7 +131,7 @@ class InfoSliver extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: Observer(
                           builder: (_) => DNText(
-                            title: "${getPercent(store.tasks)}% done",
+                            title: "${getPercent(store.listAllTask)}% done",
                           ),
                         ),
                       ),
