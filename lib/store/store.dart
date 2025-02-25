@@ -20,6 +20,10 @@ abstract class AppStoreBase with Store {
   ObservableList<TaskModel> tasks = ObservableList<TaskModel>.of([]);
 
   @observable
+  ObservableList<TaskModel> collaborationTasks =
+      ObservableList<TaskModel>.of([]);
+
+  @observable
   ObservableList<Board> boards = ObservableList<Board>.of([]);
 
   @observable
@@ -29,24 +33,20 @@ abstract class AppStoreBase with Store {
   DateTime selectedDate = now;
 
   @computed
-  List<TaskModel> get collaborationTasks =>
-      tasks.where((task) => task.isCollaborated == true).toList();
-
-  @computed
-  List<TaskModel> get todayTasks => tasks
+  List<TaskModel> get todayTasks => [...tasks, ...collaborationTasks]
       .where((task) =>
           getSliceDate(task.date) == getSliceDate(selectedDate.toString()))
       .toList();
 
   @computed
-  List<TaskModel> get listArchiveTasks =>
+  List<TaskModel> get listClosedTasks =>
       todayTasks.where((task) => task.done).toList();
 
   @computed
-  List<TaskModel> get listAllTask => tasks;
+  List<TaskModel> get listAllTask => [...tasks, ...collaborationTasks];
 
   @computed
-  List<TaskModel> get listActiveTask =>
+  List<TaskModel> get listOpenedTask =>
       todayTasks.where((task) => !task.done).toList();
 
   @computed
@@ -55,20 +55,26 @@ abstract class AppStoreBase with Store {
 
   @computed
   List<TaskModel> get listAllCollaborationTask =>
-      tasks.where((task) => task.isCollaborated).toList();
-
-  @computed
-  List<TaskModel> get nextTasks => tasks
-      .where((task) =>
-          getSliceDay(task.date.toString()) >
-          getSliceDay(selectedDate.toString()))
-      .toList();
+      listAllTask.where((task) => task.isCollaborated).toList();
 
   @action
   Future setUser(String id) async {
     final query = await userService.setUser(id);
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
+    });
+  }
+
+  @action
+  Future<void> fetchCollaborationTasks(String id) async {
+    final query = taskService.getCollaborationTasks(id);
+
+    query.listen((event) {
+      collaborationTasks = ObservableList.of([]);
+      final List<TaskModel> collaborationTasksList = event.docs
+          .map((doc) => TaskModel.fromJsonWithId(doc.data(), doc.id))
+          .toList();
+      collaborationTasks = ObservableList.of(collaborationTasksList);
     });
   }
 
@@ -102,6 +108,7 @@ abstract class AppStoreBase with Store {
   Future<void> initState(String id) async {
     await Future.wait([
       fetchTasks(id),
+      fetchCollaborationTasks(id),
       fetchBoards(id),
     ]);
   }
@@ -109,6 +116,7 @@ abstract class AppStoreBase with Store {
   void reset() {
     tasks = ObservableList.of([]);
     boards = ObservableList.of([]);
+    collaborationTasks = ObservableList.of([]);
     user = emptyUser;
   }
 }

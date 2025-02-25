@@ -148,7 +148,7 @@ class _NavigateState extends State<Navigate> {
                                   ),
                                   child: DNText(
                                     title:
-                                        'Opened ${store.listActiveTask.length}',
+                                        'Opened ${store.listOpenedTask.length}',
                                     color: taskViewsStoreLocal.isActiveTask
                                         ? Theme.of(context).primaryColor
                                         : Colors.white,
@@ -162,7 +162,7 @@ class _NavigateState extends State<Navigate> {
                                   ),
                                   child: DNText(
                                     title:
-                                        'Closed ${store.listArchiveTasks.length}',
+                                        'Closed ${store.listClosedTasks.length}',
                                     color: !taskViewsStoreLocal.isActiveTask
                                         ? Theme.of(context).primaryColor
                                         : Colors.white,
@@ -170,7 +170,7 @@ class _NavigateState extends State<Navigate> {
                                 ),
                               ],
                             ),
-                            if (store.listArchiveTasks.isNotEmpty)
+                            if (store.listClosedTasks.isNotEmpty)
                               Positioned(
                                 right: 5,
                                 top: 3,

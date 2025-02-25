@@ -65,7 +65,7 @@ class _ActionButtonState extends State<ActionButton> {
             Board(
                 author: store.user.name,
                 title: createStoreLocal.board,
-                description: createStoreLocal.taskDescription,
+                description: createStoreLocal.boardDescription,
                 userId: store.user.docId ?? '',
                 createdAt: now.toString(),
                 tasks: [taskId]).toJson(),

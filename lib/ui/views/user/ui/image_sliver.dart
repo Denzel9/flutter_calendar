@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
@@ -105,8 +104,6 @@ class _ImageSliverState extends State<ImageSliver> {
                                     builder: (context) => const AuthPage()),
                                 (route) => false,
                               );
-                              Navigator.pushReplacementNamed(
-                                  context, routesList.auth);
                             }
                           },
                           title: const DNText(title: 'Change account'),

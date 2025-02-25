@@ -34,6 +34,12 @@ class _InfoState extends State<Main> {
   }
 
   @override
+  void dispose() {
+    store.selectedDate = now;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final datePickerTitle =
         '${weekDaysSlice[store.selectedDate.weekday - 1]} ${formatDatePadLeft(store.selectedDate.day)}, ${store.selectedDate.year} ${formatDatePadLeft(store.selectedDate.hour)}:${formatDatePadLeft(store.selectedDate.minute)}';

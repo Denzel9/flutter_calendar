@@ -9,65 +9,6 @@ part of 'store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on AppStoreBase, Store {
-  Computed<List<TaskModel>>? _$collaborationTasksComputed;
-
-  @override
-  List<TaskModel> get collaborationTasks => (_$collaborationTasksComputed ??=
-          Computed<List<TaskModel>>(() => super.collaborationTasks,
-              name: 'AppStoreBase.collaborationTasks'))
-      .value;
-  Computed<List<TaskModel>>? _$todayTasksComputed;
-
-  @override
-  List<TaskModel> get todayTasks => (_$todayTasksComputed ??=
-          Computed<List<TaskModel>>(() => super.todayTasks,
-              name: 'AppStoreBase.todayTasks'))
-      .value;
-  Computed<List<TaskModel>>? _$listArchiveTasksComputed;
-
-  @override
-  List<TaskModel> get listArchiveTasks => (_$listArchiveTasksComputed ??=
-          Computed<List<TaskModel>>(() => super.listArchiveTasks,
-              name: 'AppStoreBase.listArchiveTasks'))
-      .value;
-  Computed<List<TaskModel>>? _$listAllTaskComputed;
-
-  @override
-  List<TaskModel> get listAllTask => (_$listAllTaskComputed ??=
-          Computed<List<TaskModel>>(() => super.listAllTask,
-              name: 'AppStoreBase.listAllTask'))
-      .value;
-  Computed<List<TaskModel>>? _$listActiveTaskComputed;
-
-  @override
-  List<TaskModel> get listActiveTask => (_$listActiveTaskComputed ??=
-          Computed<List<TaskModel>>(() => super.listActiveTask,
-              name: 'AppStoreBase.listActiveTask'))
-      .value;
-  Computed<List<TaskModel>>? _$listCollaborationTaskComputed;
-
-  @override
-  List<TaskModel> get listCollaborationTask =>
-      (_$listCollaborationTaskComputed ??= Computed<List<TaskModel>>(
-              () => super.listCollaborationTask,
-              name: 'AppStoreBase.listCollaborationTask'))
-          .value;
-  Computed<List<TaskModel>>? _$listAllCollaborationTaskComputed;
-
-  @override
-  List<TaskModel> get listAllCollaborationTask =>
-      (_$listAllCollaborationTaskComputed ??= Computed<List<TaskModel>>(
-              () => super.listAllCollaborationTask,
-              name: 'AppStoreBase.listAllCollaborationTask'))
-          .value;
-  Computed<List<TaskModel>>? _$nextTasksComputed;
-
-  @override
-  List<TaskModel> get nextTasks =>
-      (_$nextTasksComputed ??= Computed<List<TaskModel>>(() => super.nextTasks,
-              name: 'AppStoreBase.nextTasks'))
-          .value;
-
   late final _$tasksAtom = Atom(name: 'AppStoreBase.tasks', context: context);
 
   @override
@@ -80,6 +21,22 @@ mixin _$AppStore on AppStoreBase, Store {
   set tasks(ObservableList<TaskModel> value) {
     _$tasksAtom.reportWrite(value, super.tasks, () {
       super.tasks = value;
+    });
+  }
+
+  late final _$collaborationTasksAtom =
+      Atom(name: 'AppStoreBase.collaborationTasks', context: context);
+
+  @override
+  ObservableList<TaskModel> get collaborationTasks {
+    _$collaborationTasksAtom.reportRead();
+    return super.collaborationTasks;
+  }
+
+  @override
+  set collaborationTasks(ObservableList<TaskModel> value) {
+    _$collaborationTasksAtom.reportWrite(value, super.collaborationTasks, () {
+      super.collaborationTasks = value;
     });
   }
 
@@ -137,6 +94,15 @@ mixin _$AppStore on AppStoreBase, Store {
     return _$setUserAsyncAction.run(() => super.setUser(id));
   }
 
+  late final _$fetchCollaborationTasksAsyncAction =
+      AsyncAction('AppStoreBase.fetchCollaborationTasks', context: context);
+
+  @override
+  Future<void> fetchCollaborationTasks(String id) {
+    return _$fetchCollaborationTasksAsyncAction
+        .run(() => super.fetchCollaborationTasks(id));
+  }
+
   late final _$fetchTasksAsyncAction =
       AsyncAction('AppStoreBase.fetchTasks', context: context);
 
@@ -165,17 +131,10 @@ mixin _$AppStore on AppStoreBase, Store {
   String toString() {
     return '''
 tasks: ${tasks},
+collaborationTasks: ${collaborationTasks},
 boards: ${boards},
 user: ${user},
-selectedDate: ${selectedDate},
-collaborationTasks: ${collaborationTasks},
-todayTasks: ${todayTasks},
-listArchiveTasks: ${listArchiveTasks},
-listAllTask: ${listAllTask},
-listActiveTask: ${listActiveTask},
-listCollaborationTask: ${listCollaborationTask},
-listAllCollaborationTask: ${listAllCollaborationTask},
-nextTasks: ${nextTasks}
+selectedDate: ${selectedDate}
     ''';
   }
 }

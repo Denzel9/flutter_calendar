@@ -26,7 +26,7 @@ List<TaskModel> filteredTask({
   }
 
   if (date != null) {
-    return store.tasks
+    return store.listAllTask
         .where((task) =>
             task.title.contains(searchText ?? '') &&
             getSliceDate(task.date) == getSliceDate(date.toString()))
@@ -34,13 +34,13 @@ List<TaskModel> filteredTask({
   }
 
   if (isActiveTask ?? false) {
-    return store.listActiveTask
+    return store.listOpenedTask
         .where((task) => task.title.contains(searchText ?? ''))
         .toList();
   }
 
   if (isArchive ?? false) {
-    return store.listArchiveTasks
+    return store.listClosedTasks
         .where((task) => task.title.contains(searchText ?? ''))
         .toList();
   }
@@ -64,7 +64,7 @@ List<TaskModel> filteredTaskToBoard(
   String boardTitle,
   AppStore store,
 ) {
-  return store.tasks
+  return store.listAllTask
       .where(
           (task) => task.board == boardTitle && task.userId == store.user.docId)
       .toList();

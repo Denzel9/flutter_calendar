@@ -64,7 +64,7 @@ class _TaskTabState extends State<TaskTab> {
                             ),
                             child: Center(
                               child: DNText(
-                                title: store.listActiveTask.length.toString(),
+                                title: store.listOpenedTask.length.toString(),
                                 fontSize: 14,
                               ),
                             ),
@@ -96,7 +96,7 @@ class _TaskTabState extends State<TaskTab> {
                             ),
                             child: Center(
                               child: DNText(
-                                title: store.listArchiveTasks.length.toString(),
+                                title: store.listClosedTasks.length.toString(),
                                 fontSize: 14,
                               ),
                             ),
