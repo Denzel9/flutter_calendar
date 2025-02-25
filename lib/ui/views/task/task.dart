@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 class TaskPage extends StatefulWidget {
   final String id;
-
   const TaskPage({super.key, required this.id});
 
   @override
@@ -39,32 +38,36 @@ class _TaskPageState extends State<TaskPage> {
             builder: (context, snapshot) {
               final TaskModel task = TaskModel.fromJsonWithId(
                   snapshot.data?.data(), snapshot.data?.id ?? '');
-
-              return Provider(
-                create: (context) => TaskStoreLocal(),
-                builder: (context, _) => Container(
-                  padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                  child: Stack(
-                    children: [
-                      Content(
-                        task: task,
-                      ),
-                      Positioned(
-                        bottom: 30,
-                        left: 0,
-                        right: 0,
-                        child: Buttons(
-                          isDone: task.done,
-                          id: task.docId ?? '',
+              if (task.userId.isNotEmpty) {
+                return Provider(
+                  create: (context) => TaskStoreLocal(),
+                  builder: (context, _) => Container(
+                    padding:
+                        const EdgeInsets.only(top: 60, left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    child: Stack(
+                      children: [
+                        Content(
+                          task: task,
                         ),
-                      )
-                    ],
+                        Positioned(
+                          bottom: 30,
+                          left: 0,
+                          right: 0,
+                          child: Buttons(
+                            isDone: task.done,
+                            id: task.docId ?? '',
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
             },
           ),
         ),

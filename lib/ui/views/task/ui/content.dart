@@ -28,9 +28,9 @@ class Content extends StatefulWidget {
 }
 
 class _ContentState extends State<Content> {
-  final editController = TextEditingController();
-  late final AppStore store;
+  final TextEditingController editController = TextEditingController();
   late final TaskStoreLocal taskStoreLocal;
+  late final AppStore store;
 
   @override
   void didChangeDependencies() {
@@ -57,7 +57,6 @@ class _ContentState extends State<Content> {
         });
       });
     });
-
     super.didChangeDependencies();
   }
 

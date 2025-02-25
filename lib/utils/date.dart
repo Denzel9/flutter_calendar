@@ -66,13 +66,21 @@ String formatDatePadLeft(int string) {
 }
 
 String getFormatDate(String date) {
-  DateTime newDate = DateTime.parse(date);
-  return '${weekDaysSlice[newDate.weekday - 1]} ${newDate.day} ${monthNames[newDate.month - 1]}, ${newDate.year}';
+  if (date.isNotEmpty) {
+    DateTime newDate = DateTime.parse(date);
+    return '${weekDaysSlice[newDate.weekday - 1]} ${newDate.day} ${monthNames[newDate.month - 1]}, ${newDate.year}';
+  } else {
+    return '';
+  }
 }
 
 String getFormatTime(String date) {
-  DateTime newDate = DateTime.parse(date);
-  return '${formatDatePadLeft(newDate.hour)}:${formatDatePadLeft(newDate.minute)}';
+  if (date.isNotEmpty) {
+    DateTime newDate = DateTime.parse(date);
+    return '${formatDatePadLeft(newDate.hour)}:${formatDatePadLeft(newDate.minute)}';
+  } else {
+    return '';
+  }
 }
 
 String getSliceDate(String date) {
