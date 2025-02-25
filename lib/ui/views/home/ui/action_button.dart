@@ -17,9 +17,10 @@ class ActionButton extends StatelessWidget {
       onPressed: () => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CreatePage(
-                  selectedIndex: homeStoreLocal.tabIndex,
-                )),
+          builder: (context) => CreatePage(
+            selectedIndex: homeStoreLocal.tabIndex,
+          ),
+        ),
       ),
       child: InkWell(
         splashColor: Colors.white10,
@@ -31,7 +32,9 @@ class ActionButton extends StatelessWidget {
               image: const AssetImage('assets/pattern.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                  Colors.amberAccent.shade200, BlendMode.multiply),
+                Colors.amberAccent.shade200,
+                BlendMode.multiply,
+              ),
             ),
           ),
           child: const Icon(

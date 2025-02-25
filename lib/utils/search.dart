@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 List<UserModel?>? searchUser(
-    List<QueryDocumentSnapshot<Map<String, dynamic>>>? snapshot,
-    TextEditingController controller) {
+  List<QueryDocumentSnapshot<Map<String, dynamic>>>? snapshot,
+  TextEditingController controller,
+) {
   final lowerCaseText = controller.text.toLowerCase();
 
   return snapshot

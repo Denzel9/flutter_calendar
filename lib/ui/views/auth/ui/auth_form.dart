@@ -75,15 +75,16 @@ class _AuthFormState extends State<AuthForm> {
 
         Future.wait([
           userService.addUser(
-              UserModel(
-                name: user.displayName ?? '',
-                email: user.email ?? '',
-                followers: [],
-                following: [],
-                lastName: '',
-                docId: user.uid,
-              ).toJson(),
-              user.uid),
+            UserModel(
+              name: user.displayName ?? '',
+              email: user.email ?? '',
+              followers: [],
+              following: [],
+              lastName: '',
+              docId: user.uid,
+            ).toJson(),
+            user.uid,
+          ),
           store.setUser(user.uid),
           localStorage.setItem('id', user.uid)
         ]);
@@ -110,17 +111,15 @@ class _AuthFormState extends State<AuthForm> {
         );
       }
     } on FirebaseAuthException catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.amberAccent,
-            content: Text(
-              error.message.toString(),
-              style: const TextStyle(color: Colors.black),
-            ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.amberAccent,
+          content: Text(
+            error.message.toString(),
+            style: const TextStyle(color: Colors.black),
           ),
-        );
-      }
+        ),
+      );
     } finally {
       setState(() {
         authService.isLoading = false;

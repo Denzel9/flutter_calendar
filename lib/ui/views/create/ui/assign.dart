@@ -23,7 +23,6 @@ class _AssignState extends State<Assign> {
     final AppStore store = context.watch<AppStore>();
 
     void doAssign(String id) {
-      print(id);
       setState(() {
         if (createStore.assign.where((el) => el == id).isEmpty) {
           createStore.assign = [...createStore.assign, id];

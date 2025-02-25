@@ -33,14 +33,11 @@ class _AboutState extends State<About> {
             String id,
             String field,
             String data,
-          ) {
-            return userService.updateField(id, field, data).then(
-              ((res) {
-                setState(() {
-                  store.user.about = data;
-                });
-              }),
-            );
+          ) async {
+            await userService.updateField(id, field, data);
+            setState(() {
+              store.user.about = data;
+            });
           },
         ),
       ),

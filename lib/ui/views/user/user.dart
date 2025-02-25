@@ -34,8 +34,8 @@ class _UserPageState extends State<UserPage> {
 
     return Provider(
       create: (context) => userStoreLocal,
-      builder: (context, _) {
-        return Observer(builder: (_) {
+      builder: (context, _) => Observer(
+        builder: (_) {
           final UserModel currentUser =
               userStoreLocal.isGuest ? userStoreLocal.user : store.user;
           return Scaffold(
@@ -57,8 +57,8 @@ class _UserPageState extends State<UserPage> {
               ),
             ),
           );
-        });
-      },
+        },
+      ),
     );
   }
 }

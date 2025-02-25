@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/user.dart';
+import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 
@@ -13,13 +14,7 @@ abstract class XStore with Store {
   bool isEdit = false;
 
   @observable
-  UserModel user = UserModel(
-      name: '',
-      lastName: '',
-      email: '',
-      following: [],
-      followers: [],
-      avatar: '');
+  UserModel user = emptyUser;
 
   @observable
   File? image;
@@ -46,12 +41,6 @@ abstract class XStore with Store {
   @action
   Future<Null> reset() async {
     isGuest = false;
-    user = UserModel(
-        name: '',
-        lastName: '',
-        email: '',
-        following: [],
-        followers: [],
-        avatar: '');
+    user = emptyUser;
   }
 }

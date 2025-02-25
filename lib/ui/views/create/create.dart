@@ -100,11 +100,7 @@ class _CreatePageState extends State<CreatePage>
                             const Media()
                           ],
                         ),
-                        ListView(
-                          children: const [
-                            Main(isTask: false),
-                          ],
-                        ),
+                        const Main(isTask: false),
                       ],
                     ),
                   ),

@@ -91,19 +91,20 @@ class _NavigateState extends State<Navigate> {
                     children: [
                       if (taskViewsStoreLocal.isShowSearch)
                         Expanded(
-                            child: SizedBox(
-                          height: 50,
-                          child: DNInput(
-                            title: 'Search',
-                            autoFocus: taskViewsStoreLocal.isShowSearch,
-                            onChanged: (string) => setState(() {
-                              taskViewsStoreLocal.searchtext = string;
-                            }),
-                            onSubmitted: (string) => setState(() {
-                              taskViewsStoreLocal.isShowSearch = false;
-                            }),
+                          child: SizedBox(
+                            height: 50,
+                            child: DNInput(
+                              title: 'Search',
+                              autoFocus: taskViewsStoreLocal.isShowSearch,
+                              onChanged: (string) => setState(() {
+                                taskViewsStoreLocal.searchtext = string;
+                              }),
+                              onSubmitted: (string) => setState(() {
+                                taskViewsStoreLocal.isShowSearch = false;
+                              }),
+                            ),
                           ),
-                        )),
+                        ),
                       DNIconButton(
                         icon: Icon(
                           taskViewsStoreLocal.isShowSearch
@@ -113,15 +114,17 @@ class _NavigateState extends State<Navigate> {
                                   : Icons.search,
                           color: Colors.black,
                         ),
-                        onClick: () => setState(() {
-                          if (taskViewsStoreLocal.searchtext.isNotEmpty) {
-                            taskViewsStoreLocal.isShowSearch = false;
-                          } else {
-                            taskViewsStoreLocal.isShowSearch =
-                                !taskViewsStoreLocal.isShowSearch;
-                          }
-                          taskViewsStoreLocal.searchtext = '';
-                        }),
+                        onClick: () => setState(
+                          () {
+                            if (taskViewsStoreLocal.searchtext.isNotEmpty) {
+                              taskViewsStoreLocal.isShowSearch = false;
+                            } else {
+                              taskViewsStoreLocal.isShowSearch =
+                                  !taskViewsStoreLocal.isShowSearch;
+                            }
+                            taskViewsStoreLocal.searchtext = '';
+                          },
+                        ),
                       ),
                       if (!taskViewsStoreLocal.isShowSearch &&
                           widget.controller.index == 0)
@@ -201,7 +204,7 @@ class _NavigateState extends State<Navigate> {
                               : Colors.transparent,
                         ),
                       if (!taskViewsStoreLocal.isShowSearch)
-                        Expanded(child: Container()),
+                        const Expanded(child: SizedBox()),
                       if (!taskViewsStoreLocal.isShowSearch &&
                           widget.controller.index == 0)
                         DNButton(

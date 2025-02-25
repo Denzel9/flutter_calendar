@@ -37,7 +37,8 @@ class DNButton extends StatelessWidget {
                 : Theme.of(context).scaffoldBackgroundColor,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             border: Border.all(
-                color: isPrimary ? Colors.transparent : Colors.white),
+              color: isPrimary ? Colors.transparent : Colors.white,
+            ),
           ),
           child: Align(
             alignment: Alignment.center,

@@ -13,7 +13,11 @@ import 'package:provider/provider.dart';
 class Attachments extends StatefulWidget {
   final String docId;
   final bool isDone;
-  const Attachments({super.key, required this.docId, required this.isDone});
+  const Attachments({
+    super.key,
+    required this.docId,
+    required this.isDone,
+  });
 
   @override
   State<Attachments> createState() => _AttachmentsState();
@@ -95,59 +99,54 @@ class _AttachmentsState extends State<Attachments> {
                   mainAxisSpacing: 10,
                 ),
                 itemCount: snapshot.data?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        useSafeArea: false,
-                        builder: (BuildContext context) {
-                          return FullScreenCarousel(
-                            images: snapshot.data,
-                            initImage: index,
-                          );
-                        },
-                      );
-                    },
-                    onLongPress: () {
-                      if (!widget.isDone) {
-                        setState(() {
-                          taskStoreLocal.isEdit = true;
-                        });
-                      }
-                    },
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        DNImage(
-                          url: snapshot.data![index],
-                        ),
-                        if (taskStoreLocal.isEdit)
-                          Positioned(
-                            right: -10,
-                            top: -13,
-                            child: DNIconButton(
-                              key: GlobalKey(),
-                              backgroundColor:
-                                  Theme.of(context).primaryColorDark,
-                              color: Colors.red,
-                              icon: const Icon(Icons.cancel),
-                              onClick: () => taskService
-                                  .deleteAttachments(
-                                    widget.docId,
-                                    parseLinkImage(snapshot.data![index]),
-                                  )
-                                  .then(
-                                    (_) => Future.delayed(
-                                        const Duration(milliseconds: 100),
-                                        () => setState(() {})),
-                                  ),
-                            ),
-                          )
-                      ],
+                itemBuilder: (BuildContext context, int index) =>
+                    GestureDetector(
+                  onTap: () => showDialog(
+                    context: context,
+                    useSafeArea: false,
+                    builder: (BuildContext context) => FullScreenCarousel(
+                      images: snapshot.data,
+                      initImage: index,
                     ),
-                  );
-                },
+                  ),
+                  onLongPress: () {
+                    if (!widget.isDone) {
+                      setState(() {
+                        taskStoreLocal.isEdit = true;
+                      });
+                    }
+                  },
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      DNImage(
+                        url: snapshot.data![index],
+                      ),
+                      if (taskStoreLocal.isEdit)
+                        Positioned(
+                          right: -10,
+                          top: -13,
+                          child: DNIconButton(
+                            key: GlobalKey(),
+                            backgroundColor: Theme.of(context).primaryColorDark,
+                            color: Colors.red,
+                            icon: const Icon(Icons.cancel),
+                            onClick: () async {
+                              await taskService.deleteAttachments(
+                                widget.docId,
+                                parseLinkImage(snapshot.data![index]),
+                              );
+
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () => setState(() {}),
+                              );
+                            },
+                          ),
+                        )
+                    ],
+                  ),
+                ),
               );
             }
             return const SizedBox();
@@ -179,9 +178,7 @@ class FullScreenCarousel extends StatelessWidget {
               ),
               items: List.generate(
                 images?.length ?? 0,
-                (index) {
-                  return DNImage(url: images?[index] ?? '');
-                },
+                (index) => DNImage(url: images?[index] ?? ''),
               ),
             ),
           ),

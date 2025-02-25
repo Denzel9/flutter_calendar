@@ -22,76 +22,73 @@ class Buttons extends StatefulWidget {
 }
 
 class _ButtonsState extends State<Buttons> {
+  late TaskStoreLocal taskStoreLocal;
   @override
   void didChangeDependencies() {
-    context.watch<TaskStoreLocal>().isDoneTask = widget.isDone;
+    taskStoreLocal = context.watch<TaskStoreLocal>();
+    taskStoreLocal.isDoneTask = widget.isDone;
     super.didChangeDependencies();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
-
-    return Observer(builder: (_) {
-      return SlideAnimation(
-        begin: const Offset(0, 2),
-        widget: Column(
-          children: [
-            if (!taskStoreLocal.isDoneTask && !taskStoreLocal.isEdit)
-              AnimatedToggleSwitch.rolling(
-                current: widget.isDone,
-                spacing: double.infinity,
-                borderWidth: 0,
-                height: 70,
-                indicatorSize: const Size.fromWidth(70),
-                values: const [false, true],
-                style: ToggleStyle(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  indicatorColor: Theme.of(context).primaryColor,
-                ),
-                iconBuilder: (value, index) => widget.isDone == value
-                    ? const Icon(Icons.done, color: Colors.black, size: 40)
-                    : const DNText(
-                        title: 'Done',
-                        color: Colors.white,
-                      ),
-                iconsTappable: false,
-                onChanged: (_) {
-                  taskService.changeDone(widget.id, !widget.isDone);
-                  setState(() {
-                    taskStoreLocal.isDoneTask = true;
-                  });
-                },
-              ),
-            if (taskStoreLocal.isEdit)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  DNButton(
-                    onClick: () =>
-                        setState(() => taskStoreLocal.isEdit = false),
-                    title: 'Save',
-                    isPrimary: false,
+  Widget build(BuildContext context) => Observer(
+        builder: (_) => SlideAnimation(
+          begin: const Offset(0, 2),
+          widget: Column(
+            children: [
+              if (!taskStoreLocal.isDoneTask && !taskStoreLocal.isEdit)
+                AnimatedToggleSwitch.rolling(
+                  current: widget.isDone,
+                  spacing: double.infinity,
+                  borderWidth: 0,
+                  height: 70,
+                  indicatorSize: const Size.fromWidth(70),
+                  values: const [false, true],
+                  style: ToggleStyle(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    indicatorColor: Theme.of(context).primaryColor,
                   ),
-                ],
-              ),
-            if (taskStoreLocal.isDoneTask && !taskStoreLocal.isEdit)
-              DNButton(
-                width: 200,
-                title: 'Cancel Is Done',
-                onClick: () {
-                  taskService.changeDone(widget.id, !widget.isDone);
-                  setState(() {
-                    taskStoreLocal.isDoneTask = false;
-                  });
-                },
-                isPrimary: false,
-                color: Colors.red,
-              )
-          ],
+                  iconBuilder: (value, index) => widget.isDone == value
+                      ? const Icon(Icons.done, color: Colors.black, size: 40)
+                      : const DNText(
+                          title: 'Done',
+                          color: Colors.white,
+                        ),
+                  iconsTappable: false,
+                  onChanged: (_) {
+                    taskService.changeDone(widget.id, !widget.isDone);
+                    setState(() {
+                      taskStoreLocal.isDoneTask = true;
+                    });
+                  },
+                ),
+              if (taskStoreLocal.isEdit)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DNButton(
+                      onClick: () =>
+                          setState(() => taskStoreLocal.isEdit = false),
+                      title: 'Save',
+                      isPrimary: false,
+                    ),
+                  ],
+                ),
+              if (taskStoreLocal.isDoneTask && !taskStoreLocal.isEdit)
+                DNButton(
+                  width: 200,
+                  title: 'Cancel Is Done',
+                  onClick: () {
+                    taskService.changeDone(widget.id, !widget.isDone);
+                    setState(() {
+                      taskStoreLocal.isDoneTask = false;
+                    });
+                  },
+                  isPrimary: false,
+                  color: Colors.red,
+                )
+            ],
+          ),
         ),
       );
-    });
-  }
 }

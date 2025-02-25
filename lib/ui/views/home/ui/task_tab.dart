@@ -71,40 +71,40 @@ class _TaskTabState extends State<TaskTab> {
                           ))
                     ],
                   ),
-                  const SizedBox(width: 10),
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      DNButton(
-                        title: 'Closed',
-                        onClick: () =>
-                            setState(() => homeStoreLocal.isActiveTask = false),
-                        isPrimary: !homeStoreLocal.isActiveTask,
-                      ),
-                      Positioned(
-                          right: -3,
-                          top: -3,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColorDark,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        DNButton(
+                          title: 'Closed',
+                          onClick: () => setState(
+                              () => homeStoreLocal.isActiveTask = false),
+                          isPrimary: !homeStoreLocal.isActiveTask,
+                        ),
+                        Positioned(
+                            right: -3,
+                            top: -3,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColorDark,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                border: Border.all(color: Colors.white),
                               ),
-                              border: Border.all(color: Colors.white),
-                            ),
-                            child: Center(
-                              child: DNText(
-                                title: store.listClosedTasks.length.toString(),
-                                fontSize: 14,
+                              child: Center(
+                                child: DNText(
+                                  title:
+                                      store.listClosedTasks.length.toString(),
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                          ))
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 10,
+                            ))
+                      ],
+                    ),
                   ),
                   DNIconButton(
                     icon: Icon(Icons.people,
@@ -143,11 +143,9 @@ class _TaskTabState extends State<TaskTab> {
                     ).length;
                     return GestureDetector(
                       onTap: () => setState(() {
-                        if (currenWeekDayIndex - 1 == index) {
-                          store.selectedDate = DateTime.now();
-                        } else {
-                          store.selectedDate = computedDate;
-                        }
+                        currenWeekDayIndex - 1 == index
+                            ? store.selectedDate = DateTime.now()
+                            : store.selectedDate = computedDate;
                       }),
                       child: Stack(
                         children: [
@@ -157,18 +155,16 @@ class _TaskTabState extends State<TaskTab> {
                             child: Row(
                               children: List.generate(
                                 tasksCount,
-                                (index) {
-                                  return Container(
-                                    width: 5,
-                                    height: 5,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white38,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
+                                (index) => Container(
+                                  width: 5,
+                                  height: 5,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white38,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
                                     ),
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ),
                           ),

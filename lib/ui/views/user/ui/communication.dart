@@ -89,22 +89,20 @@ class _CommunicationState extends State<Communication> {
               child: FutureBuilder(
                 future: getTasksCount,
                 initialData: '0',
-                builder: (context, snap) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: const DNText(
-                      title: 'Tasks',
-                      opacity: .5,
+                builder: (context, snap) => ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const DNText(
+                    title: 'Tasks',
+                    opacity: .5,
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: DNText(
+                      title: snap.data.toString(),
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DNText(
-                        title: snap.data.toString(),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],

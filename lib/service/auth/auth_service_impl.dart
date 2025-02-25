@@ -1,7 +1,6 @@
 import 'package:calendar_flutter/service/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../core/controller/controller.dart';
 
 class AuthServiceImpl implements AuthService {

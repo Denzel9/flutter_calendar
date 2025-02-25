@@ -58,7 +58,7 @@ abstract class AppStoreBase with Store {
       listAllTask.where((task) => task.isCollaborated).toList();
 
   @action
-  Future setUser(String id) async {
+  Future<void> setUser(String id) async {
     final query = await userService.setUser(id);
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
@@ -117,6 +117,7 @@ abstract class AppStoreBase with Store {
     tasks = ObservableList.of([]);
     boards = ObservableList.of([]);
     collaborationTasks = ObservableList.of([]);
+    selectedDate = now;
     user = emptyUser;
   }
 }

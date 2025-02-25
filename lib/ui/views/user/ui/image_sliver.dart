@@ -76,47 +76,45 @@ class _ImageSliverState extends State<ImageSliver> {
         actions: [
           if (!userStoreLocal.isGuest && !userStoreLocal.isEdit)
             DNIconButton(
-              onClick: () {
-                showModalBottomSheet(
-                  backgroundColor: const Color.fromARGB(255, 35, 35, 35),
-                  context: context,
-                  builder: (_) => Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Align(
-                          alignment: Alignment.center,
-                          child: DNText(
-                            title: 'Settings',
-                          ),
+              onClick: () => showModalBottomSheet(
+                backgroundColor: const Color.fromARGB(255, 35, 35, 35),
+                context: context,
+                builder: (_) => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.center,
+                        child: DNText(
+                          title: 'Settings',
                         ),
-                        const SizedBox(height: 20),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          onTap: () async {
-                            await localStorage.deleteItem('id');
-                            store.reset();
-                            if (context.mounted) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const AuthPage()),
-                                (route) => false,
-                              );
-                            }
-                          },
-                          title: const DNText(title: 'Change account'),
-                          trailing: Icon(
-                            Icons.exit_to_app,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () async {
+                          await localStorage.deleteItem('id');
+                          store.reset();
+                          if (context.mounted) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AuthPage()),
+                              (route) => false,
+                            );
+                          }
+                        },
+                        title: const DNText(title: 'Change account'),
+                        trailing: Icon(
+                          Icons.exit_to_app,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      )
+                    ],
                   ),
-                );
-              },
+                ),
+              ),
               icon: const Icon(
                 Icons.settings,
                 color: Colors.black,

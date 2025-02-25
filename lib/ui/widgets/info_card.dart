@@ -67,7 +67,9 @@ class _InfoCardState extends State<InfoCard>
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TaskPage(id: widget.data.docId)))
+                    builder: (context) => TaskPage(id: widget.data.docId),
+                  ),
+                )
               : showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -127,7 +129,7 @@ class _InfoCardState extends State<InfoCard>
                         width: 5,
                       ),
                       const Icon(
-                        Icons.av_timer,
+                        Icons.access_time,
                         color: Colors.white,
                       )
                     ],

@@ -25,7 +25,7 @@ class HeaderCalendar extends StatefulWidget {
 class _HeaderCalendarState extends State<HeaderCalendar> {
   @override
   Widget build(BuildContext context) {
-    final ViewingStoreLocal taskViewsStoreLocal =
+    final ViewingStoreLocal viewingStoreLocal =
         context.watch<ViewingStoreLocal>();
     final AppStore store = context.watch<AppStore>();
 
@@ -33,7 +33,7 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
       children: [
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: taskViewsStoreLocal.isOpenCalendar ? 330 : 0,
+          height: viewingStoreLocal.isOpenCalendar ? 330 : 0,
           width: double.infinity,
           color: Colors.amberAccent,
           child: Padding(
@@ -42,9 +42,9 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
               onClick: (DateTime day) => setState(
                 () {
                   store.selectedDate = day;
-                  taskViewsStoreLocal.selectedDate = day;
-                  taskViewsStoreLocal.isOpenCalendar =
-                      !taskViewsStoreLocal.isOpenCalendar;
+                  viewingStoreLocal.selectedDate = day;
+                  viewingStoreLocal.isOpenCalendar =
+                      !viewingStoreLocal.isOpenCalendar;
                   widget.controller.index = 0;
                 },
               ),
@@ -70,14 +70,14 @@ class _HeaderCalendarState extends State<HeaderCalendar> {
               Observer(
                 builder: (_) => DNText(
                   title:
-                      '${taskViewsStoreLocal.selectedDate.day} ${monthsFullNames[store.selectedDate.month - 1]}, ${taskViewsStoreLocal.selectedDate.year}',
+                      '${viewingStoreLocal.selectedDate.day} ${monthsFullNames[store.selectedDate.month - 1]}, ${viewingStoreLocal.selectedDate.year}',
                 ),
               ),
               DNIconButton(
                 icon: const Icon(Icons.calendar_month),
                 onClick: () => setState(() {
-                  taskViewsStoreLocal.isOpenCalendar =
-                      !taskViewsStoreLocal.isOpenCalendar;
+                  viewingStoreLocal.isOpenCalendar =
+                      !viewingStoreLocal.isOpenCalendar;
                   widget.controller.index = 0;
                 }),
               ),

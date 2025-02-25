@@ -47,65 +47,58 @@ class _UserSearchStatePage extends State<SearchPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: DNInput(
-                    title: 'Search users',
-                    controller: controller,
-                    autoFocus: true,
-                    onChanged: (_) => setState(() {}),
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.all(10),
+            child: DNInput(
+              title: 'Search users',
+              controller: controller,
+              autoFocus: true,
+              onChanged: (_) => setState(() {}),
             ),
           ),
           Expanded(
             child: StreamBuilder(
               stream: getAllUser,
               builder: (context, snapshot) {
+                final users = searchUser(snapshot.data?.docs, controller);
                 if (snapshot.hasData) {
                   return ListView.builder(
-                    itemCount:
-                        searchUser(snapshot.data?.docs, controller)?.length,
+                    itemCount: users?.length,
                     itemBuilder: (context, index) {
-                      final user =
-                          searchUser(snapshot.data?.docs, controller)?[index];
+                      final user = users?[index];
                       if (user != null && user.docId != userId) {
                         return GestureDetector(
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) {
-                                return UserPage(userId: user.docId);
-                              },
+                              builder: (context) =>
+                                  UserPage(userId: user.docId),
                             ),
                           ),
                           child: ListTile(
                             leading: FutureBuilder(
-                                future: userService.getAvatar(user.docId ?? ''),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ClipOval(
-                                      child: DNImage(
-                                        url: snapshot.data ?? '',
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                    );
-                                  } else if (!snapshot.hasData &&
-                                      snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                    return CircleAvatar(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        radius: 20,
-                                        child: const Icon(Icons.person));
-                                  } else {
-                                    return const CircularProgressIndicator();
-                                  }
-                                }),
+                              future: userService.getAvatar(user.docId ?? ''),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ClipOval(
+                                    child: DNImage(
+                                      url: snapshot.data ?? '',
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  );
+                                } else if (!snapshot.hasData &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                  return CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      radius: 20,
+                                      child: const Icon(Icons.person));
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              },
+                            ),
                             title: DNText(
                                 title:
                                     '${toUpperCase(user.name)} ${toUpperCase(user.lastName)}'),

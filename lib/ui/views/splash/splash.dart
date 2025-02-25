@@ -40,7 +40,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     final store = context.read<AppStore>();
     _checkId(store);
     super.didChangeDependencies();

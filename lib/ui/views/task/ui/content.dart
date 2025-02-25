@@ -29,15 +29,17 @@ class Content extends StatefulWidget {
 
 class _ContentState extends State<Content> {
   final editController = TextEditingController();
+  late final AppStore store;
+  late final TaskStoreLocal taskStoreLocal;
 
   @override
-  void didChangeDependencies() async {
-    final AppStore store = context.watch<AppStore>();
-    final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
+  void didChangeDependencies() {
+    store = context.watch<AppStore>();
+    taskStoreLocal = context.watch<TaskStoreLocal>();
 
     setState(() {
       if (widget.task.userId == store.user.docId) {
-        context.watch<TaskStoreLocal>().currentBoard = store.boards
+        taskStoreLocal.currentBoard = store.boards
                 .firstWhere(
                   (el) => el.title == widget.task.board,
                   orElse: () => emptyBoard,
@@ -66,13 +68,8 @@ class _ContentState extends State<Content> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
-    final AppStore store = context.watch<AppStore>();
-
-    return Observer(
-      builder: (_) {
-        return Column(
+  Widget build(BuildContext context) => Observer(
+        builder: (_) => Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,8 +192,6 @@ class _ContentState extends State<Content> {
               ),
             )
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
 }

@@ -37,9 +37,7 @@ Future<dynamic> showFollowBottomSheet({
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) {
-                              return UserPage(userId: user.docId);
-                            },
+                            builder: (context) => UserPage(userId: user.docId),
                           ),
                         ),
                         leading: FutureBuilder(

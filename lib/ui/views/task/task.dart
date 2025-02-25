@@ -40,36 +40,31 @@ class _TaskPageState extends State<TaskPage> {
               final TaskModel task = TaskModel.fromJsonWithId(
                   snapshot.data?.data(), snapshot.data?.id ?? '');
 
-              if (task.userId.isNotEmpty) {
-                return Provider(
-                  create: (context) => TaskStoreLocal(),
-                  builder: (context, _) => Container(
-                    padding:
-                        const EdgeInsets.only(top: 60, left: 10, right: 10),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    child: Stack(
-                      children: [
-                        Content(
-                          task: task,
-                        ),
-                        Positioned(
-                          bottom: 30,
-                          left: 0,
-                          right: 0,
-                          child: Buttons(
-                            isDone: task.done,
-                            id: task.docId ?? '',
-                          ),
-                        )
-                      ],
-                    ),
+              return Provider(
+                create: (context) => TaskStoreLocal(),
+                builder: (context, _) => Container(
+                  padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorDark,
                   ),
-                );
-              } else {
-                return const CircularProgressIndicator();
-              }
+                  child: Stack(
+                    children: [
+                      Content(
+                        task: task,
+                      ),
+                      Positioned(
+                        bottom: 30,
+                        left: 0,
+                        right: 0,
+                        child: Buttons(
+                          isDone: task.done,
+                          id: task.docId ?? '',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
             },
           ),
         ),

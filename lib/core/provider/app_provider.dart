@@ -8,10 +8,8 @@ class AppProvider extends StatelessWidget {
   const AppProvider({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => AppStore(firestore),
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => Provider(
+        create: (context) => AppStore(firestore),
+        child: child,
+      );
 }

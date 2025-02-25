@@ -18,7 +18,9 @@ class BoardTab extends StatelessWidget {
         ? Observer(
             builder: (_) => ListView.builder(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 20),
+                    horizontal: 10.0,
+                    vertical: 20,
+                  ),
                   itemCount: store.boards.length,
                   itemBuilder: (context, index) {
                     final board = store.boards[index];
