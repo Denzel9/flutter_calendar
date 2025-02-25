@@ -10,14 +10,14 @@ import 'package:provider/provider.dart';
 class MenuButton extends StatefulWidget {
   final String docId;
   final List<Board> boards;
-  final bool isOpenedTask;
+  final bool isClosedTask;
   final String userId;
 
   const MenuButton({
     super.key,
     required this.docId,
     required this.boards,
-    required this.isOpenedTask,
+    required this.isClosedTask,
     required this.userId,
   });
 
@@ -54,7 +54,7 @@ class _MenuButtonState extends State<MenuButton> {
               foregroundColor: WidgetStatePropertyAll(Colors.black),
             ),
             itemBuilder: (BuildContext context) => [
-              if (!widget.isOpenedTask)
+              if (!widget.isClosedTask)
                 PopupMenuItem(
                   onTap: () => setState(
                     () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,

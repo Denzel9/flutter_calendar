@@ -67,130 +67,133 @@ class _ContentState extends State<Content> {
   }
 
   @override
-  Widget build(BuildContext context) => Observer(
-        builder: (_) => Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DNIconButton(
-                  icon: const Icon(
-                    Icons.chevron_left,
-                    color: Colors.black,
-                  ),
-                  onClick: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    Navigator.pop(context);
-                  },
+  Widget build(BuildContext context) {
+    final authortitle =
+        '${getFormatDate(widget.task.createdAt)}, by ${widget.task.userId == store.user.docId ? 'me' : widget.task.author}';
+    return Observer(
+      builder: (_) => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DNIconButton(
+                icon: const Icon(
+                  Icons.chevron_left,
+                  color: Colors.black,
                 ),
-                MenuButton(
-                  docId: widget.task.docId ?? '',
+                onClick: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  Navigator.pop(context);
+                },
+              ),
+              MenuButton(
+                docId: widget.task.docId ?? '',
+                boards: store.boards,
+                isClosedTask: widget.task.done,
+                userId: widget.task.userId,
+              )
+            ],
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 30),
+              children: [
+                BoardButton(
+                  board: widget.task.board,
                   boards: store.boards,
-                  isOpenedTask: widget.task.done,
-                  userId: widget.task.userId,
-                )
-              ],
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 30),
-                children: [
-                  BoardButton(
-                    board: widget.task.board,
-                    boards: store.boards,
-                    taskId: widget.task.userId,
-                  ),
-                  DNEditableField(
-                    title: widget.task.title,
-                    isEdit: taskStoreLocal.isEdit && !widget.task.done,
-                    editField: 'title',
-                    docId: widget.task.docId ?? '',
-                    maxFontSize: 40,
-                    minFontSize: 20,
-                    updateField: taskService.updateField,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10, top: 30),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                  taskId: widget.task.userId,
+                ),
+                DNEditableField(
+                  title: widget.task.title,
+                  isEdit: taskStoreLocal.isEdit && !widget.task.done,
+                  editField: 'title',
+                  docId: widget.task.docId ?? '',
+                  maxFontSize: 40,
+                  minFontSize: 20,
+                  updateField: taskService.updateField,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const DNText(
+                        title: 'Time',
+                        opacity: .5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      if (!widget.task.done)
                         const DNText(
-                          title: 'Time',
+                          title: 'Assignee',
                           opacity: .5,
                           fontWeight: FontWeight.bold,
                         ),
-                        if (!widget.task.done)
-                          const DNText(
-                            title: 'Assignee',
-                            opacity: .5,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              DNText(
-                                title: getFormatTime(widget.task.date),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              )
-                            ],
-                          ),
-                          subtitle: DNText(
-                            title: getFormatDate(widget.task.date),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      if (!widget.task.done)
-                        Assign(
-                          docId: widget.task.docId ?? '',
-                          assignList: widget.task.assign,
-                        )
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: DNEditableField(
-                      title: widget.task.description,
-                      isEdit: taskStoreLocal.isEdit && !widget.task.done,
-                      editField: 'description',
-                      docId: widget.task.docId ?? '',
-                      updateField: taskService.updateField,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DNText(
+                              title: getFormatTime(widget.task.date),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            )
+                          ],
+                        ),
+                        subtitle: DNText(
+                          title: getFormatDate(widget.task.date),
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
-                  ),
-                  const DNText(
-                    title: 'Created',
-                    opacity: .5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: DNText(
-                      title:
-                          '${getFormatDate(widget.task.createdAt)}, by ${widget.task.author}',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Attachments(
+                    if (!widget.task.done)
+                      Assign(
+                        docId: widget.task.docId ?? '',
+                        assignList: widget.task.assign,
+                      )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: DNEditableField(
+                    title: widget.task.description,
+                    isEdit: taskStoreLocal.isEdit && !widget.task.done,
+                    editField: 'description',
                     docId: widget.task.docId ?? '',
-                    isDone: widget.task.done,
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      );
+                    updateField: taskService.updateField,
+                  ),
+                ),
+                const DNText(
+                  title: 'Created',
+                  opacity: .5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: DNText(
+                    title: authortitle,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Attachments(
+                  docId: widget.task.docId ?? '',
+                  isDone: widget.task.done,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
