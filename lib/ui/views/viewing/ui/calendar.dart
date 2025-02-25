@@ -126,7 +126,7 @@ class _CalendarState extends State<Calendar> {
                         itemBuilder: (context, day) {
                           final dayDate = getSliceDate(
                               dates[monthsFullNames[month]][day].toString());
-                          final todayTasks = store.tasks
+                          final todayTasks = store.listAllTask
                               .where((element) =>
                                   getSliceDate(element.date.split(' ')[0]) ==
                                   dayDate)
