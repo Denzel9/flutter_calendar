@@ -23,7 +23,7 @@ void main() {
 
   group('Test main store', () {
     test('Tasks is not empty', () async {
-      expect(store.tasks.length, 2);
+      expect(store.tasks.length, 1);
     });
 
     test('Collaboration tasks is not empty', () async {
