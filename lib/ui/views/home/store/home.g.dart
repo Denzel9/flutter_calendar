@@ -42,11 +42,27 @@ mixin _$HomeStoreLocal on XStore, Store {
     });
   }
 
+  late final _$tabIndexAtom = Atom(name: 'XStore.tabIndex', context: context);
+
+  @override
+  int get tabIndex {
+    _$tabIndexAtom.reportRead();
+    return super.tabIndex;
+  }
+
+  @override
+  set tabIndex(int value) {
+    _$tabIndexAtom.reportWrite(value, super.tabIndex, () {
+      super.tabIndex = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 isActiveTask: ${isActiveTask},
-isCollaborationTasks: ${isCollaborationTasks}
+isCollaborationTasks: ${isCollaborationTasks},
+tabIndex: ${tabIndex}
     ''';
   }
 }

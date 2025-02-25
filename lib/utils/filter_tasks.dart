@@ -62,7 +62,10 @@ List<Board> filteredBoards(
 
 List<TaskModel> filteredTaskToBoard(
   String boardTitle,
-  List<TaskModel> tasks,
+  AppStore store,
 ) {
-  return tasks.where((task) => task.board == boardTitle).toList();
+  return store.tasks
+      .where(
+          (task) => task.board == boardTitle && task.userId == store.user.docId)
+      .toList();
 }

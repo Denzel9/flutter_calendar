@@ -25,12 +25,12 @@ class Content extends StatelessWidget {
     return Observer(
       builder: (_) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: filteredTaskToBoard(title, store.tasks).isNotEmpty
+        child: filteredTaskToBoard(title, store).isNotEmpty
             ? ListView.builder(
                 controller: controller,
-                itemCount: filteredTaskToBoard(title, store.tasks).length,
+                itemCount: filteredTaskToBoard(title, store).length,
                 itemBuilder: (context, index) {
-                  final task = filteredTaskToBoard(title, store.tasks)[index];
+                  final task = filteredTaskToBoard(title, store)[index];
                   return InfoCard(
                     data: task,
                     index: index,

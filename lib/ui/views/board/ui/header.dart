@@ -48,8 +48,7 @@ class Header extends StatelessWidget {
                 itemBuilder: (BuildContext context) => [
                   PopupMenuItem(
                     onTap: () async {
-                      final findedBoards =
-                          filteredTaskToBoard(title, store.tasks);
+                      final findedBoards = filteredTaskToBoard(title, store);
 
                       if (findedBoards.isEmpty) {
                         await boardService.deleteBoard(id);
@@ -90,8 +89,7 @@ class Header extends StatelessWidget {
               builder: (_) => Tab(
                 height: 50,
                 child: DNText(
-                  title:
-                      '${filteredTaskToBoard(title, store.tasks).length} Tasks',
+                  title: '${filteredTaskToBoard(title, store).length} Tasks',
                   fontSize: 25,
                   color:
                       controller.index == 0 ? Colors.amberAccent : Colors.white,

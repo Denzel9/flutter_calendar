@@ -26,8 +26,25 @@ class TaskServiceImpl implements TaskService {
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> getTasks(String id) =>
-      firestore.collection("tasks").where("userId", isEqualTo: id).snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getTasks(String id) => firestore
+      .collection("tasks")
+      .where(
+        Filter.or(
+          Filter.and(
+            Filter("userId", isEqualTo: id),
+            Filter("isCollaborated", isEqualTo: false),
+          ),
+          Filter.and(
+            Filter("userId", isEqualTo: id),
+            Filter("isCollaborated", isEqualTo: true),
+          ),
+          Filter.and(
+            Filter("assign", arrayContains: id),
+            Filter("userId", isNotEqualTo: id),
+          ),
+        ),
+      )
+      .snapshots();
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getCollaborationTasks(
@@ -35,7 +52,6 @@ class TaskServiceImpl implements TaskService {
       firestore
           .collection("tasks")
           .where("assign", arrayContains: id)
-          .where("userId", isNotEqualTo: id)
           .snapshots();
 
   @override

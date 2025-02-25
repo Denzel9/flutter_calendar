@@ -9,13 +9,13 @@ part of 'store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on AppStoreBase, Store {
-  Computed<List<TaskModel>>? _$tasksComputed;
+  Computed<List<TaskModel>>? _$collaborationTasksComputed;
 
   @override
-  List<TaskModel> get tasks =>
-      (_$tasksComputed ??= Computed<List<TaskModel>>(() => super.tasks,
-              name: 'AppStoreBase.tasks'))
-          .value;
+  List<TaskModel> get collaborationTasks => (_$collaborationTasksComputed ??=
+          Computed<List<TaskModel>>(() => super.collaborationTasks,
+              name: 'AppStoreBase.collaborationTasks'))
+      .value;
   Computed<List<TaskModel>>? _$todayTasksComputed;
 
   @override
@@ -68,35 +68,18 @@ mixin _$AppStore on AppStoreBase, Store {
               name: 'AppStoreBase.nextTasks'))
           .value;
 
-  late final _$ownTasksAtom =
-      Atom(name: 'AppStoreBase.ownTasks', context: context);
+  late final _$tasksAtom = Atom(name: 'AppStoreBase.tasks', context: context);
 
   @override
-  ObservableList<TaskModel> get ownTasks {
-    _$ownTasksAtom.reportRead();
-    return super.ownTasks;
+  ObservableList<TaskModel> get tasks {
+    _$tasksAtom.reportRead();
+    return super.tasks;
   }
 
   @override
-  set ownTasks(ObservableList<TaskModel> value) {
-    _$ownTasksAtom.reportWrite(value, super.ownTasks, () {
-      super.ownTasks = value;
-    });
-  }
-
-  late final _$collaborationTasksAtom =
-      Atom(name: 'AppStoreBase.collaborationTasks', context: context);
-
-  @override
-  ObservableList<TaskModel> get collaborationTasks {
-    _$collaborationTasksAtom.reportRead();
-    return super.collaborationTasks;
-  }
-
-  @override
-  set collaborationTasks(ObservableList<TaskModel> value) {
-    _$collaborationTasksAtom.reportWrite(value, super.collaborationTasks, () {
-      super.collaborationTasks = value;
+  set tasks(ObservableList<TaskModel> value) {
+    _$tasksAtom.reportWrite(value, super.tasks, () {
+      super.tasks = value;
     });
   }
 
@@ -154,62 +137,38 @@ mixin _$AppStore on AppStoreBase, Store {
     return _$setUserAsyncAction.run(() => super.setUser(id));
   }
 
-  late final _$AppStoreBaseActionController =
-      ActionController(name: 'AppStoreBase', context: context);
+  late final _$fetchTasksAsyncAction =
+      AsyncAction('AppStoreBase.fetchTasks', context: context);
 
   @override
-  void fetchCollaborationTasks(String id) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(
-        name: 'AppStoreBase.fetchCollaborationTasks');
-    try {
-      return super.fetchCollaborationTasks(id);
-    } finally {
-      _$AppStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> fetchTasks(String id) {
+    return _$fetchTasksAsyncAction.run(() => super.fetchTasks(id));
   }
 
-  @override
-  void fetchTasks(String id) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(
-        name: 'AppStoreBase.fetchTasks');
-    try {
-      return super.fetchTasks(id);
-    } finally {
-      _$AppStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
+  late final _$fetchBoardsAsyncAction =
+      AsyncAction('AppStoreBase.fetchBoards', context: context);
 
   @override
-  void fetchBoards(String id) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(
-        name: 'AppStoreBase.fetchBoards');
-    try {
-      return super.fetchBoards(id);
-    } finally {
-      _$AppStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> fetchBoards(String id) {
+    return _$fetchBoardsAsyncAction.run(() => super.fetchBoards(id));
   }
 
+  late final _$initStateAsyncAction =
+      AsyncAction('AppStoreBase.initState', context: context);
+
   @override
-  void initState(String id) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(
-        name: 'AppStoreBase.initState');
-    try {
-      return super.initState(id);
-    } finally {
-      _$AppStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> initState(String id) {
+    return _$initStateAsyncAction.run(() => super.initState(id));
   }
 
   @override
   String toString() {
     return '''
-ownTasks: ${ownTasks},
-collaborationTasks: ${collaborationTasks},
+tasks: ${tasks},
 boards: ${boards},
 user: ${user},
 selectedDate: ${selectedDate},
-tasks: ${tasks},
+collaborationTasks: ${collaborationTasks},
 todayTasks: ${todayTasks},
 listArchiveTasks: ${listArchiveTasks},
 listAllTask: ${listAllTask},

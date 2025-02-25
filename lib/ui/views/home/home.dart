@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   void didChangeDependencies() {
-    final store = context.read<AppStore>();
+    final store = context.watch<AppStore>();
     store.initState(widget.id ?? '');
     super.didChangeDependencies();
   }
@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage>
   @override
   void dispose() {
     tabController.dispose();
+    print(1);
     super.dispose();
   }
 

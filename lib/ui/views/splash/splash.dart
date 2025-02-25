@@ -16,22 +16,26 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   void _checkId(AppStore store) {
     Future.delayed(const Duration(seconds: 2), () async {
-      await localStorage.getItem('id').then((id) {
-        if (id.isNotEmpty) {
-          store.setUser(id).then((_) {
-            if (mounted) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return HomePage(id: id);
-              }));
-            }
+      final id = await localStorage.getItem('id');
+
+      if (id.isNotEmpty) {
+        await store.setUser(id);
+
+        if (mounted) {
+          setState(() {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+              return HomePage(id: id);
+            }));
           });
-        } else {
-          if (mounted) {
-            Navigator.pushReplacementNamed(context, routesList.auth);
-          }
         }
-      });
+      } else {
+        if (mounted) {
+          setState(() {
+            Navigator.pushReplacementNamed(context, routesList.auth);
+          });
+        }
+      }
     });
   }
 

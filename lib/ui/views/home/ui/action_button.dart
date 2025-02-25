@@ -1,5 +1,7 @@
-import 'package:calendar_flutter/core/config/routes/routes.dart';
+import 'package:calendar_flutter/ui/views/create/create.dart';
+import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ActionButton extends StatelessWidget {
   const ActionButton({
@@ -8,9 +10,17 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeStoreLocal homeStoreLocal = context.watch<HomeStoreLocal>();
+
     return FloatingActionButton(
       clipBehavior: Clip.antiAlias,
-      onPressed: () => Navigator.pushNamed(context, routesList.create),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CreatePage(
+                  selectedIndex: homeStoreLocal.tabIndex,
+                )),
+      ),
       child: InkWell(
         splashColor: Colors.white10,
         child: Ink(

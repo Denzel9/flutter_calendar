@@ -3,6 +3,7 @@ import 'package:calendar_flutter/models/board.dart';
 import 'package:calendar_flutter/models/task.dart';
 import 'package:calendar_flutter/models/user.dart';
 import 'package:calendar_flutter/utils/date.dart';
+import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 
@@ -16,30 +17,20 @@ abstract class AppStoreBase with Store {
   AppStoreBase(this.firestore);
 
   @observable
-  ObservableList<TaskModel> ownTasks = ObservableList<TaskModel>.of([]);
-
-  @observable
-  ObservableList<TaskModel> collaborationTasks =
-      ObservableList<TaskModel>.of([]);
+  ObservableList<TaskModel> tasks = ObservableList<TaskModel>.of([]);
 
   @observable
   ObservableList<Board> boards = ObservableList<Board>.of([]);
 
   @observable
-  UserModel user = UserModel(
-    name: '',
-    lastName: '',
-    email: '',
-    docId: '',
-    following: [],
-    followers: [],
-  );
+  UserModel user = emptyUser;
 
   @observable
   DateTime selectedDate = now;
 
   @computed
-  List<TaskModel> get tasks => [...ownTasks, ...collaborationTasks];
+  List<TaskModel> get collaborationTasks =>
+      tasks.where((task) => task.isCollaborated == true).toList();
 
   @computed
   List<TaskModel> get todayTasks => tasks
@@ -75,55 +66,32 @@ abstract class AppStoreBase with Store {
 
   @action
   Future setUser(String id) async {
-    Stream<DocumentSnapshot<Map<String, dynamic>>> query =
-        await userService.setUser(id);
+    final query = await userService.setUser(id);
     query.listen((event) {
       user = UserModel.fromJsonWithId(event.data(), event.id);
     });
   }
 
   @action
-  void fetchCollaborationTasks(String id) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        taskService.getCollaborationTasks(id);
+  Future<void> fetchTasks(String id) async {
+    final query = taskService.getTasks(id);
 
     query.listen((event) {
-      final List<TaskModel> listTasks = [];
-      for (final doc in event.docs) {
-        listTasks.add(TaskModel.fromJsonWithId(
-            doc.data() as Map<String, dynamic>?, doc.id));
-      }
-
-      collaborationTasks = ObservableList.of(listTasks);
+      final List<TaskModel> tasksList = event.docs
+          .map((doc) => TaskModel.fromJsonWithId(doc.data(), doc.id))
+          .toList();
+      tasks = ObservableList.of(tasksList);
     });
   }
 
   @action
-  void fetchTasks(String id) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        taskService.getTasks(id);
-
-    query.listen((event) {
-      final List<TaskModel> listTasks = [];
-      for (final doc in event.docs) {
-        listTasks.add(TaskModel.fromJsonWithId(
-            doc.data() as Map<String, dynamic>?, doc.id));
-      }
-
-      ownTasks = ObservableList.of(listTasks);
-    });
-  }
-
-  @action
-  void fetchBoards(String id) {
-    Stream<QuerySnapshot<Map<String, dynamic>>> query =
-        boardService.getBoards(id);
+  Future<void> fetchBoards(String id) async {
+    final query = boardService.getBoards(id);
 
     query.listen((event) {
       final List<Board> listBoards = [];
       for (final doc in event.docs) {
-        listBoards.add(
-            Board.fromJsonWithId(doc.data() as Map<String, dynamic>?, doc.id));
+        listBoards.add(Board.fromJsonWithId(doc.data(), doc.id));
       }
 
       boards = ObservableList.of(listBoards);
@@ -131,9 +99,16 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  void initState(String id) {
-    fetchTasks(id);
-    fetchCollaborationTasks(id);
-    fetchBoards(id);
+  Future<void> initState(String id) async {
+    await Future.wait([
+      fetchTasks(id),
+      fetchBoards(id),
+    ]);
+  }
+
+  void reset() {
+    tasks = ObservableList.of([]);
+    boards = ObservableList.of([]);
+    user = emptyUser;
   }
 }

@@ -90,6 +90,8 @@ class _ContentState extends State<Content> {
                 MenuButton(
                   docId: widget.task.docId ?? '',
                   boards: store.boards,
+                  isOpenedTask: widget.task.done,
+                  userId: widget.task.userId,
                 )
               ],
             ),

@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:calendar_flutter/core/config/routes/routes.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/home/store/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class TabsSliver extends StatefulWidget {
   final TabController controller;
+
   const TabsSliver({
     super.key,
     required this.controller,
@@ -23,7 +25,8 @@ class _TabsSliverState extends State<TabsSliver> {
 
   @override
   Widget build(BuildContext context) {
-    final store = context.watch<AppStore>();
+    final AppStore store = context.watch<AppStore>();
+    final HomeStoreLocal homeStoreLocal = context.watch<HomeStoreLocal>();
 
     return SliverAppBar(
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -43,7 +46,7 @@ class _TabsSliverState extends State<TabsSliver> {
           builder: (_) => TabBar(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             controller: widget.controller,
-            onTap: (value) => setState(() {}),
+            onTap: (value) => setState(() => homeStoreLocal.tabIndex = value),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorColor: Colors.amberAccent,
             unselectedLabelColor: Colors.white54,

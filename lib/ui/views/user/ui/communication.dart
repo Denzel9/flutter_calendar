@@ -29,6 +29,14 @@ class _CommunicationState extends State<Communication> {
   }
 
   @override
+  void didUpdateWidget(covariant Communication oldWidget) {
+    if (oldWidget.userId != widget.userId) {
+      getTasksCount = taskService.getTasksCount(widget.userId);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(

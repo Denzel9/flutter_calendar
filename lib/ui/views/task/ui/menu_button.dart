@@ -1,5 +1,6 @@
 import 'package:calendar_flutter/core/controller/controller.dart';
 import 'package:calendar_flutter/models/board.dart';
+import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/task/store/task.dart';
 import 'package:calendar_flutter/utils/empty_model.dart';
@@ -9,11 +10,15 @@ import 'package:provider/provider.dart';
 class MenuButton extends StatefulWidget {
   final String docId;
   final List<Board> boards;
+  final bool isOpenedTask;
+  final String userId;
 
   const MenuButton({
     super.key,
     required this.docId,
     required this.boards,
+    required this.isOpenedTask,
+    required this.userId,
   });
 
   @override
@@ -35,6 +40,7 @@ class _MenuButtonState extends State<MenuButton> {
   @override
   Widget build(BuildContext context) {
     final TaskStoreLocal taskStoreLocal = context.watch<TaskStoreLocal>();
+    final AppStore store = context.watch<AppStore>();
 
     return taskStoreLocal.isDeleting
         ? const SizedBox(
@@ -48,58 +54,61 @@ class _MenuButtonState extends State<MenuButton> {
               foregroundColor: WidgetStatePropertyAll(Colors.black),
             ),
             itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                onTap: () => setState(
-                  () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
+              if (!widget.isOpenedTask)
+                PopupMenuItem(
+                  onTap: () => setState(
+                    () => taskStoreLocal.isEdit = !taskStoreLocal.isEdit,
+                  ),
+                  child: const DNText(
+                    title: 'Edit',
+                    color: Colors.black,
+                  ),
                 ),
-                child: const DNText(
-                  title: 'Edit',
-                  color: Colors.black,
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text(
-                          'Are you sure you want to delete the task?'),
-                      action: SnackBarAction(
-                        textColor: Theme.of(context).colorScheme.error,
-                        label: 'Delete',
-                        onPressed: () {
-                          setState(() {
-                            taskStoreLocal.isDeleting = true;
-                          });
+              if (store.user.docId == widget.userId)
+                PopupMenuItem(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text(
+                            'Are you sure you want to delete the task?'),
+                        action: SnackBarAction(
+                          textColor: Theme.of(context).colorScheme.error,
+                          label: 'Delete',
+                          onPressed: () {
+                            setState(() {
+                              taskStoreLocal.isDeleting = true;
+                            });
 
-                          Future.wait([
-                            taskService.deleteTask(widget.docId),
-                            boardService.deleteTask(
-                                taskStoreLocal.currentBoard, widget.docId),
-                          ]);
+                            Future.wait([
+                              taskService.deleteTask(widget.docId),
+                              boardService.deleteTask(
+                                  taskStoreLocal.currentBoard, widget.docId),
+                            ]);
 
-                          if (taskStoreLocal.links.isNotEmpty) {
-                            for (final link in taskStoreLocal.links) {
-                              taskService.deleteAttachments(widget.docId, link);
+                            if (taskStoreLocal.links.isNotEmpty) {
+                              for (final link in taskStoreLocal.links) {
+                                taskService.deleteAttachments(
+                                    widget.docId, link);
+                              }
                             }
-                          }
 
-                          checkEmptyBoard(widget.docId, widget.boards);
+                            checkEmptyBoard(widget.docId, widget.boards);
 
-                          setState(() {
-                            Navigator.pop(context);
-                            taskService.isLoading = false;
-                            taskStoreLocal.isDeleting = false;
-                          });
-                        },
+                            setState(() {
+                              Navigator.pop(context);
+                              taskService.isLoading = false;
+                              taskStoreLocal.isDeleting = false;
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: DNText(
-                  title: 'Delete',
-                  color: Theme.of(context).colorScheme.error,
+                    );
+                  },
+                  child: DNText(
+                    title: 'Delete',
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 ),
-              ),
             ],
           );
   }

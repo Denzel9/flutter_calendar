@@ -10,4 +10,7 @@ abstract class XStore with Store {
 
   @observable
   bool isCollaborationTasks = false;
+
+  @observable
+  int tabIndex = 0;
 }

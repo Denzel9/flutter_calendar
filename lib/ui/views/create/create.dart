@@ -9,9 +9,12 @@ import 'package:provider/provider.dart';
 
 class CreatePage extends StatefulWidget {
   final String? selectedBoard;
+  final int? selectedIndex;
+
   const CreatePage({
     super.key,
     this.selectedBoard,
+    this.selectedIndex,
   });
 
   @override
@@ -24,7 +27,8 @@ class _CreatePageState extends State<CreatePage>
 
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    tabController = TabController(
+        length: 2, vsync: this, initialIndex: widget.selectedIndex ?? 0);
     super.initState();
   }
 

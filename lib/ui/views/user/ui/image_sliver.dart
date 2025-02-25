@@ -5,8 +5,8 @@ import 'package:calendar_flutter/store/store.dart';
 import 'package:calendar_flutter/ui/components/icon_button.dart';
 import 'package:calendar_flutter/ui/components/image.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
+import 'package:calendar_flutter/ui/views/auth/auth.dart';
 import 'package:calendar_flutter/ui/views/user/store/user.dart';
-import 'package:calendar_flutter/utils/empty_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -97,8 +97,14 @@ class _ImageSliverState extends State<ImageSliver> {
                           contentPadding: EdgeInsets.zero,
                           onTap: () async {
                             await localStorage.deleteItem('id');
-                            store.user = emptyUser;
+                            store.reset();
                             if (context.mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AuthPage()),
+                                (route) => false,
+                              );
                               Navigator.pushReplacementNamed(
                                   context, routesList.auth);
                             }
