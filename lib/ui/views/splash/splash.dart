@@ -48,12 +48,14 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).primaryColorDark,
+        // backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Colors.white,
         body: const Center(
           child: DNText(
-            title: 'DNTask',
+            title: 'TASKNI',
             fontWeight: FontWeight.bold,
-            color: Colors.amberAccent,
+            // color: Color.fromARGB(255, 0, 255, 208),
+            color: Color.fromARGB(255, 39, 195, 166),
             fontSize: 40,
           ),
         ),

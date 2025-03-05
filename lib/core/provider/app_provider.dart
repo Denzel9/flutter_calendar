@@ -1,4 +1,5 @@
 import 'package:calendar_flutter/core/controller/controller.dart';
+import 'package:calendar_flutter/store/image_store/image_store.dart';
 import 'package:calendar_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +9,11 @@ class AppProvider extends StatelessWidget {
   const AppProvider({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) => Provider(
-        create: (context) => AppStore(firestore),
+  Widget build(BuildContext context) => MultiProvider(
+        providers: [
+          Provider<AppStore>(create: (context) => AppStore(firestore)),
+          Provider<ImageStore>(create: (context) => ImageStore()),
+        ],
         child: child,
       );
 }

@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({
-    super.key,
-  });
+  const ActionButton({super.key});
 
   @override
   Widget build(BuildContext context) {

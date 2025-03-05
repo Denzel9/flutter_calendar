@@ -3,7 +3,7 @@ import 'package:calendar_flutter/ui/views/create/store/create.dart';
 import 'package:calendar_flutter/ui/views/create/ui/action_button.dart';
 import 'package:calendar_flutter/ui/views/create/ui/assign.dart';
 import 'package:calendar_flutter/ui/views/create/ui/main.dart';
-import 'package:calendar_flutter/ui/views/create/ui/media.dart';
+import 'package:calendar_flutter/ui/views/create/ui/attachments.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,7 +97,10 @@ class _CreatePageState extends State<CreatePage>
                               selectedBoard: widget.selectedBoard,
                             ),
                             const Assign(),
-                            const Media()
+                            // Attachments(
+                            //   withTitle: true,
+                            //   deleteCallback: () {},
+                            // )
                           ],
                         ),
                         const Main(isTask: false),

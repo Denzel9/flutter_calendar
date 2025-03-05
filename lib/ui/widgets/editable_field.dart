@@ -13,6 +13,7 @@ class DNEditableField extends StatefulWidget {
   final double minFontSize;
   final bool withTitle;
   final String docId;
+  final FontWeight fontWeight;
   final Future<void> Function(
     String id,
     String field,
@@ -29,6 +30,7 @@ class DNEditableField extends StatefulWidget {
     this.withTitle = true,
     this.maxFontSize = 40,
     this.minFontSize = 18,
+    this.fontWeight = FontWeight.bold,
   });
 
   @override
@@ -92,7 +94,7 @@ class _EditableFieldState extends State<DNEditableField> {
                       title: toUpperCase(widget.editField),
                       opacity: .5,
                       height: 2.2,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: widget.fontWeight,
                     ),
                     if (widget.isEdit)
                       IconButton(
@@ -109,9 +111,9 @@ class _EditableFieldState extends State<DNEditableField> {
               if (widget.title.isNotEmpty)
                 AutoSizeText(
                   widget.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: widget.fontWeight,
                   ),
                   minFontSize: widget.minFontSize,
                   maxLines: widget.maxFontSize,
@@ -135,9 +137,9 @@ class _EditableFieldState extends State<DNEditableField> {
                   children: [
                     AutoSizeText(
                       widget.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: widget.fontWeight,
                       ),
                       minFontSize: widget.minFontSize,
                       maxLines: widget.maxFontSize,

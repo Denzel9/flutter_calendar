@@ -13,6 +13,7 @@ final task = TaskModel(
   createdAt: 'createdAt',
   isCollaborated: false,
   userId: 'userId',
+  status: taskStatus.keys.first,
 );
 
 final collaborationTask = TaskModel(
@@ -26,6 +27,7 @@ final collaborationTask = TaskModel(
   createdAt: 'createdAt',
   isCollaborated: true,
   userId: 'anotherUserId',
+  status: taskStatus.keys.first,
 );
 
 final board = Board(

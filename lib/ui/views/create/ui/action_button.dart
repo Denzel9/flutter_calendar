@@ -52,6 +52,7 @@ class _ActionButtonState extends State<ActionButton> {
             createdAt: now.toString(),
             isCollaborated: createStoreLocal.assign.isNotEmpty ? true : false,
             userId: store.user.docId ?? '',
+            status: taskStatus.keys.first,
           ).toJson(),
         );
 

@@ -40,7 +40,10 @@ class BoardButton extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => BoardViewPage(id: docId ?? ''),
+                  builder: (context) => BoardPage(
+                    id: docId ?? '',
+                    board: board,
+                  ),
                 );
               }
             },

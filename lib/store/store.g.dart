@@ -9,6 +9,51 @@ part of 'store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on AppStoreBase, Store {
+  Computed<List<TaskModel>>? _$todayTasksComputed;
+
+  @override
+  List<TaskModel> get todayTasks => (_$todayTasksComputed ??=
+          Computed<List<TaskModel>>(() => super.todayTasks,
+              name: 'AppStoreBase.todayTasks'))
+      .value;
+  Computed<List<TaskModel>>? _$listClosedTasksComputed;
+
+  @override
+  List<TaskModel> get listClosedTasks => (_$listClosedTasksComputed ??=
+          Computed<List<TaskModel>>(() => super.listClosedTasks,
+              name: 'AppStoreBase.listClosedTasks'))
+      .value;
+  Computed<List<TaskModel>>? _$listAllTaskComputed;
+
+  @override
+  List<TaskModel> get listAllTask => (_$listAllTaskComputed ??=
+          Computed<List<TaskModel>>(() => super.listAllTask,
+              name: 'AppStoreBase.listAllTask'))
+      .value;
+  Computed<List<TaskModel>>? _$listOpenedTaskComputed;
+
+  @override
+  List<TaskModel> get listOpenedTask => (_$listOpenedTaskComputed ??=
+          Computed<List<TaskModel>>(() => super.listOpenedTask,
+              name: 'AppStoreBase.listOpenedTask'))
+      .value;
+  Computed<List<TaskModel>>? _$listCollaborationTaskComputed;
+
+  @override
+  List<TaskModel> get listCollaborationTask =>
+      (_$listCollaborationTaskComputed ??= Computed<List<TaskModel>>(
+              () => super.listCollaborationTask,
+              name: 'AppStoreBase.listCollaborationTask'))
+          .value;
+  Computed<List<TaskModel>>? _$listAllCollaborationTaskComputed;
+
+  @override
+  List<TaskModel> get listAllCollaborationTask =>
+      (_$listAllCollaborationTaskComputed ??= Computed<List<TaskModel>>(
+              () => super.listAllCollaborationTask,
+              name: 'AppStoreBase.listAllCollaborationTask'))
+          .value;
+
   late final _$tasksAtom = Atom(name: 'AppStoreBase.tasks', context: context);
 
   @override
@@ -90,7 +135,7 @@ mixin _$AppStore on AppStoreBase, Store {
       AsyncAction('AppStoreBase.setUser', context: context);
 
   @override
-  Future<dynamic> setUser(String id) {
+  Future<void> setUser(String id) {
     return _$setUserAsyncAction.run(() => super.setUser(id));
   }
 
@@ -134,7 +179,13 @@ tasks: ${tasks},
 collaborationTasks: ${collaborationTasks},
 boards: ${boards},
 user: ${user},
-selectedDate: ${selectedDate}
+selectedDate: ${selectedDate},
+todayTasks: ${todayTasks},
+listClosedTasks: ${listClosedTasks},
+listAllTask: ${listAllTask},
+listOpenedTask: ${listOpenedTask},
+listCollaborationTask: ${listCollaborationTask},
+listAllCollaborationTask: ${listAllCollaborationTask}
     ''';
   }
 }

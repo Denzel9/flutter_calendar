@@ -4,6 +4,7 @@ import 'package:calendar_flutter/ui/components/animate/slide.dart';
 import 'package:calendar_flutter/ui/components/text.dart';
 import 'package:calendar_flutter/ui/views/board/board.dart';
 import 'package:calendar_flutter/ui/views/task/task.dart';
+import 'package:calendar_flutter/utils/assign_title.dart';
 import 'package:calendar_flutter/utils/date.dart';
 import 'package:calendar_flutter/utils/get_colors_tasks.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,6 @@ class InfoCard extends StatefulWidget {
 class _InfoCardState extends State<InfoCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
-  String assignTitle(String ownerId) {
-    final String author =
-        widget.data.userId == ownerId ? 'me' : widget.data.author;
-    return widget.data is TaskModel && widget.data.isCollaborated
-        ? 'Assigned by $author'
-        : '';
-  }
 
   @override
   void initState() {
@@ -62,20 +55,14 @@ class _InfoCardState extends State<InfoCard>
           milliseconds: widget.index != null ? widget.index! * 100 : 0),
       begin: const Offset(0, 3),
       widget: GestureDetector(
-        onTap: () {
-          widget.data is TaskModel
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TaskPage(id: widget.data.docId),
-                  ),
-                )
-              : showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => BoardViewPage(id: widget.data.docId),
-                );
-        },
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => widget.data is TaskModel
+                ? TaskPage(id: widget.data.docId)
+                : BoardPage(id: widget.data.docId, board: widget.data.title),
+          ),
+        ),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           margin: const EdgeInsets.only(bottom: 10),
@@ -110,7 +97,11 @@ class _InfoCardState extends State<InfoCard>
                         width: 10,
                       ),
                       DNText(
-                        title: assignTitle(store.user.docId ?? ''),
+                        title: widget.data is TaskModel &&
+                                widget.data.isCollaborated
+                            ? assignTitle(store.user.docId ?? '',
+                                widget.data.userId, widget.data.author)
+                            : '',
                         color: Colors.white54,
                         fontSize: 14,
                       ),

@@ -6,6 +6,7 @@ class TaskModel {
   final String date;
   final String createdAt;
   final bool done;
+  final String status;
   final List<dynamic> assign;
   final String? docId;
   final String userId;
@@ -22,6 +23,7 @@ class TaskModel {
     required this.createdAt,
     required this.isCollaborated,
     required this.userId,
+    required this.status,
     this.docId,
   });
 
@@ -37,6 +39,7 @@ class TaskModel {
       createdAt: json?['createdAt'] ?? '',
       isCollaborated: json?['isCollaborated'] ?? false,
       userId: json?['userId'] ?? '',
+      status: json?['status'] ?? '',
       docId: id,
     );
   }
@@ -52,7 +55,14 @@ class TaskModel {
       'done': done,
       'assign': assign,
       'userId': userId,
+      'status': status,
       'isCollaborated': isCollaborated,
     };
   }
 }
+
+final taskStatus = {
+  'Open': 'Open',
+  'In Work': 'In work',
+  'Close': 'Close',
+};

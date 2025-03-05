@@ -83,6 +83,10 @@ String getFormatTime(String date) {
   }
 }
 
+bool isToday(String date) {
+  return getSliceDate(date) == getSliceDate(now.toString());
+}
+
 String getSliceDate(String date) {
   String newDate = date.split(' ')[0];
   return newDate;

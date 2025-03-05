@@ -33,7 +33,7 @@ class DNButton extends StatelessWidget {
           curve: Curves.easeInOut,
           decoration: BoxDecoration(
             color: isPrimary
-                ? Theme.of(context).primaryColor
+                ? const Color.fromRGBO(198, 40, 79, 1)
                 : Theme.of(context).scaffoldBackgroundColor,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             border: Border.all(
@@ -49,7 +49,7 @@ class DNButton extends StatelessWidget {
                 : DNText(
                     title: title,
                     fontSize: fontSize,
-                    color: isPrimary ? color : Colors.white,
+                    color: !isPrimary ? color : Colors.white,
                   ),
           ),
         ),

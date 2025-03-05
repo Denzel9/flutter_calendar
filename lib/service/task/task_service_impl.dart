@@ -89,6 +89,7 @@ class TaskServiceImpl implements TaskService {
   @override
   Future<List<String>> getAttachments(String id) async {
     final List<String> listAttachments = [];
+
     await storage
         .ref()
         .child("task_$id/attachments")
@@ -106,6 +107,8 @@ class TaskServiceImpl implements TaskService {
   Future<void> deleteAttachments(
     String id,
     String image,
-  ) =>
-      storage.ref().child("task_$id/attachments/$image.jpg").delete();
+  ) {
+    isLoading = true;
+    return storage.ref().child("task_$id/attachments/$image.jpg").delete();
+  }
 }

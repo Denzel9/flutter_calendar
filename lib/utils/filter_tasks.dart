@@ -64,7 +64,27 @@ List<TaskModel> filteredTaskToBoard(
   String boardTitle,
   AppStore store,
 ) {
-  return store.listAllTask
+  List<TaskModel> sortedTasks = [...store.listAllTask];
+
+  sortedTasks.sort((a, b) {
+    DateTime firstDate = DateTime.parse(a.date);
+    DateTime secondDate = DateTime.parse(b.date);
+
+    bool isFirstToday = isToday(a.date);
+    bool isSecondToday = isToday(b.date);
+
+    if (isFirstToday && isSecondToday) {
+      return firstDate.compareTo(secondDate);
+    } else if (isFirstToday) {
+      return -1;
+    } else if (isSecondToday) {
+      return 1;
+    } else {
+      return firstDate.compareTo(secondDate);
+    }
+  });
+
+  return sortedTasks
       .where(
           (task) => task.board == boardTitle && task.userId == store.user.docId)
       .toList();
